@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HIVEMIND // PROJECT_ORION</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;900&amp;family=Work+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "tertiary-fixed-dim": "#d1c79d",
+                        "secondary-fixed-dim": "#ffb690",
+                        "on-secondary-fixed": "#341100",
+                        "primary": "#ffe1a7",
+                        "secondary-container": "#ec6a06",
+                        "surface-variant": "#353534",
+                        "surface-dim": "#131313",
+                        "outline": "#9c8f79",
+                        "error": "#ffb4ab",
+                        "secondary-fixed": "#ffdbca",
+                        "inverse-surface": "#e5e2e1",
+                        "tertiary": "#f0e5ba",
+                        "surface-bright": "#3a3939",
+                        "on-surface": "#e5e2e1",
+                        "on-tertiary-fixed-variant": "#4d4727",
+                        "on-primary-fixed": "#261a00",
+                        "on-tertiary-fixed": "#201c02",
+                        "surface-tint": "#f9bd22",
+                        "primary-container": "#fbbf24",
+                        "on-secondary-container": "#4a1c00",
+                        "error-container": "#93000a",
+                        "on-tertiary": "#363113",
+                        "outline-variant": "#4f4633",
+                        "on-primary": "#402d00",
+                        "inverse-on-surface": "#313030",
+                        "on-primary-container": "#6c4f00",
+                        "primary-fixed": "#ffdf9f",
+                        "on-error-container": "#ffdad6",
+                        "on-secondary-fixed-variant": "#783200",
+                        "surface-container-lowest": "#0e0e0e",
+                        "on-background": "#e5e2e1",
+                        "secondary": "#ffb690",
+                        "tertiary-container": "#d3c99f",
+                        "tertiary-fixed": "#ede3b8",
+                        "background": "#131313",
+                        "surface-container-high": "#2a2a2a",
+                        "on-secondary": "#552100",
+                        "on-primary-fixed-variant": "#5c4300",
+                        "inverse-primary": "#795900",
+                        "surface-container-highest": "#353534",
+                        "surface": "#131313",
+                        "on-surface-variant": "#d3c5ac",
+                        "on-tertiary-container": "#5b5433",
+                        "surface-container-low": "#1c1b1b",
+                        "primary-fixed-dim": "#f9bd22",
+                        "surface-container": "#201f1f",
+                        "on-error": "#690005"
+                    },
+                    fontFamily: {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Work Sans"],
+                        "label": ["Space Grotesk"]
+                    },
+                    borderRadius: {"DEFAULT": "0px", "lg": "0px", "xl": "0px", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #131313;
+            background-image: radial-gradient(#2a2a2a 1px, transparent 1px);
+            background-size: 24px 24px;
+            font-family: 'Work Sans', sans-serif;
+        }
+        .honeycomb-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cpath fill='%23fbbf24' fill-opacity='1' d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.32v12.86l11 6.35 11-6.35V17.32L14 10.97 3 17.32z'/%3E%3C/svg%3E");
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .hard-shadow { box-shadow: 4px 4px 0px 0px #0e0e0e; }
+        .hard-shadow-hover:hover { box-shadow: 8px 8px 0px 0px #0e0e0e; transform: translate(-2px, -2px); }
+        .hard-shadow-active:active { box-shadow: 0px 0px 0px 0px #0e0e0e; transform: translate(4px, 4px); }
+    </style>
+</head>
+<body class="text-on-surface selection:bg-primary-container selection:text-on-primary-container">
+<div class="honeycomb-overlay"></div>
+<div class="flex min-h-screen relative z-10">
+<!-- SideNavBar Predicted Component -->
+<aside class="w-64 h-screen border-r-3 border-[#9c8f79] rounded-none bg-[#131313] flex flex-col sticky top-0 left-0 z-50">
+<div class="p-6 border-b-3 border-[#9c8f79]">
+<div class="text-2xl font-black tracking-tighter text-[#fbbf24] font-headline">HIVEMIND</div>
+<div class="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant font-headline mt-1">OPERATOR_01</div>
+</div>
+<nav class="flex-1 mt-4 overflow-y-auto">
+<a class="flex items-center px-6 py-4 text-[#e5e2e1] hover:bg-[#2a2a2a] transition-colors hover:translate-x-1 hover:shadow-[2px_2px_0px_0px_#fbbf24] font-['Space_Grotesk'] uppercase tracking-widest font-bold" href="#">
+<span class="material-symbols-outlined mr-4">grid_view</span> DASHBOARD
+                </a>
+<a class="flex items-center px-6 py-4 bg-[#fbbf24] text-[#131313] border-y-2 border-black font-['Space_Grotesk'] uppercase tracking-widest font-bold" href="#">
+<span class="material-symbols-outlined mr-4">account_tree</span> PROJECTS
+                </a>
+<a class="flex items-center px-6 py-4 text-[#e5e2e1] hover:bg-[#2a2a2a] transition-colors hover:translate-x-1 hover:shadow-[2px_2px_0px_0px_#fbbf24] font-['Space_Grotesk'] uppercase tracking-widest font-bold" href="#">
+<span class="material-symbols-outlined mr-4">reorder</span> WORKFLOWS
+                </a>
+<a class="flex items-center px-6 py-4 text-[#e5e2e1] hover:bg-[#2a2a2a] transition-colors hover:translate-x-1 hover:shadow-[2px_2px_0px_0px_#fbbf24] font-['Space_Grotesk'] uppercase tracking-widest font-bold" href="#">
+<span class="material-symbols-outlined mr-4">task_alt</span> TASKS
+                </a>
+<a class="flex items-center px-6 py-4 text-[#e5e2e1] hover:bg-[#2a2a2a] transition-colors hover:translate-x-1 hover:shadow-[2px_2px_0px_0px_#fbbf24] font-['Space_Grotesk'] uppercase tracking-widest font-bold" href="#">
+<span class="material-symbols-outlined mr-4">bar_chart</span> ANALYTICS
+                </a>
+<a class="flex items-center px-6 py-4 text-[#e5e2e1] hover:bg-[#2a2a2a] transition-colors hover:translate-x-1 hover:shadow-[2px_2px_0px_0px_#fbbf24] font-['Space_Grotesk'] uppercase tracking-widest font-bold" href="#">
+<span class="material-symbols-outlined mr-4">settings</span> SETTINGS
+                </a>
+</nav>
+<div class="p-4 border-t-3 border-[#9c8f79]">
+<button class="w-full bg-[#fbbf24] text-[#131313] py-3 font-headline font-black uppercase tracking-tighter active:translate-y-1 transition-transform duration-75 border-2 border-black hard-shadow">
+                    NEW_PROJECT
+                </button>
+</div>
+</aside>
+<main class="flex-1 flex flex-col">
+<!-- TopAppBar Predicted Component -->
+<header class="flex justify-between items-center w-full px-6 py-4 sticky top-0 z-50 bg-[#131313] border-b-3 border-[#9c8f79] rounded-none">
+<div class="flex items-center space-x-4">
+<div class="text-xl font-black text-[#fbbf24] font-headline">HIVEMIND // COMMAND_CENTER</div>
+</div>
+<div class="flex items-center space-x-8">
+<div class="relative hidden lg:block">
+<input class="bg-surface-container-lowest border-2 border-outline px-4 py-1.5 w-64 text-sm font-label uppercase tracking-widest focus:outline-none focus:border-primary-container focus:ring-0" placeholder="SEARCH_DATABASE..." type="text"/>
+<span class="material-symbols-outlined absolute right-3 top-2 text-outline text-sm">search</span>
+</div>
+<div class="flex items-center space-x-6">
+<span class="material-symbols-outlined text-[#d3c5ac] cursor-pointer hover:text-[#fbbf24]">notifications</span>
+<span class="material-symbols-outlined text-[#d3c5ac] cursor-pointer hover:text-[#fbbf24]">terminal</span>
+<span class="material-symbols-outlined text-[#d3c5ac] cursor-pointer hover:text-[#fbbf24]">account_circle</span>
+</div>
+</div>
+</header>
+<!-- Secondary Toolbar -->
+<nav class="bg-surface-container px-6 py-0 border-b-3 border-outline flex items-center justify-between">
+<div class="flex space-x-0 h-14">
+<a class="px-6 h-full flex items-center text-primary-container border-b-4 border-primary-container font-headline font-bold uppercase tracking-widest bg-surface-container-high" href="#">OVERVIEW</a>
+<a class="px-6 h-full flex items-center text-on-surface-variant hover:text-primary-container font-headline font-bold uppercase tracking-widest hover:bg-surface-container-high transition-colors" href="#">WORKFLOWS</a>
+<a class="px-6 h-full flex items-center text-on-surface-variant hover:text-primary-container font-headline font-bold uppercase tracking-widest hover:bg-surface-container-high transition-colors" href="#">DOCS</a>
+<a class="px-6 h-full flex items-center text-on-surface-variant hover:text-primary-container font-headline font-bold uppercase tracking-widest hover:bg-surface-container-high transition-colors" href="#">SETTINGS</a>
+</div>
+<div class="flex items-center space-x-3">
+<span class="font-label text-xs font-bold uppercase text-on-surface-variant tracking-tighter">PROJECT STATE:</span>
+<div class="flex items-center bg-surface-container-lowest border-2 border-outline px-2 py-1">
+<span class="text-[10px] font-bold text-primary-container mr-2 uppercase">Active Project</span>
+<div class="w-8 h-4 bg-primary-container relative cursor-pointer">
+<div class="absolute right-0.5 top-0.5 w-3 h-3 bg-black"></div>
+</div>
+</div>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="p-8 grid grid-cols-12 gap-8">
+<!-- Left Panel (40%) -->
+<div class="col-span-12 lg:col-span-5 space-y-8">
+<section class="space-y-4">
+<div class="inline-block bg-secondary-container px-3 py-1 text-[10px] font-bold text-on-secondary-container font-headline uppercase tracking-tighter">ALPHA_CLASS</div>
+<h1 class="text-6xl font-black font-headline tracking-tighter text-on-surface">PROJECT ORION</h1>
+<div class="bg-surface-container-lowest border-2 border-outline p-6 hard-shadow font-mono text-sm leading-relaxed text-on-surface-variant relative overflow-hidden">
+<div class="absolute top-0 right-0 p-2 bg-outline/20 text-[10px] uppercase font-bold text-outline">SPEC_v4.02</div>
+<p class="mb-4">// PROJECT_INITIALIZATION_STRING: "ORION-X9-GLOBAL"</p>
+<p>Distributed data orchestration layer designed for low-latency ingestion of edge-node telemetrics. Orion utilizes a modular kernel to bridge legacy monolithic workflows with next-gen tactical pipelines.</p>
+<div class="mt-6 pt-6 border-t border-outline/30 space-y-2">
+<div class="flex justify-between">
+<span class="text-outline uppercase">CREATED_BY:</span>
+<span class="text-primary-container">OPERATOR_01</span>
+</div>
+<div class="flex justify-between">
+<span class="text-outline uppercase">TIMESTAMP:</span>
+<span class="text-on-surface">2023-11-24:09:44:02</span>
+</div>
+</div>
+</div>
+</section>
+<section class="space-y-3">
+<div class="text-[10px] font-bold uppercase tracking-widest text-outline">RESOURCE_TAGS</div>
+<div class="flex flex-wrap gap-2">
+<span class="border-2 border-outline px-3 py-1 text-xs font-bold font-headline uppercase bg-surface-container">Ingestion</span>
+<span class="border-2 border-outline px-3 py-1 text-xs font-bold font-headline uppercase bg-surface-container">Critical_Ops</span>
+<span class="border-2 border-outline px-3 py-1 text-xs font-bold font-headline uppercase bg-surface-container">Data_Lake</span>
+<span class="border-2 border-outline px-3 py-1 text-xs font-bold font-headline uppercase bg-surface-container">AWS_WEST_02</span>
+</div>
+</section>
+<section class="grid grid-cols-2 gap-4">
+<button class="bg-surface-container-high border-2 border-outline py-4 font-headline font-black uppercase tracking-widest hover:bg-outline hover:text-black transition-all hard-shadow-active">
+                            EDIT_PROJECT
+                        </button>
+<button class="bg-error-container/20 border-2 border-error text-error py-4 font-headline font-black uppercase tracking-widest hover:bg-error hover:text-on-error transition-all hard-shadow-active">
+                            ARCHIVE
+                        </button>
+</section>
+</div>
+<!-- Right Panel (60%) -->
+<div class="col-span-12 lg:col-span-7 space-y-8">
+<!-- Metadata Grid -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-0 border-3 border-outline">
+<div class="p-6 border-r-3 border-outline bg-surface-container">
+<div class="text-[10px] font-bold uppercase text-outline mb-1">TASKS</div>
+<div class="text-4xl font-black font-headline text-on-surface">128</div>
+</div>
+<div class="p-6 border-r-3 border-outline bg-surface-container">
+<div class="text-[10px] font-bold uppercase text-outline mb-1">FLOWS</div>
+<div class="text-4xl font-black font-headline text-on-surface">14</div>
+</div>
+<div class="p-6 border-r-3 border-outline bg-surface-container">
+<div class="text-[10px] font-bold uppercase text-outline mb-1">STATUS</div>
+<div class="text-xl font-black font-headline text-primary-container uppercase">NOMINAL</div>
+</div>
+<div class="p-6 bg-surface-container">
+<div class="text-[10px] font-bold uppercase text-outline mb-1">HEALTH</div>
+<div class="flex items-end space-x-1 h-8">
+<div class="w-2 h-full bg-primary-container"></div>
+<div class="w-2 h-5/6 bg-primary-container"></div>
+<div class="w-2 h-full bg-primary-container"></div>
+<div class="w-2 h-4/6 bg-primary-container"></div>
+<div class="w-2 h-3/6 bg-primary-container"></div>
+</div>
+</div>
+</div>
+<!-- Workflows Section -->
+<section class="space-y-6">
+<div class="flex items-center justify-between">
+<h2 class="text-2xl font-black font-headline uppercase tracking-tighter">ACTIVE_WORKFLOWS</h2>
+<div class="flex border-2 border-outline">
+<button class="p-2 bg-primary-container text-on-primary-container"><span class="material-symbols-outlined text-sm">grid_view</span></button>
+<button class="p-2 bg-surface-container hover:bg-surface-container-high"><span class="material-symbols-outlined text-sm">reorder</span></button>
+<button class="p-2 bg-surface-container hover:bg-surface-container-high"><span class="material-symbols-outlined text-sm">schema</span></button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Card 1 -->
+<div class="bg-surface-container border-2 border-outline p-6 hard-shadow-hover transition-all cursor-pointer group">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary-container text-4xl" style="font-variation-settings: 'FILL' 1;">input_circle</span>
+<div class="bg-primary-container/10 border border-primary-container px-2 py-0.5 text-[10px] font-bold text-primary-container uppercase">RUNNING</div>
+</div>
+<h3 class="text-xl font-bold font-headline uppercase tracking-tight group-hover:text-primary-container">Ingestion Flow</h3>
+<p class="text-sm text-on-surface-variant mt-2 font-body line-clamp-2">Standard telemetry mapping for all edge nodes in cluster 7.</p>
+<div class="mt-6 flex items-center justify-between">
+<div class="flex -space-x-2">
+<div class="w-6 h-6 bg-outline border border-black"></div>
+<div class="w-6 h-6 bg-surface-bright border border-black"></div>
+</div>
+<span class="text-[10px] font-mono text-outline">Uptime: 142h</span>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container border-2 border-outline p-6 hard-shadow-hover transition-all cursor-pointer group">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-secondary-container text-4xl" style="font-variation-settings: 'FILL' 1;">analytics</span>
+<div class="bg-surface-container-highest px-2 py-0.5 text-[10px] font-bold text-on-surface-variant uppercase">QUEUED</div>
+</div>
+<h3 class="text-xl font-bold font-headline uppercase tracking-tight group-hover:text-primary-container">Analytics Pipeline</h3>
+<p class="text-sm text-on-surface-variant mt-2 font-body line-clamp-2">Aggregating hourly metrics into centralized tactical dashboard views.</p>
+<div class="mt-6 flex items-center justify-between">
+<div class="flex -space-x-2">
+<div class="w-6 h-6 bg-primary-container border border-black"></div>
+<div class="w-6 h-6 bg-outline border border-black"></div>
+</div>
+<span class="text-[10px] font-mono text-outline">Uptime: 0h</span>
+</div>
+</div>
+<!-- Card 3 (Empty State / Add) -->
+<div class="border-2 border-dashed border-outline p-6 flex flex-col items-center justify-center text-outline hover:border-primary-container hover:text-primary-container transition-colors cursor-pointer group">
+<span class="material-symbols-outlined text-4xl mb-2">add_box</span>
+<span class="font-headline font-black uppercase tracking-widest text-sm">ADD_WORKFLOW</span>
+</div>
+</div>
+</section>
+<!-- Tactical Visualizer -->
+<section class="bg-surface-container-lowest border-2 border-outline p-4 h-48 relative overflow-hidden">
+<div class="absolute inset-0 opacity-20 flex items-center justify-center">
+<svg class="stroke-primary-container fill-none" height="100%" width="100%">
+<path d="M0,50 Q100,20 200,50 T400,50 T600,50 T800,50" stroke-width="2"></path>
+<path d="M0,70 Q150,40 300,70 T600,70 T900,70" stroke-dasharray="4,4" stroke-width="1"></path>
+</svg>
+</div>
+<div class="relative z-10 flex flex-col justify-between h-full">
+<div class="flex justify-between items-start">
+<span class="text-[10px] font-mono text-primary-container font-bold uppercase tracking-widest">LIVE_CORE_THROUGHPUT</span>
+<span class="text-[10px] font-mono text-outline">v9.2.1-STABLE</span>
+</div>
+<div class="flex justify-between items-end">
+<div class="text-xs font-mono">
+<div class="flex items-center"><span class="w-2 h-2 bg-primary-container mr-2"></span> DATA_FLOW: 1.4 GB/s</div>
+<div class="flex items-center"><span class="w-2 h-2 bg-error mr-2"></span> LATENCY: 12ms</div>
+</div>
+<div class="text-2xl font-black font-headline tracking-tighter uppercase italic text-on-surface-variant">HVM_SYS_OK</div>
+</div>
+</div>
+</section>
+</div>
+</div>
+<!-- Footer Status Bar Predicted Editorial Component -->
+<footer class="mt-auto bg-surface-container-highest border-t-3 border-outline px-6 py-2 flex items-center justify-between text-[10px] font-mono uppercase tracking-widest text-on-surface-variant">
+<div class="flex items-center space-x-6">
+<span class="flex items-center"><span class="w-2 h-2 bg-primary-container rounded-full mr-2"></span> SYSTEM: ONLINE</span>
+<span class="flex items-center"><span class="w-2 h-2 bg-primary-container rounded-full mr-2"></span> SYNC: 99.8%</span>
+<span>PATH: /PROJECTS/ORION/OVERVIEW</span>
+</div>
+<div>
+                    OPERATOR: ALTAIR_99 // NODE: DC_NORTH_04
+                </div>
+</footer>
+</main>
+</div>
+</body></html>

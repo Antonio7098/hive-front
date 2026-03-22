@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HIVEMIND // PROJECTS</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800;900&amp;family=Work+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "tertiary-fixed-dim": "#d1c79d",
+                        "secondary-fixed-dim": "#ffb690",
+                        "on-secondary-fixed": "#341100",
+                        "primary": "#ffe1a7",
+                        "secondary-container": "#ec6a06",
+                        "surface-variant": "#353534",
+                        "surface-dim": "#131313",
+                        "outline": "#9c8f79",
+                        "error": "#ffb4ab",
+                        "secondary-fixed": "#ffdbca",
+                        "inverse-surface": "#e5e2e1",
+                        "tertiary": "#f0e5ba",
+                        "surface-bright": "#3a3939",
+                        "on-surface": "#e5e2e1",
+                        "on-tertiary-fixed-variant": "#4d4727",
+                        "on-primary-fixed": "#261a00",
+                        "on-tertiary-fixed": "#201c02",
+                        "surface-tint": "#f9bd22",
+                        "primary-container": "#fbbf24",
+                        "on-secondary-container": "#4a1c00",
+                        "error-container": "#93000a",
+                        "on-tertiary": "#363113",
+                        "outline-variant": "#4f4633",
+                        "on-primary": "#402d00",
+                        "inverse-on-surface": "#313030",
+                        "on-primary-container": "#6c4f00",
+                        "primary-fixed": "#ffdf9f",
+                        "on-error-container": "#ffdad6",
+                        "on-secondary-fixed-variant": "#783200",
+                        "surface-container-lowest": "#0e0e0e",
+                        "on-background": "#e5e2e1",
+                        "secondary": "#ffb690",
+                        "tertiary-container": "#d3c99f",
+                        "tertiary-fixed": "#ede3b8",
+                        "background": "#131313",
+                        "surface-container-high": "#2a2a2a",
+                        "on-secondary": "#552100",
+                        "on-primary-fixed-variant": "#5c4300",
+                        "inverse-primary": "#795900",
+                        "surface-container-highest": "#353534",
+                        "surface": "#131313",
+                        "on-surface-variant": "#d3c5ac",
+                        "on-tertiary-container": "#5b5433",
+                        "surface-container-low": "#1c1b1b",
+                        "primary-fixed-dim": "#f9bd22",
+                        "surface-container": "#201f1f",
+                        "on-error": "#690005"
+                    },
+                    fontFamily: {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Work Sans"],
+                        "label": ["Space Grotesk"]
+                    },
+                    borderRadius: {"DEFAULT": "0px", "lg": "0px", "xl": "0px", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #131313;
+            background-image: radial-gradient(#201f1f 1px, transparent 0);
+            background-size: 24px 24px;
+            font-family: 'Work Sans', sans-serif;
+        }
+        .honeycomb-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            opacity: 0.05;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='49' viewBox='0 0 28 49'%3E%3Cpath fill='%23fbbf24' fill-opacity='1' d='M13.99 9.25l13 7.5v15l-13 7.5L1 31.75v-15l12.99-7.5zM3 17.32v12.93l10.99 6.34 11-6.35V17.32L14 10.98 3 17.32z'/%3E%3C/svg%3E");
+            z-index: 0;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="text-on-surface antialiased">
+<div class="honeycomb-overlay"></div>
+<div class="flex min-h-screen">
+<!-- SideNavBar -->
+<aside class="w-64 h-screen border-r-3 border-[#9c8f79] rounded-none bg-[#131313] flex flex-col sticky top-0 left-0 z-40">
+<div class="p-6 flex flex-col gap-1">
+<span class="text-2xl font-black tracking-tighter text-[#fbbf24]">HIVEMIND</span>
+<span class="font-['Space_Grotesk'] uppercase tracking-widest font-bold text-xs text-[#d3c5ac]">OPERATOR_01</span>
+</div>
+<nav class="flex-1 mt-6">
+<!-- DASHBOARD -->
+<a class="flex items-center gap-4 px-6 py-4 text-[#e5e2e1] hover:bg-[#2a2a2a] transition-colors hover:translate-x-1 hover:shadow-[2px_2px_0px_0px_#fbbf24] active:translate-y-1 transition-transform duration-75" href="#">
+<span class="material-symbols-outlined">grid_view</span>
+<span class="font-['Space_Grotesk'] uppercase tracking-widest font-bold text-sm">DASHBOARD</span>
+</a>
+<!-- PROJECTS (ACTIVE) -->
+<a class="flex items-center gap-4 px-6 py-4 bg-[#fbbf24] text-[#131313] border-y-2 border-black font-['Space_Grotesk'] uppercase tracking-widest font-bold text-sm" href="#">
+<span class="material-symbols-outlined">account_tree</span>
+<span>PROJECTS</span>
+</a>
+<!-- WORKFLOWS -->
+<a class="flex items-center gap-4 px-6 py-4 text-[#e5e2e1] hover:bg-[#2a2a2a] transition-colors hover:translate-x-1 hover:shadow-[2px_2px_0px_0px_#fbbf24] active:translate-y-1 transition-transform duration-75" href="#">
+<span class="material-symbols-outlined">reorder</span>
+<span class="font-['Space_Grotesk'] uppercase tracking-widest font-bold text-sm">WORKFLOWS</span>
+</a>
+<!-- TASKS -->
+<a class="flex items-center gap-4 px-6 py-4 text-[#e5e2e1] hover:bg-[#2a2a2a] transition-colors hover:translate-x-1 hover:shadow-[2px_2px_0px_0px_#fbbf24] active:translate-y-1 transition-transform duration-75" href="#">
+<span class="material-symbols-outlined">task_alt</span>
+<span class="font-['Space_Grotesk'] uppercase tracking-widest font-bold text-sm">TASKS</span>
+</a>
+<!-- ANALYTICS -->
+<a class="flex items-center gap-4 px-6 py-4 text-[#e5e2e1] hover:bg-[#2a2a2a] transition-colors hover:translate-x-1 hover:shadow-[2px_2px_0px_0px_#fbbf24] active:translate-y-1 transition-transform duration-75" href="#">
+<span class="material-symbols-outlined">bar_chart</span>
+<span class="font-['Space_Grotesk'] uppercase tracking-widest font-bold text-sm">ANALYTICS</span>
+</a>
+<!-- SETTINGS -->
+<a class="flex items-center gap-4 px-6 py-4 text-[#e5e2e1] hover:bg-[#2a2a2a] transition-colors hover:translate-x-1 hover:shadow-[2px_2px_0px_0px_#fbbf24] active:translate-y-1 transition-transform duration-75" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-['Space_Grotesk'] uppercase tracking-widest font-bold text-sm">SETTINGS</span>
+</a>
+</nav>
+<div class="p-6">
+<button class="w-full bg-primary-container text-on-primary-fixed font-headline font-bold uppercase tracking-widest py-3 border-2 border-black shadow-[4px_4px_0px_0px_#0e0e0e] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-none transition-all">
+                    NEW_PROJECT
+                </button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col relative z-10">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center w-full px-6 py-4 sticky top-0 z-50 bg-[#131313] border-b-3 border-[#9c8f79]">
+<div class="flex items-center gap-4">
+<h1 class="text-xl font-black text-[#fbbf24] font-['Space_Grotesk'] font-bold uppercase tracking-[0.1em]">HIVEMIND // COMMAND_CENTER</h1>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative flex items-center">
+<input class="bg-surface-container-lowest border-2 border-outline px-4 py-1 text-xs font-mono focus:outline-none focus:border-primary-container w-64 text-on-surface" placeholder="SYSTEM_SEARCH..." type="text"/>
+<span class="material-symbols-outlined absolute right-2 text-outline text-sm">search</span>
+</div>
+<div class="flex gap-4">
+<span class="material-symbols-outlined text-[#d3c5ac] cursor-pointer hover:text-[#fbbf24]">notifications</span>
+<span class="material-symbols-outlined text-[#d3c5ac] cursor-pointer hover:text-[#fbbf24]">terminal</span>
+<span class="material-symbols-outlined text-[#d3c5ac] cursor-pointer hover:text-[#fbbf24]">account_circle</span>
+</div>
+</div>
+</header>
+<!-- Content -->
+<div class="p-8 max-w-7xl mx-auto w-full">
+<!-- Header Section -->
+<div class="flex justify-between items-end mb-12">
+<div>
+<div class="font-mono text-primary-container text-xs mb-2 tracking-[0.4em] uppercase">Directory / Root / Projects</div>
+<h2 class="text-6xl font-black font-headline tracking-tighter text-on-surface">PROJECTS</h2>
+</div>
+<button class="bg-primary-container text-on-primary-fixed px-8 py-4 border-3 border-black font-headline font-extrabold text-lg shadow-[6px_6px_0px_0px_#9c8f79] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all">
+                        + NEW_PROJECT
+                    </button>
+</div>
+<!-- Recent Projects Section -->
+<section class="mb-16">
+<div class="flex items-center gap-4 mb-6">
+<h3 class="font-headline font-bold text-xl uppercase tracking-widest text-[#d3c5ac]">Section_01 // Recent_Activity</h3>
+<div class="h-[2px] flex-1 bg-outline opacity-30"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Big Card 1 -->
+<div class="bg-surface-container border-3 border-outline p-6 shadow-[8px_8px_0px_0px_#0e0e0e] hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-[12px_12px_0px_0px_#fbbf24] transition-all cursor-pointer group">
+<div class="flex justify-between items-start mb-4">
+<span class="bg-secondary-container text-on-primary-fixed px-3 py-1 font-headline font-bold text-xs uppercase">PRIORITY_ALPHA</span>
+<span class="font-mono text-xs text-outline">ID: 882-X</span>
+</div>
+<h4 class="text-2xl font-black font-headline mb-3 text-primary-container group-hover:underline">NEURAL_NEXUS</h4>
+<p class="text-on-surface-variant font-body text-sm mb-6 leading-relaxed">Optimization of decentralized compute clusters for deep-learning deployment in edge environments.</p>
+<div class="flex justify-between items-center pt-6 border-t-2 border-outline-variant">
+<div class="flex flex-col">
+<span class="text-[10px] font-mono uppercase text-outline">Task_Count</span>
+<span class="font-headline font-bold text-lg">42</span>
+</div>
+<div class="flex flex-col items-end">
+<span class="text-[10px] font-mono uppercase text-outline">Last_Update</span>
+<span class="font-headline font-bold text-sm">02_MIN_AGO</span>
+</div>
+</div>
+</div>
+<!-- Big Card 2 -->
+<div class="bg-surface-container border-3 border-outline p-6 shadow-[8px_8px_0px_0px_#0e0e0e] hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-[12px_12px_0px_0px_#fbbf24] transition-all cursor-pointer group">
+<div class="flex justify-between items-start mb-4">
+<span class="bg-primary-container text-on-primary-fixed px-3 py-1 font-headline font-bold text-xs uppercase">ACTIVE_STATUS</span>
+<span class="font-mono text-xs text-outline">ID: 412-K</span>
+</div>
+<h4 class="text-2xl font-black font-headline mb-3 text-primary-container group-hover:underline">TITAN_SHIELD</h4>
+<p class="text-on-surface-variant font-body text-sm mb-6 leading-relaxed">Hardening layer-2 protocol security through biometric verification and encrypted handshakes.</p>
+<div class="flex justify-between items-center pt-6 border-t-2 border-outline-variant">
+<div class="flex flex-col">
+<span class="text-[10px] font-mono uppercase text-outline">Task_Count</span>
+<span class="font-headline font-bold text-lg">158</span>
+</div>
+<div class="flex flex-col items-end">
+<span class="text-[10px] font-mono uppercase text-outline">Last_Update</span>
+<span class="font-headline font-bold text-sm">14_HRS_AGO</span>
+</div>
+</div>
+</div>
+<!-- Big Card 3 -->
+<div class="bg-surface-container border-3 border-outline p-6 shadow-[8px_8px_0px_0px_#0e0e0e] hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-[12px_12px_0px_0px_#fbbf24] transition-all cursor-pointer group">
+<div class="flex justify-between items-start mb-4">
+<span class="bg-surface-container-highest text-on-surface px-3 py-1 font-headline font-bold text-xs uppercase border-2 border-outline">STABLE_FLOW</span>
+<span class="font-mono text-xs text-outline">ID: 009-P</span>
+</div>
+<h4 class="text-2xl font-black font-headline mb-3 text-primary-container group-hover:underline">CORE_LEGACY</h4>
+<p class="text-on-surface-variant font-body text-sm mb-6 leading-relaxed">Maintenance of legacy mainframe interfaces for modern API consumption and data bridging.</p>
+<div class="flex justify-between items-center pt-6 border-t-2 border-outline-variant">
+<div class="flex flex-col">
+<span class="text-[10px] font-mono uppercase text-outline">Task_Count</span>
+<span class="font-headline font-bold text-lg">12</span>
+</div>
+<div class="flex flex-col items-end">
+<span class="text-[10px] font-mono uppercase text-outline">Last_Update</span>
+<span class="font-headline font-bold text-sm">05_DAYS_AGO</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- All Projects Grid -->
+<section>
+<div class="flex items-center gap-4 mb-6">
+<h3 class="font-headline font-bold text-xl uppercase tracking-widest text-[#d3c5ac]">Section_02 // Project_Manifest</h3>
+<div class="h-[2px] flex-1 bg-outline opacity-30"></div>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<!-- Project Card -->
+<div class="bg-surface-container-low border-2 border-outline-variant p-4 flex flex-col justify-between hover:bg-surface-container-high transition-colors group cursor-pointer">
+<div>
+<div class="flex justify-between mb-2">
+<span class="font-mono text-[10px] text-outline">PROJ_89</span>
+<span class="bg-primary-container h-2 w-2"></span>
+</div>
+<h5 class="font-headline font-bold text-on-surface uppercase group-hover:text-primary-container transition-colors">VORTEX_BLADE</h5>
+</div>
+<div class="mt-8 flex justify-between items-end">
+<span class="font-mono text-xs text-on-surface-variant">TASKS: 14</span>
+<span class="material-symbols-outlined text-outline text-sm">arrow_forward</span>
+</div>
+</div>
+<!-- Project Card -->
+<div class="bg-surface-container-low border-2 border-outline-variant p-4 flex flex-col justify-between hover:bg-surface-container-high transition-colors group cursor-pointer">
+<div>
+<div class="flex justify-between mb-2">
+<span class="font-mono text-[10px] text-outline">PROJ_102</span>
+<span class="bg-secondary-container h-2 w-2"></span>
+</div>
+<h5 class="font-headline font-bold text-on-surface uppercase group-hover:text-primary-container transition-colors">GHOST_SHELL</h5>
+</div>
+<div class="mt-8 flex justify-between items-end">
+<span class="font-mono text-xs text-on-surface-variant">TASKS: 88</span>
+<span class="material-symbols-outlined text-outline text-sm">arrow_forward</span>
+</div>
+</div>
+<!-- Project Card -->
+<div class="bg-surface-container-low border-2 border-outline-variant p-4 flex flex-col justify-between hover:bg-surface-container-high transition-colors group cursor-pointer">
+<div>
+<div class="flex justify-between mb-2">
+<span class="font-mono text-[10px] text-outline">PROJ_44</span>
+<span class="bg-outline h-2 w-2"></span>
+</div>
+<h5 class="font-headline font-bold text-on-surface uppercase group-hover:text-primary-container transition-colors">DRUID_NET</h5>
+</div>
+<div class="mt-8 flex justify-between items-end">
+<span class="font-mono text-xs text-on-surface-variant">TASKS: 05</span>
+<span class="material-symbols-outlined text-outline text-sm">arrow_forward</span>
+</div>
+</div>
+<!-- Project Card -->
+<div class="bg-surface-container-low border-2 border-outline-variant p-4 flex flex-col justify-between hover:bg-surface-container-high transition-colors group cursor-pointer">
+<div>
+<div class="flex justify-between mb-2">
+<span class="font-mono text-[10px] text-outline">PROJ_17</span>
+<span class="bg-primary-container h-2 w-2"></span>
+</div>
+<h5 class="font-headline font-bold text-on-surface uppercase group-hover:text-primary-container transition-colors">ZENITH_OPS</h5>
+</div>
+<div class="mt-8 flex justify-between items-end">
+<span class="font-mono text-xs text-on-surface-variant">TASKS: 231</span>
+<span class="material-symbols-outlined text-outline text-sm">arrow_forward</span>
+</div>
+</div>
+<!-- Repeat for visual density -->
+<div class="bg-surface-container-low border-2 border-outline-variant p-4 flex flex-col justify-between hover:bg-surface-container-high transition-colors group cursor-pointer">
+<div>
+<div class="flex justify-between mb-2">
+<span class="font-mono text-[10px] text-outline">PROJ_55</span>
+<span class="bg-outline h-2 w-2"></span>
+</div>
+<h5 class="font-headline font-bold text-on-surface uppercase group-hover:text-primary-container transition-colors">KINETIC_LINK</h5>
+</div>
+<div class="mt-8 flex justify-between items-end">
+<span class="font-mono text-xs text-on-surface-variant">TASKS: 19</span>
+<span class="material-symbols-outlined text-outline text-sm">arrow_forward</span>
+</div>
+</div>
+<div class="bg-surface-container-low border-2 border-outline-variant p-4 flex flex-col justify-between hover:bg-surface-container-high transition-colors group cursor-pointer">
+<div>
+<div class="flex justify-between mb-2">
+<span class="font-mono text-[10px] text-outline">PROJ_11</span>
+<span class="bg-primary-container h-2 w-2"></span>
+</div>
+<h5 class="font-headline font-bold text-on-surface uppercase group-hover:text-primary-container transition-colors">OMNI_GRID</h5>
+</div>
+<div class="mt-8 flex justify-between items-end">
+<span class="font-mono text-xs text-on-surface-variant">TASKS: 56</span>
+<span class="material-symbols-outlined text-outline text-sm">arrow_forward</span>
+</div>
+</div>
+<div class="bg-surface-container-low border-2 border-outline-variant p-4 flex flex-col justify-between hover:bg-surface-container-high transition-colors group cursor-pointer">
+<div>
+<div class="flex justify-between mb-2">
+<span class="font-mono text-[10px] text-outline">PROJ_22</span>
+<span class="bg-secondary-container h-2 w-2"></span>
+</div>
+<h5 class="font-headline font-bold text-on-surface uppercase group-hover:text-primary-container transition-colors">PULSE_POINT</h5>
+</div>
+<div class="mt-8 flex justify-between items-end">
+<span class="font-mono text-xs text-on-surface-variant">TASKS: 104</span>
+<span class="material-symbols-outlined text-outline text-sm">arrow_forward</span>
+</div>
+</div>
+<div class="bg-surface-container-low border-2 border-outline-variant p-4 flex flex-col justify-between hover:bg-surface-container-high transition-colors group cursor-pointer">
+<div>
+<div class="flex justify-between mb-2">
+<span class="font-mono text-[10px] text-outline">PROJ_01</span>
+<span class="bg-primary-container h-2 w-2"></span>
+</div>
+<h5 class="font-headline font-bold text-on-surface uppercase group-hover:text-primary-container transition-colors">ALPHA_ROOT</h5>
+</div>
+<div class="mt-8 flex justify-between items-end">
+<span class="font-mono text-xs text-on-surface-variant">TASKS: 01</span>
+<span class="material-symbols-outlined text-outline text-sm">arrow_forward</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Footer Status Bar -->
+<footer class="mt-auto bg-surface-container-highest border-t-3 border-[#9c8f79] px-6 py-2 flex justify-between items-center text-[10px] font-mono tracking-widest text-on-surface-variant">
+<div class="flex gap-6">
+<span>SYSTEM_STATUS: <span class="text-primary-container">OPTIMAL</span></span>
+<span>LATENCY: 14MS</span>
+<span>DATABASE: SYNCED</span>
+</div>
+<div>
+<span>© 2024 HIVEMIND COMMAND</span>
+</div>
+</footer>
+</main>
+</div>
+</body></html>

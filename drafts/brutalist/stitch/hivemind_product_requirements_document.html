@@ -1,0 +1,73 @@
+# HiveMind - Project/Workflow/Task Management Dashboard
+
+## Tech Stack
+- **Build Tool**: Vite
+- **Framework**: React 18+ with functional components and hooks
+- **Routing**: React Router v6
+- **Styling**: Tailwind CSS (with CSS custom properties for theming)
+- **Icons**: Lucide React or Heroicons
+
+---
+
+## Architecture Principles
+
+### 1. Centralized Theme System
+All colors, spacing, and design tokens defined as CSS custom properties in `src/styles/theme.css`. Theme is applied via `data-theme` attribute on root element.
+
+```css
+:root {
+  --color-bg-primary: #0a0a0a;
+  --color-bg-secondary: #141414;
+  --color-bg-elevated: #1a1a1a;
+  --color-border: #2a2a2a;
+  --color-text-primary: #fef3c7;
+  --color-text-secondary: #d97706;
+  --color-accent: #fbbf24;
+  --color-accent-hover: #f59e0b;
+  --color-accent-light: #fcd34d;
+  --color-warning: #f97316;
+}
+```
+
+### 2. Component Reusability Strategy
+
+**Layer 1 - Primitives** (in `src/components/ui/`)
+- `Button`, `Card`, `Badge`, `Input`, `Select`, `Toggle`, `Avatar`, `Icon`
+
+**Layer 2 - Composed Components** (in `src/components/common/`)
+- `EntityCard`, `ViewSwitcher`, `MetadataRow`, `SectionPanel`, `Toolbar`, `StatusToggle`, `ExpandableItem`, `HoneycombBackground`
+
+**Layer 3 - Feature Components** (in `src/components/features/`)
+- `TaskBoard`, `WorkflowBoard`, `ListView`, `GraphView`, `ProjectGrid`, `DashboardWidgets`
+
+---
+
+## Page Specifications
+
+### Dashboard (`/`)
+- 2-column grid.
+- **Active Widget (Left)**: Pulsing indicator, running tasks.
+- **Todo Widget (Top Right)**: List of TaskSummary items.
+- **Recent Projects Widget (Bottom Right)**: Last projects worked on.
+
+### Projects Page (`/projects`)
+- **Section 1 - Recent**: 3-column grid of large cards.
+- **Section 2 - All Projects**: 4-column grid of small cards.
+
+### Project Detail (`/projects/:id`)
+- 2-column layout (40/60 split).
+- Left: Info/Description.
+- Right: Metadata, Active State toggle, Workflows (Kanban/List/Graph), Quick Actions.
+
+### Workflow Detail (`/workflows/:id`)
+- Similar 2-column layout focusing on Tasks and Spec.
+
+### Task Detail (`/tasks/:id`)
+- Similar 2-column layout focusing on Subtasks and Detail Spec.
+
+---
+
+## Brutalist Theme Details
+- **Visual Language**: Sharp corners, 2-3px black borders, offset blocky shadows, uppercase bold headings, Monospace fonts (JetBrains Mono).
+- **Honeycomb Hints**: Subtle hexagonal pattern backgrounds and cell-like grid structures.
+- **Colors**: Black/Dark Gray backgrounds, Yellow/Amber accents, White/Cream text.
