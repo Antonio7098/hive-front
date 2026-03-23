@@ -16,3 +16,7 @@ export { AddCard } from './AddCard';
 export { StatsBar, StatCell } from './StatsBar';
 export { InfoCell, InfoGrid } from './InfoGrid';
 export { DetailSection } from './DetailSection';
+export { SubtaskList } from './SubtaskList';
+export { QuickLinks } from './QuickLinks';
+export { CodeViewer } from './CodeViewer';
+export { SpecBlock, SpecCard } from './SpecBlock';

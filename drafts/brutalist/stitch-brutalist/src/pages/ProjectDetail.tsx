@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import { Toolbar, ViewSwitcher, EntityCard, MetadataGrid, MetadataCell, HealthBar, AddCard, DetailFooter } from '../components/common';
+import { Toolbar, ViewSwitcher, EntityCard, MetadataGrid, MetadataCell, HealthBar, AddCard, DetailFooter, SpecBlock } from '../components/common';
 import { Button, Badge, Toggle } from '../components/ui';
 import { TacticalVisualizer } from '../components/features/TacticalVisualizer';
 import { mockProjects, mockWorkflows } from '../data/mock';
@@ -37,21 +37,17 @@ export function ProjectDetail() {
           <div className="space-y-4">
             <Badge variant="secondary">{project.priority || 'ALPHA_CLASS'}</Badge>
             <h1 className="text-6xl font-black font-headline tracking-tighter text-on-surface">{project.name}</h1>
-            <div className="bg-surface-container-lowest border-2 border-outline p-6 font-mono text-sm leading-relaxed text-on-surface-variant relative overflow-hidden">
-              <div className="absolute top-0 right-0 p-2 bg-outline/20 text-[10px] uppercase font-bold text-outline">SPEC_v4.02</div>
-              <p className="mb-4">// PROJECT_INITIALIZATION_STRING: "{project.id.toUpperCase()}-X9-GLOBAL"</p>
+            <SpecBlock
+              title={`// PROJECT_INITIALIZATION_STRING: "${project.id.toUpperCase()}-X9-GLOBAL"`}
+              rows={[
+                { label: 'CREATED_BY', value: 'OPERATOR_01', highlight: true },
+                { label: 'TIMESTAMP', value: '2023-11-24:09:44:02' },
+              ]}
+              version="SPEC_v4.02"
+              className="font-mono text-sm"
+            >
               <p>{project.description}</p>
-              <div className="mt-6 pt-6 border-t border-outline/30 space-y-2">
-                <div className="flex justify-between">
-                  <span className="text-outline uppercase">CREATED_BY:</span>
-                  <span className="text-primary-container">OPERATOR_01</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-outline uppercase">TIMESTAMP:</span>
-                  <span className="text-on-surface">2023-11-24:09:44:02</span>
-                </div>
-              </div>
-            </div>
+            </SpecBlock>
           </div>
 
           <div className="grid grid-cols-2 gap-4">

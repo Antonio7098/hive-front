@@ -1,8 +1,26 @@
 import { useParams } from 'react-router-dom';
-import { Toolbar, InfoGrid, DetailFooter } from '../components/common';
-import { Button, Badge, Toggle, Card, Icon } from '../components/ui';
+import { Toolbar, InfoGrid, DetailFooter, SubtaskList, QuickLinks, CodeViewer, SpecCard } from '../components/common';
+import { Button, Toggle, Card, Icon } from '../components/ui';
 import { mockTasks } from '../data/mock';
 import { useToggle } from '../hooks/useToggle';
+
+const SPEC_CODE = `{
+  "parser_config": {
+    "engine": "v8_optimized",
+    "mode": "asynchronous",
+    "buffer_limit": "256mb",
+    "safety": {
+      "max_depth": 12,
+      "on_overflow": "truncate_and_warn"
+    }
+  },
+  "deployment_target": "EDGE_NODE_OMEGA"
+}`;
+
+const QUICK_LINKS = [
+  { label: 'WIKI_DOCS_09', icon: 'open_in_new' },
+  { label: 'GIT_REPOSITORY', icon: 'terminal' },
+];
 
 export function TaskDetail() {
   const { id } = useParams();
@@ -32,34 +50,15 @@ export function TaskDetail() {
 
       <main className="p-8 grid grid-cols-12 gap-8">
         <div className="col-span-12 lg:col-span-5 flex flex-col gap-8">
-          <Card variant="default" padding="lg" className="relative overflow-hidden">
-            <div className="absolute top-0 right-0 p-2 bg-primary-container text-black font-headline font-black text-[10px] tracking-tighter uppercase rotate-90 origin-bottom-right translate-x-[-10px] translate-y-[20px]">
-              CRITICAL_PATH
-            </div>
-            <label className="font-headline font-bold text-xs text-primary-container tracking-[0.2em] mb-4 block">
-              TASK_ID // {task.id.toUpperCase()}
-            </label>
-            <h2 className="text-5xl font-headline font-black tracking-tight mb-6">{task.name}</h2>
-            <div className="space-y-6">
-              <div>
-                <label className="font-headline font-bold text-[10px] text-on-surface-variant tracking-widest uppercase mb-1 block">Objective</label>
-                <p className="text-on-surface leading-relaxed text-sm">{task.description}</p>
-              </div>
-              <InfoGrid cells={[
-                { label: 'Assigned_To', value: (
-                  <div className="flex items-center gap-2">
-                    <div className="w-6 h-6 bg-surface-container-highest border border-outline flex items-center justify-center">
-                      <Icon name="person" size={14} />
-                    </div>
-                    <span className="text-sm font-bold mono-text uppercase">{task.assignee || 'UNASSIGNED'}</span>
-                  </div>
-                )},
-                { label: 'Due_Date', value: (
-                  <span className="text-sm font-bold mono-text text-secondary-container">{task.dueDate || 'NO_DEADLINE'}</span>
-                )},
-              ]} />
-            </div>
-          </Card>
+          <SpecCard
+            specId={task.id.toUpperCase()}
+            title={task.name}
+            description={task.description}
+            rows={[
+              { label: 'CREATED_BY', value: 'OPERATOR_01', highlight: true },
+              { label: 'TIMESTAMP', value: '2023-11-24:09:44:02' },
+            ]}
+          />
 
           <Card variant="default" padding="md" className="space-y-6">
             <div className="flex items-center justify-between border-b-2 border-outline-variant pb-4">
@@ -82,7 +81,7 @@ export function TaskDetail() {
             ]} />
             <div className="p-4 bg-surface-container-highest border-2 border-outline-variant flex items-center justify-between">
               <span className="font-headline font-black text-xs tracking-widest uppercase">Current Status</span>
-              <Badge variant="warning">{task.status.replace('_', ' ')}</Badge>
+              <span className="font-headline font-bold text-lg text-warning uppercase tracking-wider">{task.status.replace('_', ' ')}</span>
             </div>
           </Card>
         </div>
@@ -93,74 +92,17 @@ export function TaskDetail() {
               <Icon name="rule" size={24} />
               SUBTASKS_MANIFEST
             </h3>
-            <div className="space-y-3">
-              {task.subtasks.map((subtask, index) => (
-                <div
-                  key={subtask.id}
-                  className={`group flex items-center gap-4 bg-surface-container-low border-2 border-outline p-4 hover:border-primary-container transition-colors cursor-pointer ${
-                    subtask.completed ? 'opacity-50' : ''
-                  } ${index === 1 ? 'border-primary-container bg-surface-container-high' : ''}`}
-                >
-                  <div className={`w-6 h-6 border-2 border-primary-container flex items-center justify-center ${
-                    subtask.completed ? 'bg-primary-container' : ''
-                  }`}>
-                    {subtask.completed && <Icon name="check" className="text-black" size={14} />}
-                  </div>
-                  <span className={`flex-1 font-headline font-bold text-sm tracking-wide ${subtask.completed ? 'line-through' : ''}`}>
-                    {subtask.name}
-                  </span>
-                  <Badge variant={subtask.completed ? 'success' : index === 1 ? 'warning' : 'neutral'} size="sm">
-                    {subtask.completed ? 'Done' : index === 1 ? 'Active' : 'Pending'}
-                  </Badge>
-                </div>
-              ))}
-            </div>
+            <SubtaskList subtasks={task.subtasks} />
             <Button variant="ghost" className="mt-6 w-full border-2 border-dashed">
               + ADD_SUBTASK_NODE
             </Button>
           </Card>
 
-          <Card variant="default" padding="none" className="flex flex-col">
-            <div className="bg-outline text-black font-headline font-black px-4 py-2 text-xs tracking-widest uppercase flex justify-between">
-              <span>TECHNICAL_SPEC_V2.0</span>
-              <span>ENC: AES-256</span>
-            </div>
-            <div className="p-6">
-              <div className="bg-black/50 p-4 border border-outline-variant mono-text text-xs leading-relaxed text-primary-container overflow-x-auto">
-                <pre>{`{
-  "parser_config": {
-    "engine": "v8_optimized",
-    "mode": "asynchronous",
-    "buffer_limit": "256mb",
-    "safety": {
-      "max_depth": 12,
-      "on_overflow": "truncate_and_warn"
-    }
-  },
-  "deployment_target": "EDGE_NODE_OMEGA"
-}`}</pre>
-              </div>
-              <div className="mt-4 flex gap-3">
-                <Button variant="secondary" size="sm" className="flex-1">
-                  <Icon name="content_copy" className="align-middle mr-1" size={18} /> Copy
-                </Button>
-                <Button variant="secondary" size="sm" className="flex-1">
-                  <Icon name="download" className="align-middle mr-1" size={18} /> Export
-                </Button>
-              </div>
-            </div>
+          <Card variant="default" padding="none">
+            <CodeViewer filename="TECHNICAL_SPEC_V2.0" code={SPEC_CODE} />
           </Card>
 
-          <div className="grid grid-cols-2 gap-4">
-            <Card variant="elevated" padding="md" className="flex items-center justify-between hover:bg-primary-container hover:text-black cursor-pointer transition-all">
-              <span className="font-headline font-black text-xs tracking-widest">WIKI_DOCS_09</span>
-              <Icon name="open_in_new" size={18} />
-            </Card>
-            <Card variant="elevated" padding="md" className="flex items-center justify-between hover:bg-primary-container hover:text-black cursor-pointer transition-all">
-              <span className="font-headline font-black text-xs tracking-widest">GIT_REPOSITORY</span>
-              <Icon name="terminal" size={18} />
-            </Card>
-          </div>
+          <QuickLinks links={QUICK_LINKS} />
         </div>
       </main>
 

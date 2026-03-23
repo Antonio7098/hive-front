@@ -1,9 +1,15 @@
 import { useParams } from 'react-router-dom';
-import { Toolbar, ViewSwitcher, StatsBar, InfoGrid, DetailFooter } from '../components/common';
+import { Toolbar, ViewSwitcher, StatsBar, InfoGrid, DetailFooter, CodeViewer } from '../components/common';
 import { Button, Badge, Toggle, Card, Icon } from '../components/ui';
 import { mockWorkflows, mockTasks } from '../data/mock';
 import { useViewMode } from '../hooks/useViewMode';
 import { useToggle } from '../hooks/useToggle';
+
+const YAML_CODE = `version: "3.4"
+pipeline:
+  name: ingestion_main
+  steps:
+    - id: parse_json`;
 
 export function WorkflowDetail() {
   const { id } = useParams();
@@ -54,17 +60,7 @@ export function WorkflowDetail() {
           </Card>
 
           <Card variant="default" padding="none" className="flex flex-col h-[400px]">
-            <div className="p-3 border-b-2 border-outline bg-surface-container flex justify-between items-center">
-              <span className="font-headline font-bold text-xs uppercase tracking-widest text-outline">workflow_spec.yaml</span>
-              <Icon name="content_copy" className="text-outline cursor-pointer hover:text-primary-container" size={18} />
-            </div>
-            <div className="p-6 font-mono text-xs overflow-auto text-on-surface-variant leading-6">
-              <div className="flex gap-4"><span className="text-outline/40 select-none">01</span><span><span className="text-primary-container">version:</span> "3.4"</span></div>
-              <div className="flex gap-4"><span className="text-outline/40 select-none">02</span><span><span className="text-primary-container">pipeline:</span></span></div>
-              <div className="flex gap-4"><span className="text-outline/40 select-none">03</span><span className="pl-4"><span className="text-primary-container">name:</span> ingestion_main</span></div>
-              <div className="flex gap-4"><span className="text-outline/40 select-none">04</span><span className="pl-4"><span className="text-primary-container">steps:</span></span></div>
-              <div className="flex gap-4"><span className="text-outline/40 select-none">05</span><span className="pl-8">- <span className="text-secondary-container">id:</span> parse_json</span></div>
-            </div>
+            <CodeViewer filename="workflow_spec.yaml" code={YAML_CODE} />
           </Card>
         </div>
 
