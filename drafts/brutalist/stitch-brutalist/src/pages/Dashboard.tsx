@@ -1,13 +1,21 @@
 import { ActiveWidget, TodoWidget, RecentProjectsWidget, PageFooter } from '../components/common';
-import { mockActiveItems, mockTodoItems, mockRecentProjects } from '../data/mock';
+import { useActiveItems, useTodoItems, useRecentProjects, useData } from '../hooks';
 
 export function Dashboard() {
+  const { items: activeItems } = useActiveItems();
+  const { items: todoItems } = useTodoItems();
+  const { projects: recentProjects } = useRecentProjects();
+  const { isConnected } = useData();
+
   return (
     <div className="p-8 grid grid-cols-12 gap-8 max-w-7xl">
       <div className="col-span-12 bg-surface-container-highest border-2 border-outline px-4 py-2 flex justify-between items-center mb-4">
         <div className="flex items-center gap-4 mono-utility text-xs">
           <span className="text-on-surface-variant">LOC:</span>
           <span className="text-primary-container">ROOT / DASHBOARD / ACTIVE_OPS</span>
+          {!isConnected && (
+            <span className="text-warning ml-4">[DEMO MODE]</span>
+          )}
         </div>
         <div className="flex items-center gap-4 mono-utility text-xs">
           <span className="flex items-center gap-2">
@@ -19,12 +27,12 @@ export function Dashboard() {
       </div>
 
       <section className="col-span-12 lg:col-span-7 space-y-8">
-        <ActiveWidget title="ACTIVE" items={mockActiveItems} />
+        <ActiveWidget title="ACTIVE" items={activeItems} />
       </section>
 
       <aside className="col-span-12 lg:col-span-5 space-y-8">
-        <TodoWidget items={mockTodoItems} count={8} />
-        <RecentProjectsWidget projects={mockRecentProjects} />
+        <TodoWidget items={todoItems} count={todoItems.length} />
+        <RecentProjectsWidget projects={recentProjects} />
       </aside>
 
       <PageFooter

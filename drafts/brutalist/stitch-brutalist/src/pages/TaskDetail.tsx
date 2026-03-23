@@ -1,8 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { Toolbar, InfoGrid, DetailFooter, SubtaskList, QuickLinks, CodeViewer, SpecCard } from '../components/common';
 import { Button, Toggle, Card, Icon } from '../components/ui';
-import { mockTasks } from '../data/mock';
-import { useToggle } from '../hooks/useToggle';
+import { useTask, useToggle } from '../hooks';
 
 const SPEC_CODE = `{
   "parser_config": {
@@ -24,9 +23,18 @@ const QUICK_LINKS = [
 
 export function TaskDetail() {
   const { id } = useParams();
+  const { task, isLoading } = useTask(id);
   const { checked: isActive, onChange: setIsActive, label: activeLabel } = useToggle(true, { onLabel: 'Live', offLabel: 'Offline' });
 
-  const task = mockTasks.find((t) => t.id === id) || mockTasks[0];
+  if (isLoading || !task) {
+    return (
+      <div className="flex-1 flex flex-col">
+        <div className="flex items-center justify-center h-64">
+          <span className="font-mono text-primary-container">LOADING...</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex-1 flex flex-col">

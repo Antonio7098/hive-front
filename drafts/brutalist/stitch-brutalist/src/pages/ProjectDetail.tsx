@@ -2,17 +2,24 @@ import { useParams } from 'react-router-dom';
 import { Toolbar, ViewSwitcher, EntityCard, MetadataGrid, MetadataCell, HealthBar, AddCard, DetailFooter, SpecBlock } from '../components/common';
 import { Button, Badge, Toggle } from '../components/ui';
 import { TacticalVisualizer } from '../components/features/TacticalVisualizer';
-import { mockProjects, mockWorkflows } from '../data/mock';
-import { useViewMode } from '../hooks/useViewMode';
-import { useToggle } from '../hooks/useToggle';
+import { useProject, useWorkflowsByProject, useViewMode, useToggle } from '../hooks';
 
 export function ProjectDetail() {
   const { id } = useParams();
+  const { project, isLoading: projectLoading } = useProject(id);
+  const { workflows, isLoading: workflowsLoading } = useWorkflowsByProject(id);
   const { viewMode, setViewMode } = useViewMode();
   const { checked: isActive, onChange: setIsActive, label: activeLabel } = useToggle(true, { onLabel: 'Active', offLabel: 'Inactive' });
 
-  const project = mockProjects.find((p) => p.id === id) || mockProjects[0];
-  const workflows = mockWorkflows.filter((w) => w.projectId === project.id);
+  if (projectLoading || workflowsLoading || !project) {
+    return (
+      <div className="flex-1 flex flex-col">
+        <div className="flex items-center justify-center h-64">
+          <span className="font-mono text-primary-container">LOADING...</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex-1 flex flex-col">

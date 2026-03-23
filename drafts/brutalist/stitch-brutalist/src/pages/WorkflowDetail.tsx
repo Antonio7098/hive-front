@@ -1,9 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { Toolbar, ViewSwitcher, StatsBar, InfoGrid, DetailFooter, CodeViewer } from '../components/common';
 import { Button, Badge, Toggle, Card, Icon } from '../components/ui';
-import { mockWorkflows, mockTasks } from '../data/mock';
-import { useViewMode } from '../hooks/useViewMode';
-import { useToggle } from '../hooks/useToggle';
+import { useWorkflow, useTasksByWorkflow, useViewMode, useToggle } from '../hooks';
 
 const YAML_CODE = `version: "3.4"
 pipeline:
@@ -13,11 +11,20 @@ pipeline:
 
 export function WorkflowDetail() {
   const { id } = useParams();
+  const { workflow, isLoading: workflowLoading } = useWorkflow(id);
+  const { tasks, isLoading: tasksLoading } = useTasksByWorkflow(id);
   const { viewMode, setViewMode } = useViewMode();
   const { checked: isActive, onChange: setIsActive, label: activeLabel } = useToggle(true, { onLabel: 'Enabled', offLabel: 'Disabled' });
 
-  const workflow = mockWorkflows.find((w) => w.id === id) || mockWorkflows[0];
-  const tasks = mockTasks.filter((t) => t.workflowId === workflow.id);
+  if (workflowLoading || tasksLoading || !workflow) {
+    return (
+      <div className="flex-1 flex flex-col">
+        <div className="flex items-center justify-center h-64">
+          <span className="font-mono text-primary-container">LOADING...</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex-1 flex flex-col">

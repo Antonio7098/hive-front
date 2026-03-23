@@ -1,12 +1,23 @@
+import { useProjects } from '../hooks';
 import { EntityCard, PageHeader, SectionHeader, PageFooter } from '../components/common';
-import { mockProjects } from '../data/mock';
 import { useViewMode } from '../hooks/useViewMode';
 
 export function Projects() {
+  const { projects, isLoading } = useProjects();
   const { viewMode, setViewMode } = useViewMode();
 
-  const recentProjects = mockProjects.slice(0, 3);
-  const allProjects = mockProjects.slice(3);
+  const recentProjects = projects.slice(0, 3);
+  const allProjects = projects.slice(3);
+
+  if (isLoading) {
+    return (
+      <div className="p-8 max-w-7xl mx-auto w-full">
+        <div className="flex items-center justify-center h-64">
+          <span className="font-mono text-primary-container">LOADING...</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-8 max-w-7xl mx-auto w-full">
