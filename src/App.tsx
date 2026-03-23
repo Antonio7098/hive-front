@@ -11,11 +11,11 @@ export function App() {
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/projects" element={<Projects />} />
-            <Route path="/projects/:id" element={<ProjectDetail />} />
             <Route path="/projects/:id/workflows" element={<ProjectWorkflows />} />
+            <Route path="/projects/:id" element={<ProjectDetail />} />
             <Route path="/workflows" element={<Workflows />} />
-            <Route path="/workflows/:id" element={<WorkflowDetail />} />
             <Route path="/workflows/:id/tasks" element={<WorkflowTasks />} />
+            <Route path="/workflows/:id" element={<WorkflowDetail />} />
             <Route path="/tasks" element={<Tasks />} />
             <Route path="/tasks/:id" element={<TaskDetail />} />
             <Route path="/analytics" element={<Analytics />} />
