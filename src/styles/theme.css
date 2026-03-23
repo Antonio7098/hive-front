@@ -1,0 +1,220 @@
+:root {
+  --color-bg-primary: #0a0a0a;
+  --color-bg-secondary: #141414;
+  --color-bg-elevated: #1a1a1a;
+  --color-border: #2a2a2a;
+  --color-text-primary: #fef3c7;
+  --color-text-secondary: #d97706;
+  --color-accent: #fbbf24;
+  --color-accent-hover: #f59e0b;
+  --color-accent-light: #fcd34d;
+  --color-warning: #f97316;
+
+  --color-surface-dim: #131313;
+  --color-surface-container-lowest: #0e0e0e;
+  --color-surface-container-low: #1c1b1b;
+  --color-surface-container: #201f1f;
+  --color-surface-container-high: #2a2a2a;
+  --color-surface-container-highest: #353534;
+  --color-surface-variant: #353534;
+  --color-surface-bright: #3a3939;
+
+  --color-on-surface: #e5e2e1;
+  --color-on-surface-variant: #d3c5ac;
+  --color-on-background: #e5e2e1;
+  --color-outline: #9c8f79;
+  --color-outline-variant: #4f4633;
+
+  --color-primary: #ffe1a7;
+  --color-primary-container: #fbbf24;
+  --color-primary-fixed: #ffdf9f;
+  --color-primary-fixed-dim: #f9bd22;
+  --color-on-primary: #402d00;
+  --color-on-primary-fixed: #261a00;
+  --color-on-primary-container: #6c4f00;
+
+  --color-secondary: #ffb690;
+  --color-secondary-container: #ec6a06;
+  --color-secondary-fixed: #ffdbca;
+  --color-secondary-fixed-dim: #ffb690;
+  --color-on-secondary: #552100;
+  --color-on-secondary-container: #4a1c00;
+  --color-on-secondary-fixed: #341100;
+  --color-on-secondary-fixed-variant: #783200;
+
+  --color-tertiary: #f0e5ba;
+  --color-tertiary-container: #d3c99f;
+  --color-tertiary-fixed: #ede3b8;
+  --color-tertiary-fixed-dim: #d1c79d;
+  --color-on-tertiary: #363113;
+  --color-on-tertiary-container: #5b5433;
+  --color-on-tertiary-fixed: #201c02;
+  --color-on-tertiary-fixed-variant: #4d4727;
+
+  --color-error: #ffb4ab;
+  --color-error-container: #93000a;
+  --color-on-error: #690005;
+  --color-on-error-container: #ffdad6;
+
+  --color-inverse-surface: #e5e2e1;
+  --color-inverse-on-surface: #313030;
+  --color-inverse-primary: #795900;
+
+  --shadow-hard: 4px 4px 0px 0px var(--color-surface-container-lowest);
+  --shadow-hard-lg: 8px 8px 0px 0px var(--color-surface-container-lowest);
+  --shadow-hard-hover: 6px 6px 0px 0px var(--color-surface-container-lowest);
+  --shadow-accent: 2px 2px 0px 0px var(--color-primary-container);
+  --shadow-accent-lg: 12px 12px 0px 0px var(--color-primary-container);
+
+  --font-headline: 'Space Grotesk', sans-serif;
+  --font-body: 'Work Sans', sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    border-radius: 0px;
+  }
+
+  body {
+    @apply bg-surface-dim text-on-surface font-body antialiased;
+    background-image: radial-gradient(#2a2a2a 0.5px, transparent 0.5px);
+    background-size: 20px 20px;
+  }
+
+  ::selection {
+    @apply bg-primary-container text-on-primary-container;
+  }
+}
+
+@layer components {
+  @keyframes brutal-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.95); }
+  }
+
+  @keyframes brutal-bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+  }
+
+  @keyframes brutal-wipe {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+
+  @keyframes brutal-shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-2px); }
+    75% { transform: translateX(2px); }
+  }
+
+  @keyframes brutal-spin-fast {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  @keyframes brutal-spin-slow {
+    from { transform: rotate(360deg); }
+    to { transform: rotate(0deg); }
+  }
+
+  @keyframes brutal-fade-in-out {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+  }
+
+  @keyframes brutal-stagger-in {
+    0% { transform: scale(0); opacity: 0; }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  .animate-brutal-pulse {
+    animation: brutal-pulse 0.8s ease-in-out infinite;
+  }
+
+  .animate-brutal-bounce {
+    animation: brutal-bounce 0.6s ease-in-out infinite;
+  }
+
+  .animate-brutal-wipe {
+    animation: brutal-wipe 1.2s ease-in-out infinite;
+  }
+
+  .animate-brutal-shake {
+    animation: brutal-shake 0.3s ease-in-out infinite;
+  }
+
+  .animate-brutal-spin-fast {
+    animation: brutal-spin-fast 0.5s linear infinite;
+  }
+
+  .animate-brutal-spin-slow {
+    animation: brutal-spin-slow 2s linear infinite;
+  }
+
+  .animate-brutal-fade-in-out {
+    animation: brutal-fade-in-out 1s ease-in-out infinite;
+  }
+
+  .animate-brutal-stagger {
+    animation: brutal-stagger-in 0.4s ease-out forwards;
+  }
+
+  .honeycomb-pattern {
+    background-color: #131313;
+    background-image: radial-gradient(#2a2a2a 0.5px, transparent 0.5px);
+    background-size: 20px 20px;
+  }
+
+  .btn-brutal {
+    @apply border-2 border-black font-headline font-bold uppercase tracking-widest py-3 px-6;
+    box-shadow: var(--shadow-hard);
+    transition: all 0.1s ease;
+  }
+
+  .btn-brutal:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: var(--shadow-hard-lg);
+  }
+
+  .btn-brutal:active {
+    transform: translate(4px, 4px);
+    box-shadow: none;
+  }
+
+  .card-brutal {
+    @apply bg-surface-container border-3 border-outline;
+    box-shadow: var(--shadow-hard-lg);
+  }
+
+  .card-brutal-hover {
+    @apply transition-all cursor-pointer;
+  }
+
+  .card-brutal-hover:hover {
+    transform: translate(-4px, -4px);
+    box-shadow: 12px 12px 0px 0px var(--color-primary-container);
+  }
+
+  .input-brutal {
+    @apply bg-surface-container-lowest border-2 border-outline px-4 py-2 text-sm font-headline tracking-widest uppercase focus:outline-none focus:border-primary-container;
+  }
+
+  .toolbar-tab {
+    @apply px-6 py-4 font-headline font-bold uppercase tracking-widest transition-colors;
+  }
+
+  .toolbar-tab-active {
+    @apply bg-primary-container text-on-primary-container border-b-4 border-b-on-primary-container;
+  }
+
+  .mono-utility {
+    font-family: var(--font-mono);
+  }
+}
