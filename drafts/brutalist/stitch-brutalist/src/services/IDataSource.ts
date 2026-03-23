@@ -24,18 +24,18 @@ export interface ProjectDto {
 
 export interface WorkflowDto {
   id: string;
-  project_id: string;
+  project_id: string | null;
   name: string;
-  description: string;
-  status: 'todo' | 'active' | 'completed';
-  task_count: number;
-  last_run: string;
-  trigger: string;
+  description: string | null;
+  status: string | null;
+  task_count: number | null;
+  last_run: string | null;
+  trigger: string | null;
 }
 
 export interface TaskDto {
   id: string;
-  workflow_id: string;
+  workflow_id: string | null;
   project_id: string;
   title: string;
   description: string | null;
