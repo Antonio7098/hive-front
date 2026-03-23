@@ -3,10 +3,22 @@ import type { IDataSource, ActiveItem, TodoItem, RecentProject } from '../servic
 import { ApiDataSource } from '../services/apiDataSource';
 import { MockDataSource } from '../services/mockDataSource';
 import type { Project, Workflow, Task } from '../types/entities';
-import { ErrorTaxonomy } from '../types/errors';
+import { ErrorTaxonomy, ErrorCategory, ErrorSeverity } from '../types/errors';
 import { structuredLogger } from '../lib/logger';
 
 const API_HEALTH_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8787';
+
+class DataSourceNotInitializedError extends Error {
+  constructor(
+    public code: string,
+    message: string,
+    public category: ErrorCategory,
+    public severity: ErrorSeverity
+  ) {
+    super(message);
+    this.name = 'DataSourceNotInitializedError';
+  }
+}
 
 interface DataContextValue {
   dataSource: IDataSource;
@@ -73,7 +85,7 @@ export function DataProvider({ children }: DataProviderProps) {
             const mockSource = new MockDataSource();
             setDataSource(mockSource);
             setIsConnected(false);
-            setConnectionWarning(`API unavailable. Using demo mode.`);
+            setConnectionWarning('API unavailable. Using demo mode.');
             structuredLogger.warn('API unreachable, using mock data', {
               url: API_HEALTH_URL,
               errorCode: ErrorTaxonomy.NETWORK_CONNECTION_FAILED.code,
@@ -111,6 +123,14 @@ export function DataProvider({ children }: DataProviderProps) {
     };
   }, []);
 
+  const notInitializedError = useMemo(() => 
+    new DataSourceNotInitializedError(
+      ErrorTaxonomy.CLIENT_INVALID_STATE.code,
+      'DataSource not initialized',
+      ErrorCategory.CLIENT,
+      ErrorSeverity.CRITICAL
+    ), []);
+
   const value = useMemo<DataContextValue>(() => {
     if (!dataSource) {
       return {
@@ -119,17 +139,17 @@ export function DataProvider({ children }: DataProviderProps) {
         isLoading: true,
         error: null,
         connectionWarning: 'Initializing...',
-        getProjects: async () => { throw new Error('DataSource not initialized'); },
-        getProject: async () => { throw new Error('DataSource not initialized'); },
-        getWorkflows: async () => { throw new Error('DataSource not initialized'); },
-        getWorkflow: async () => { throw new Error('DataSource not initialized'); },
-        getWorkflowsByProject: async () => { throw new Error('DataSource not initialized'); },
-        getTasks: async () => { throw new Error('DataSource not initialized'); },
-        getTask: async () => { throw new Error('DataSource not initialized'); },
-        getTasksByWorkflow: async () => { throw new Error('DataSource not initialized'); },
-        getActiveItems: async () => { throw new Error('DataSource not initialized'); },
-        getTodoItems: async () => { throw new Error('DataSource not initialized'); },
-        getRecentProjects: async () => { throw new Error('DataSource not initialized'); },
+        getProjects: async () => { throw notInitializedError; },
+        getProject: async () => { throw notInitializedError; },
+        getWorkflows: async () => { throw notInitializedError; },
+        getWorkflow: async () => { throw notInitializedError; },
+        getWorkflowsByProject: async () => { throw notInitializedError; },
+        getTasks: async () => { throw notInitializedError; },
+        getTask: async () => { throw notInitializedError; },
+        getTasksByWorkflow: async () => { throw notInitializedError; },
+        getActiveItems: async () => { throw notInitializedError; },
+        getTodoItems: async () => { throw notInitializedError; },
+        getRecentProjects: async () => { throw notInitializedError; },
       };
     }
 
@@ -151,7 +171,7 @@ export function DataProvider({ children }: DataProviderProps) {
       getTodoItems: () => dataSource.getTodoItems(),
       getRecentProjects: () => dataSource.getRecentProjects(),
     };
-  }, [dataSource, isConnected, isLoading, error, connectionWarning]);
+  }, [dataSource, isConnected, isLoading, error, connectionWarning, notInitializedError]);
 
   return (
     <DataContext.Provider value={value}>

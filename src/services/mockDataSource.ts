@@ -1,7 +1,32 @@
 import type { Project, Workflow, Task } from '../types/entities';
 import type { IDataSource, ActiveItem, TodoItem, RecentProject } from './IDataSource';
+import { ErrorTaxonomy, ErrorCategory, ErrorSeverity } from '../types/errors';
+import { structuredLogger } from '../lib/logger';
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+class MockError extends Error {
+  constructor(
+    public code: string,
+    message: string,
+    public category: ErrorCategory,
+    public severity: ErrorSeverity
+  ) {
+    super(message);
+    this.name = 'MockError';
+  }
+}
+
+function createNotFoundError(resource: string, id: string): MockError {
+  const taxonomy = ErrorTaxonomy.NOT_FOUND_PROJECT;
+  const message = `${resource} "${id}" not found`;
+  return new MockError(
+    taxonomy.code,
+    message,
+    ErrorCategory.NOT_FOUND,
+    ErrorSeverity.MEDIUM
+  );
+}
 
 export class MockDataSource implements IDataSource {
   readonly isConnected = false;
@@ -205,13 +230,22 @@ export class MockDataSource implements IDataSource {
       updatedAt: new Date(),
     };
     this.projects.push(project);
+    structuredLogger.debug('Mock project created', { projectId: project.id });
     return project;
   }
 
   async updateProject(id: string, data: Partial<Project>): Promise<Project> {
     await delay(100);
     const index = this.projects.findIndex(p => p.id === id);
-    if (index === -1) throw new Error(`Project ${id} not found`);
+    if (index === -1) {
+      const error = createNotFoundError('Project', id);
+      structuredLogger.error(
+        `Mock update failed: project not found`,
+        { code: error.code, category: error.category, severity: error.severity, message: error.message },
+        { projectId: id }
+      );
+      throw error;
+    }
     this.projects[index] = { ...this.projects[index], ...data, updatedAt: new Date() };
     return this.projects[index];
   }
@@ -219,7 +253,10 @@ export class MockDataSource implements IDataSource {
   async deleteProject(id: string): Promise<void> {
     await delay(100);
     const index = this.projects.findIndex(p => p.id === id);
-    if (index !== -1) this.projects.splice(index, 1);
+    if (index !== -1) {
+      this.projects.splice(index, 1);
+      structuredLogger.debug('Mock project deleted', { projectId: id });
+    }
   }
 
   async getWorkflows(): Promise<Workflow[]> {
@@ -241,13 +278,28 @@ export class MockDataSource implements IDataSource {
     await delay(100);
     const workflow: Workflow = { ..._data, id: `wf-${Date.now()}` };
     this.workflows.push(workflow);
+    structuredLogger.debug('Mock workflow created', { workflowId: workflow.id });
     return workflow;
   }
 
   async updateWorkflow(id: string, data: Partial<Workflow>): Promise<Workflow> {
     await delay(100);
     const index = this.workflows.findIndex(w => w.id === id);
-    if (index === -1) throw new Error(`Workflow ${id} not found`);
+    if (index === -1) {
+      const taxonomy = ErrorTaxonomy.NOT_FOUND_WORKFLOW;
+      const error = new MockError(
+        taxonomy.code,
+        `Workflow "${id}" not found`,
+        ErrorCategory.NOT_FOUND,
+        ErrorSeverity.MEDIUM
+      );
+      structuredLogger.error(
+        `Mock update failed: workflow not found`,
+        { code: error.code, category: error.category, severity: error.severity, message: error.message },
+        { workflowId: id }
+      );
+      throw error;
+    }
     this.workflows[index] = { ...this.workflows[index], ...data };
     return this.workflows[index];
   }
@@ -255,7 +307,10 @@ export class MockDataSource implements IDataSource {
   async deleteWorkflow(id: string): Promise<void> {
     await delay(100);
     const index = this.workflows.findIndex(w => w.id === id);
-    if (index !== -1) this.workflows.splice(index, 1);
+    if (index !== -1) {
+      this.workflows.splice(index, 1);
+      structuredLogger.debug('Mock workflow deleted', { workflowId: id });
+    }
   }
 
   async getTasks(): Promise<Task[]> {
@@ -277,13 +332,28 @@ export class MockDataSource implements IDataSource {
     await delay(100);
     const task: Task = { ..._data, id: `task-${Date.now()}` };
     this.tasks.push(task);
+    structuredLogger.debug('Mock task created', { taskId: task.id });
     return task;
   }
 
   async updateTask(id: string, data: Partial<Task>): Promise<Task> {
     await delay(100);
     const index = this.tasks.findIndex(t => t.id === id);
-    if (index === -1) throw new Error(`Task ${id} not found`);
+    if (index === -1) {
+      const taxonomy = ErrorTaxonomy.NOT_FOUND_TASK;
+      const error = new MockError(
+        taxonomy.code,
+        `Task "${id}" not found`,
+        ErrorCategory.NOT_FOUND,
+        ErrorSeverity.MEDIUM
+      );
+      structuredLogger.error(
+        `Mock update failed: task not found`,
+        { code: error.code, category: error.category, severity: error.severity, message: error.message },
+        { taskId: id }
+      );
+      throw error;
+    }
     this.tasks[index] = { ...this.tasks[index], ...data };
     return this.tasks[index];
   }
@@ -291,7 +361,10 @@ export class MockDataSource implements IDataSource {
   async deleteTask(id: string): Promise<void> {
     await delay(100);
     const index = this.tasks.findIndex(t => t.id === id);
-    if (index !== -1) this.tasks.splice(index, 1);
+    if (index !== -1) {
+      this.tasks.splice(index, 1);
+      structuredLogger.debug('Mock task deleted', { taskId: id });
+    }
   }
 
   async getActiveItems(): Promise<ActiveItem[]> {
