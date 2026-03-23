@@ -1,4 +1,4 @@
-interface TacticalVisualizerProps {
+export interface TacticalVisualizerProps {
   className?: string;
 }
 
