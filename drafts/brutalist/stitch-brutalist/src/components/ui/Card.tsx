@@ -7,7 +7,7 @@ interface CardProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 const variantClasses = {
-  default: 'bg-surface-container border-3 border-outline shadow-[8px_8px_0px_0px_#0e0e0e]',
+  default: 'card-brutal',
   elevated: 'bg-surface-container-high border-2 border-outline-variant shadow-[4px_4px_0px_0px_#0e0e0e]',
   outlined: 'bg-surface-container-lowest border-2 border-dashed border-outline',
 };

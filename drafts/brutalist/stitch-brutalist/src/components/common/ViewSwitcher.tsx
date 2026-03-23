@@ -1,6 +1,5 @@
 import { Icon } from '../ui';
-
-export type ViewMode = 'kanban' | 'list' | 'graph';
+import type { ViewMode } from './types';
 
 interface ViewSwitcherProps {
   activeView: ViewMode;

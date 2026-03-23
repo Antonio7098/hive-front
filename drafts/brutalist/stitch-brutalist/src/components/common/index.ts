@@ -7,3 +7,6 @@ export { ExpandableItem } from './ExpandableItem';
 export { ActiveWidget } from './ActiveWidget';
 export { TodoWidget } from './TodoWidget';
 export { RecentProjectsWidget } from './RecentProjectsWidget';
+export { PageFooter } from './PageFooter';
+export { PageHeader } from './PageHeader';
+export { SectionHeader } from './SectionHeader';

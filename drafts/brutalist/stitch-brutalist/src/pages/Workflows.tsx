@@ -1,35 +1,23 @@
-import { useState } from 'react';
-import { EntityCard, ViewSwitcher } from '../components/common';
-import { Button } from '../components/ui';
+import { EntityCard, PageHeader, SectionHeader, PageFooter } from '../components/common';
 import { mockWorkflows } from '../data/mock';
+import { useViewMode } from '../hooks/useViewMode';
 
 export function Workflows() {
-  const [viewMode, setViewMode] = useState<'kanban' | 'list' | 'graph'>('kanban');
+  const { viewMode, setViewMode } = useViewMode();
 
   const activeWorkflows = mockWorkflows.filter((w) => w.status === 'active');
   const otherWorkflows = mockWorkflows.filter((w) => w.status !== 'active');
 
   return (
     <div className="p-8 max-w-7xl mx-auto w-full">
-      <div className="flex justify-between items-end mb-12">
-        <div>
-          <div className="font-mono text-primary-container text-xs mb-2 tracking-[0.4em] uppercase">
-            Directory / Root / Workflows
-          </div>
-          <h2 className="text-6xl font-black font-headline tracking-tighter text-on-surface">WORKFLOWS</h2>
-        </div>
-        <Button variant="primary" size="lg">
-          + NEW_WORKFLOW
-        </Button>
-      </div>
+      <PageHeader
+        breadcrumb="Directory / Root / Workflows"
+        title="WORKFLOWS"
+        actionLabel="+ NEW_WORKFLOW"
+      />
 
       <section className="mb-16">
-        <div className="flex items-center gap-4 mb-6">
-          <h3 className="font-headline font-bold text-xl uppercase tracking-widest text-[#d3c5ac]">
-            Section_01 // Active_Runs
-          </h3>
-          <div className="h-[2px] flex-1 bg-outline opacity-30"></div>
-        </div>
+        <SectionHeader label="Section_01 // Active_Runs" />
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {activeWorkflows.map((workflow) => (
             <EntityCard key={workflow.id} entity={workflow} type="workflow" variant="default" />
@@ -38,15 +26,12 @@ export function Workflows() {
       </section>
 
       <section>
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-4">
-            <h3 className="font-headline font-bold text-xl uppercase tracking-widest text-[#d3c5ac]">
-              Section_02 // Workflow_Manifest
-            </h3>
-            <div className="h-[2px] flex-1 bg-outline opacity-30 w-32"></div>
-          </div>
-          <ViewSwitcher activeView={viewMode} onViewChange={setViewMode} />
-        </div>
+        <SectionHeader
+          label="Section_02 // Workflow_Manifest"
+          dividerWidth="short"
+          viewMode={viewMode}
+          onViewModeChange={setViewMode}
+        />
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {otherWorkflows.map((workflow) => (
             <EntityCard key={workflow.id} entity={workflow} type="workflow" variant="compact" />
@@ -54,16 +39,7 @@ export function Workflows() {
         </div>
       </section>
 
-      <footer className="mt-16 bg-surface-container-highest border-t-3 border-[#9c8f79] px-6 py-2 flex justify-between items-center text-[10px] font-mono tracking-widest text-on-surface-variant">
-        <div className="flex gap-6">
-          <span>SYSTEM_STATUS: <span className="text-primary-container">OPTIMAL</span></span>
-          <span>LATENCY: 14MS</span>
-          <span>DATABASE: SYNCED</span>
-        </div>
-        <div>
-          <span>© 2024 HIVEMIND COMMAND</span>
-        </div>
-      </footer>
+      <PageFooter />
     </div>
   );
 }

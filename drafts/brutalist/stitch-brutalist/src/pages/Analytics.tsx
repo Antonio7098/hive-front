@@ -1,18 +1,14 @@
 import { Icon } from '../components/ui';
+import { PageHeader, PageFooter } from '../components/common';
 
 export function Analytics() {
   return (
     <div className="p-8 max-w-7xl mx-auto w-full">
-      <div className="mb-12">
-        <div className="font-mono text-primary-container text-xs mb-2 tracking-[0.4em] uppercase">
-          Directory / Root / Analytics
-        </div>
-        <h2 className="text-6xl font-black font-headline tracking-tighter text-on-surface">ANALYTICS</h2>
-      </div>
+      <PageHeader breadcrumb="Directory / Root / Analytics" title="ANALYTICS" />
 
       <div className="grid grid-cols-12 gap-8">
         <div className="col-span-12 lg:col-span-8 space-y-8">
-          <section className="bg-surface-container border-3 border-outline p-6 shadow-[8px_8px_0px_0px_#0e0e0e]">
+          <section className="card-brutal p-6">
             <h3 className="font-headline font-black text-xl uppercase tracking-widest mb-6">System_Throughput</h3>
             <div className="h-48 border-2 border-outline bg-surface-container-lowest flex items-center justify-center">
               <div className="text-center">
@@ -22,7 +18,7 @@ export function Analytics() {
             </div>
           </section>
 
-          <section className="bg-surface-container border-3 border-outline p-6 shadow-[8px_8px_0px_0px_#0e0e0e]">
+          <section className="card-brutal p-6">
             <h3 className="font-headline font-black text-xl uppercase tracking-widest mb-6">Resource_Utilization</h3>
             <div className="grid grid-cols-3 gap-4">
               <div className="border-2 border-outline p-4 text-center">
@@ -42,7 +38,7 @@ export function Analytics() {
         </div>
 
         <div className="col-span-12 lg:col-span-4 space-y-8">
-          <section className="bg-surface-container border-3 border-outline p-6 shadow-[8px_8px_0px_0px_#0e0e0e]">
+          <section className="card-brutal p-6">
             <h3 className="font-headline font-black text-xl uppercase tracking-widest mb-6">Project_Status</h3>
             <div className="space-y-4">
               <div className="flex justify-between items-center border-b-2 border-outline pb-4">
@@ -64,7 +60,7 @@ export function Analytics() {
             </div>
           </section>
 
-          <section className="bg-surface-container border-3 border-outline p-6 shadow-[8px_8px_0px_0px_#0e0e0e]">
+          <section className="card-brutal p-6">
             <h3 className="font-headline font-black text-xl uppercase tracking-widest mb-6">Health_Metrics</h3>
             <div className="space-y-4">
               <div className="flex items-center gap-4">
@@ -84,16 +80,7 @@ export function Analytics() {
         </div>
       </div>
 
-      <footer className="mt-16 bg-surface-container-highest border-t-3 border-[#9c8f79] px-6 py-2 flex justify-between items-center text-[10px] font-mono tracking-widest text-on-surface-variant">
-        <div className="flex gap-6">
-          <span>SYSTEM_STATUS: <span className="text-primary-container">OPTIMAL</span></span>
-          <span>LATENCY: 14MS</span>
-          <span>DATABASE: SYNCED</span>
-        </div>
-        <div>
-          <span>© 2024 HIVEMIND COMMAND</span>
-        </div>
-      </footer>
+      <PageFooter />
     </div>
   );
 }

@@ -123,7 +123,7 @@
 
   .card-brutal-hover:hover {
     transform: translate(-4px, -4px);
-    box-shadow: 12px 12px 0px 0px #fbbf24;
+    box-shadow: 12px 12px 0px 0px var(--color-primary-container);
   }
 
   .input-brutal {

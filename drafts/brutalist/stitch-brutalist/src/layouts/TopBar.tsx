@@ -7,9 +7,9 @@ interface TopBarProps {
 
 export function TopBar({ title = 'HIVEMIND // COMMAND_CENTER', version = 'V4.2.0_STABLE' }: TopBarProps) {
   return (
-    <header className="flex justify-between items-center w-full px-6 py-4 sticky top-0 z-50 bg-[#131313] border-b-3 border-[#9c8f79] font-headline font-bold uppercase tracking-[0.1em]">
+    <header className="flex justify-between items-center w-full px-6 py-4 sticky top-0 z-50 bg-surface-dim border-b-3 border-outline font-headline font-bold uppercase tracking-[0.1em]">
       <div className="flex items-center gap-4">
-        <h1 className="text-xl font-black text-[#fbbf24]">{title}</h1>
+        <h1 className="text-xl font-black text-primary-container">{title}</h1>
         <span className="bg-surface-container px-2 py-0.5 border border-outline text-[10px] mono-utility text-on-surface-variant">
           {version}
         </span>
@@ -25,14 +25,14 @@ export function TopBar({ title = 'HIVEMIND // COMMAND_CENTER', version = 'V4.2.0
           />
         </div>
 
-        <div className="flex items-center gap-4 text-[#d3c5ac]">
-          <button className="hover:text-[#fbbf24] transition-colors active:bg-[#fbbf24] active:text-black p-1">
+        <div className="flex items-center gap-4 text-on-surface-variant">
+          <button className="hover:text-primary-container transition-colors active:bg-primary-container active:text-on-primary-container p-1">
             <Icon name="notifications" />
           </button>
-          <button className="hover:text-[#fbbf24] transition-colors active:bg-[#fbbf24] active:text-black p-1">
+          <button className="hover:text-primary-container transition-colors active:bg-primary-container active:text-on-primary-container p-1">
             <Icon name="terminal" />
           </button>
-          <button className="hover:text-[#fbbf24] transition-colors active:bg-[#fbbf24] active:text-black p-1 border-2 border-[#fbbf24]">
+          <button className="hover:text-primary-container transition-colors active:bg-primary-container active:text-on-primary-container p-1 border-2 border-primary-container">
             <Icon name="account_circle" />
           </button>
         </div>

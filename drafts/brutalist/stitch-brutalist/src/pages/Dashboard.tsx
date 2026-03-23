@@ -1,4 +1,4 @@
-import { ActiveWidget, TodoWidget, RecentProjectsWidget } from '../components/common';
+import { ActiveWidget, TodoWidget, RecentProjectsWidget, PageFooter } from '../components/common';
 import { mockActiveItems, mockTodoItems, mockRecentProjects } from '../data/mock';
 
 export function Dashboard() {
@@ -27,17 +27,22 @@ export function Dashboard() {
         <RecentProjectsWidget projects={mockRecentProjects} />
       </aside>
 
-      <footer className="col-span-12 mt-auto border-t-3 border-[#9c8f79] bg-[#131313] p-4 flex justify-between items-center mono-utility text-[10px] text-on-surface-variant uppercase tracking-tighter">
-        <div className="flex gap-8">
-          <span>CPU_LOAD: 24%</span>
-          <span>MEM_USAGE: 6.2GB / 32GB</span>
-          <span>DISK_IO: 120MB/s</span>
-        </div>
-        <div className="flex gap-4 items-center">
-          <span className="text-primary-container">● SECURE_LINK_ESTABLISHED</span>
-          <span>2024-05-21 14:32:01 UTC</span>
-        </div>
-      </footer>
+      <PageFooter
+        className="col-span-12 mt-auto"
+        leftContent={
+          <div className="flex gap-8">
+            <span>CPU_LOAD: 24%</span>
+            <span>MEM_USAGE: 6.2GB / 32GB</span>
+            <span>DISK_IO: 120MB/s</span>
+          </div>
+        }
+        rightContent={
+          <div className="flex gap-4 items-center">
+            <span className="text-primary-container">● SECURE_LINK_ESTABLISHED</span>
+            <span>2024-05-21 14:32:01 UTC</span>
+          </div>
+        }
+      />
     </div>
   );
 }

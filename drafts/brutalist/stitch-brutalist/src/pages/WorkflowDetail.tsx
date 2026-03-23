@@ -1,13 +1,14 @@
 import { useParams } from 'react-router-dom';
-import { useState } from 'react';
 import { Toolbar, ViewSwitcher } from '../components/common';
 import { Button, Badge, Toggle, Card, Icon } from '../components/ui';
 import { mockWorkflows, mockTasks } from '../data/mock';
+import { useViewMode } from '../hooks/useViewMode';
+import { useToggle } from '../hooks/useToggle';
 
 export function WorkflowDetail() {
   const { id } = useParams();
-  const [viewMode, setViewMode] = useState<'kanban' | 'list' | 'graph'>('kanban');
-  const [isActive, setIsActive] = useState(true);
+  const { viewMode, setViewMode } = useViewMode();
+  const { checked: isActive, onChange: setIsActive, label: activeLabel } = useToggle(true, { onLabel: 'Enabled', offLabel: 'Disabled' });
 
   const workflow = mockWorkflows.find((w) => w.id === id) || mockWorkflows[0];
   const tasks = mockTasks.filter((t) => t.workflowId === workflow.id);
@@ -75,7 +76,7 @@ export function WorkflowDetail() {
 
         <div className="col-span-12 lg:col-span-7 space-y-8">
           <div className="grid grid-cols-4 gap-4">
-            <div className="col-span-3 bg-surface-container p-4 border-3 border-outline flex justify-between items-center">
+            <div className="col-span-3 card-brutal p-4 flex justify-between items-center">
               <div className="grid grid-cols-3 gap-8 divide-x-2 divide-outline/30">
                 <div className="px-2 text-center">
                   <div className="text-[10px] font-bold text-outline uppercase tracking-tighter">Total_Tasks</div>
@@ -91,9 +92,9 @@ export function WorkflowDetail() {
                 </div>
               </div>
             </div>
-            <div className="bg-surface-container p-4 border-3 border-outline flex flex-col items-center justify-center gap-2">
+            <div className="card-brutal p-4 flex flex-col items-center justify-center gap-2">
               <div className="text-[10px] font-bold text-outline uppercase tracking-tighter text-center">Workflow_Status</div>
-              <Toggle checked={isActive} onChange={setIsActive} label={isActive ? 'Enabled' : 'Disabled'} />
+              <Toggle checked={isActive} onChange={setIsActive} label={activeLabel} />
             </div>
           </div>
 

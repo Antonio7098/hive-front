@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Icon } from '../ui';
+import { CardHeader } from '../ui/Card';
 
 interface TodoWidgetProps {
   items: {
@@ -20,13 +21,13 @@ const priorityColors = {
 
 export function TodoWidget({ items, count, className = '' }: TodoWidgetProps) {
   return (
-    <div className={`bg-surface-container border-3 border-outline shadow-[8px_8px_0px_0px_#0e0e0e] ${className}`}>
-      <div className="border-b-3 border-outline p-5 flex justify-between items-center bg-surface-container-high">
-        <h2 className="font-headline font-black text-xl tracking-widest uppercase">TODO</h2>
-        {count !== undefined && (
+    <div className={`card-brutal p-0 ${className}`}>
+      <CardHeader
+        title="TODO"
+        action={count !== undefined ? (
           <span className="bg-secondary-container text-white px-3 py-1 text-sm font-bold border-2 border-black">{count}</span>
-        )}
-      </div>
+        ) : undefined}
+      />
       <div className="divide-y-2 divide-outline">
         {items.map((item) => (
           <Link

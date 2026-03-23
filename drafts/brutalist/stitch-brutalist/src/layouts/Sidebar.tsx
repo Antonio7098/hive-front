@@ -17,10 +17,10 @@ const navItems = [
 
 export function Sidebar({ children }: SidebarProps) {
   return (
-    <aside className="w-64 h-screen border-r-3 border-[#9c8f79] flex flex-col sticky top-0 left-0 bg-[#131313] shadow-[4px_4px_0px_0px_#0e0e0e] z-[60]">
-      <div className="p-6 flex flex-col gap-1 border-b-3 border-[#9c8f79]">
-        <div className="text-2xl font-black tracking-tighter text-[#fbbf24] font-headline">HIVEMIND</div>
-        <div className="text-[10px] font-headline uppercase tracking-widest font-bold text-[#d3c5ac]">OPERATOR_01</div>
+    <aside className="w-64 h-screen border-r-3 border-outline flex flex-col sticky top-0 left-0 bg-surface-dim shadow-[4px_4px_0px_0px_#0e0e0e] z-[60]">
+      <div className="p-6 flex flex-col gap-1 border-b-3 border-outline">
+        <div className="text-2xl font-black tracking-tighter text-primary-container font-headline">HIVEMIND</div>
+        <div className="text-[10px] font-headline uppercase tracking-widest font-bold text-on-surface-variant">OPERATOR_01</div>
       </div>
 
       <nav className="flex-1 py-4">
@@ -33,8 +33,8 @@ export function Sidebar({ children }: SidebarProps) {
               font-headline uppercase tracking-widest font-bold
               transition-all duration-75
               ${isActive
-                ? 'bg-[#fbbf24] text-[#131313] border-y-2 border-black'
-                : 'text-[#e5e2e1] hover:bg-[#2a2a2a] hover:translate-x-1 hover:shadow-[2px_2px_0px_0px_#fbbf24]'
+                ? 'bg-primary-container text-on-primary-container border-y-2 border-black'
+                : 'text-on-surface hover:bg-surface-container-high hover:translate-x-1 hover:shadow-[2px_2px_0px_0px_#fbbf24]'
               }
             `}
           >

@@ -1,12 +1,12 @@
 import { useParams } from 'react-router-dom';
-import { useState } from 'react';
 import { Toolbar } from '../components/common';
 import { Button, Badge, Toggle, Card, Icon } from '../components/ui';
 import { mockTasks } from '../data/mock';
+import { useToggle } from '../hooks/useToggle';
 
 export function TaskDetail() {
   const { id } = useParams();
-  const [isActive, setIsActive] = useState(true);
+  const { checked: isActive, onChange: setIsActive, label: activeLabel } = useToggle(true, { onLabel: 'Live', offLabel: 'Offline' });
 
   const task = mockTasks.find((t) => t.id === id) || mockTasks[0];
 
@@ -68,7 +68,7 @@ export function TaskDetail() {
           <Card variant="default" padding="md" className="space-y-6">
             <div className="flex items-center justify-between border-b-2 border-outline-variant pb-4">
               <span className="font-headline font-bold text-xs tracking-widest text-on-surface-variant uppercase">Active State</span>
-              <Toggle checked={isActive} onChange={setIsActive} label={isActive ? 'Live' : 'Offline'} />
+              <Toggle checked={isActive} onChange={setIsActive} label={activeLabel} />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="p-4 bg-surface-container-high border-2 border-outline-variant">

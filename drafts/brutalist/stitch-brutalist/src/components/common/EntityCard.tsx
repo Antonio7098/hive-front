@@ -2,43 +2,7 @@ import { Link } from 'react-router-dom';
 import { Badge } from '../ui/Badge';
 import { StatusDot } from '../ui/StatusDot';
 import { Icon } from '../ui';
-
-interface Project {
-  id: string;
-  name: string;
-  description?: string;
-  status?: 'active' | 'archived' | 'draft';
-  taskCount: number;
-  workflowCount?: number;
-  lastActivity?: string;
-  priority?: string;
-}
-
-interface Workflow {
-  id: string;
-  name: string;
-  description?: string;
-  status?: 'todo' | 'active' | 'completed';
-  taskCount: number;
-  lastRun?: string;
-}
-
-interface Subtask {
-  id: string;
-  name: string;
-  completed: boolean;
-}
-
-interface Task {
-  id: string;
-  name: string;
-  description?: string;
-  status?: 'backlog' | 'in_progress' | 'done';
-  priority?: 'low' | 'medium' | 'high';
-  assignee?: string;
-  dueDate?: string;
-  subtasks?: Subtask[];
-}
+import type { Project, Workflow, Task } from '../../types/entities';
 
 interface EntityCardProps {
   entity: Project | Workflow | Task;

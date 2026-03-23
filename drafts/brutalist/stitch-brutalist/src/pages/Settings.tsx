@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Button, Toggle, Icon } from '../components/ui';
+import { PageHeader, PageFooter } from '../components/common';
 
 export function Settings() {
   const [notifications, setNotifications] = useState(true);
@@ -8,16 +9,11 @@ export function Settings() {
 
   return (
     <div className="p-8 max-w-7xl mx-auto w-full">
-      <div className="mb-12">
-        <div className="font-mono text-primary-container text-xs mb-2 tracking-[0.4em] uppercase">
-          Directory / Root / Settings
-        </div>
-        <h2 className="text-6xl font-black font-headline tracking-tighter text-on-surface">SETTINGS</h2>
-      </div>
+      <PageHeader breadcrumb="Directory / Root / Settings" title="SETTINGS" />
 
       <div className="grid grid-cols-12 gap-8">
         <div className="col-span-12 lg:col-span-8 space-y-8">
-          <section className="bg-surface-container border-3 border-outline p-6 shadow-[8px_8px_0px_0px_#0e0e0e]">
+          <section className="card-brutal p-6">
             <h3 className="font-headline font-black text-xl uppercase tracking-widest mb-6 flex items-center gap-3">
               <Icon name="settings" size={24} />
               System_Configuration
@@ -47,7 +43,7 @@ export function Settings() {
             </div>
           </section>
 
-          <section className="bg-surface-container border-3 border-outline p-6 shadow-[8px_8px_0px_0px_#0e0e0e]">
+          <section className="card-brutal p-6">
             <h3 className="font-headline font-black text-xl uppercase tracking-widest mb-6 flex items-center gap-3">
               <Icon name="terminal" size={24} />
               Operator_Profile
@@ -77,7 +73,7 @@ export function Settings() {
         </div>
 
         <div className="col-span-12 lg:col-span-4 space-y-8">
-          <section className="bg-surface-container border-3 border-outline p-6 shadow-[8px_8px_0px_0px_#0e0e0e]">
+          <section className="card-brutal p-6">
             <h3 className="font-headline font-black text-xl uppercase tracking-widest mb-6">Danger_Zone</h3>
             <div className="space-y-4">
               <Button variant="danger" size="md" className="w-full">
@@ -112,16 +108,7 @@ export function Settings() {
         </div>
       </div>
 
-      <footer className="mt-16 bg-surface-container-highest border-t-3 border-[#9c8f79] px-6 py-2 flex justify-between items-center text-[10px] font-mono tracking-widest text-on-surface-variant">
-        <div className="flex gap-6">
-          <span>SYSTEM_STATUS: <span className="text-primary-container">OPTIMAL</span></span>
-          <span>LATENCY: 14MS</span>
-          <span>DATABASE: SYNCED</span>
-        </div>
-        <div>
-          <span>© 2024 HIVEMIND COMMAND</span>
-        </div>
-      </footer>
+      <PageFooter />
     </div>
   );
 }

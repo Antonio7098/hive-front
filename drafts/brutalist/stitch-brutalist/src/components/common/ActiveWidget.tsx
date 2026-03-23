@@ -1,3 +1,5 @@
+import { ProgressBar } from '../ui/ProgressBar';
+
 interface ActiveWidgetProps {
   title: string;
   items: {
@@ -11,7 +13,7 @@ interface ActiveWidgetProps {
 
 export function ActiveWidget({ title, items, className = '' }: ActiveWidgetProps) {
   return (
-    <div className={`bg-surface-container border-3 border-outline shadow-[8px_8px_0px_0px_#0e0e0e] ${className}`}>
+    <div className={`card-brutal p-0 ${className}`}>
       <div className="border-b-3 border-outline p-5 flex justify-between items-center bg-surface-container-high">
         <div className="flex items-center gap-3">
           <span className="w-3 h-3 bg-primary-container animate-pulse"></span>
@@ -42,10 +44,7 @@ export function ActiveWidget({ title, items, className = '' }: ActiveWidgetProps
               </div>
             </div>
             {item.progress !== undefined && (
-              <div className="w-full bg-surface-container-lowest h-6 border-2 border-outline p-1 relative">
-                <div className="bg-primary-container h-full" style={{ width: `${item.progress}%` }} />
-                <span className="absolute right-2 top-0.5 mono-utility text-[10px] text-on-surface">{item.progress}%</span>
-              </div>
+              <ProgressBar value={item.progress} />
             )}
           </div>
         ))}

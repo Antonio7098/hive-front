@@ -1,14 +1,15 @@
 import { useParams } from 'react-router-dom';
-import { useState } from 'react';
 import { Toolbar, ViewSwitcher, EntityCard, MetadataGrid, MetadataCell } from '../components/common';
 import { Button, Badge, Toggle, Icon } from '../components/ui';
 import { TacticalVisualizer } from '../components/features/TacticalVisualizer';
 import { mockProjects, mockWorkflows } from '../data/mock';
+import { useViewMode } from '../hooks/useViewMode';
+import { useToggle } from '../hooks/useToggle';
 
 export function ProjectDetail() {
   const { id } = useParams();
-  const [viewMode, setViewMode] = useState<'kanban' | 'list' | 'graph'>('kanban');
-  const [isActive, setIsActive] = useState(true);
+  const { viewMode, setViewMode } = useViewMode();
+  const { checked: isActive, onChange: setIsActive, label: activeLabel } = useToggle(true, { onLabel: 'Active', offLabel: 'Inactive' });
 
   const project = mockProjects.find((p) => p.id === id) || mockProjects[0];
   const workflows = mockWorkflows.filter((w) => w.projectId === project.id);
@@ -26,7 +27,7 @@ export function ProjectDetail() {
         actions={
           <div className="flex items-center gap-3">
             <span className="font-headline text-xs font-bold uppercase text-on-surface-variant tracking-tighter">PROJECT STATE:</span>
-            <Toggle checked={isActive} onChange={setIsActive} label={isActive ? 'Active' : 'Inactive'} />
+            <Toggle checked={isActive} onChange={setIsActive} label={activeLabel} />
           </div>
         }
       />
