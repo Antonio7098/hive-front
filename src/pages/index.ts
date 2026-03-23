@@ -1,8 +1,10 @@
 export { Dashboard } from './Dashboard';
 export { Projects } from './Projects';
 export { ProjectDetail } from './ProjectDetail';
-export { WorkflowDetail } from './WorkflowDetail';
+export { ProjectWorkflows } from './ProjectWorkflows';
 export { Workflows } from './Workflows';
+export { WorkflowDetail } from './WorkflowDetail';
+export { WorkflowTasks } from './WorkflowTasks';
 export { TaskDetail } from './TaskDetail';
 export { Tasks } from './Tasks';
 export { Analytics } from './Analytics';
