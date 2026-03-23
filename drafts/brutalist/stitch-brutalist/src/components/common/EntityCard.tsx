@@ -61,7 +61,7 @@ export function EntityCard({
   return (
     <Link
       to={`/${type === 'workflow' ? 'workflows' : type === 'task' ? 'tasks' : 'projects'}/${entity.id}`}
-      className="bg-surface-container border-3 border-outline p-6 shadow-[8px_8px_0px_0px_#0e0e0e] hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-[12px_12px_0px_0px_#fbbf24] transition-all cursor-pointer group"
+      className="bg-surface-container border-3 border-outline p-6 shadow-[var(--shadow-hard-lg)] hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-[var(--shadow-accent-lg)] transition-all cursor-pointer group"
       onClick={onClick}
     >
       <div className="flex justify-between items-start mb-4">

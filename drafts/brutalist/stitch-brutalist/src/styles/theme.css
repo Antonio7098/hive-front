@@ -60,9 +60,11 @@
   --color-inverse-on-surface: #313030;
   --color-inverse-primary: #795900;
 
-  --shadow-hard: 4px 4px 0px 0px #0e0e0e;
-  --shadow-hard-lg: 8px 8px 0px 0px #0e0e0e;
-  --shadow-hard-hover: 6px 6px 0px 0px #0e0e0e;
+  --shadow-hard: 4px 4px 0px 0px var(--color-surface-container-lowest);
+  --shadow-hard-lg: 8px 8px 0px 0px var(--color-surface-container-lowest);
+  --shadow-hard-hover: 6px 6px 0px 0px var(--color-surface-container-lowest);
+  --shadow-accent: 2px 2px 0px 0px var(--color-primary-container);
+  --shadow-accent-lg: 12px 12px 0px 0px var(--color-primary-container);
 
   --font-headline: 'Space Grotesk', sans-serif;
   --font-body: 'Work Sans', sans-serif;

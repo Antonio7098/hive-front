@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
-import { Toolbar, ViewSwitcher, EntityCard, MetadataGrid, MetadataCell } from '../components/common';
-import { Button, Badge, Toggle, Icon } from '../components/ui';
+import { Toolbar, ViewSwitcher, EntityCard, MetadataGrid, MetadataCell, HealthBar, AddCard, DetailFooter } from '../components/common';
+import { Button, Badge, Toggle } from '../components/ui';
 import { TacticalVisualizer } from '../components/features/TacticalVisualizer';
 import { mockProjects, mockWorkflows } from '../data/mock';
 import { useViewMode } from '../hooks/useViewMode';
@@ -34,7 +34,7 @@ export function ProjectDetail() {
 
       <div className="p-8 grid grid-cols-12 gap-8">
         <div className="col-span-12 lg:col-span-5 space-y-8">
-          <section className="space-y-4">
+          <div className="space-y-4">
             <Badge variant="secondary">{project.priority || 'ALPHA_CLASS'}</Badge>
             <h1 className="text-6xl font-black font-headline tracking-tighter text-on-surface">{project.name}</h1>
             <div className="bg-surface-container-lowest border-2 border-outline p-6 font-mono text-sm leading-relaxed text-on-surface-variant relative overflow-hidden">
@@ -52,12 +52,12 @@ export function ProjectDetail() {
                 </div>
               </div>
             </div>
-          </section>
+          </div>
 
-          <section className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-4">
             <Button variant="secondary" size="md">EDIT_PROJECT</Button>
             <Button variant="danger" size="md">ARCHIVE</Button>
-          </section>
+          </div>
         </div>
 
         <div className="col-span-12 lg:col-span-7 space-y-8">
@@ -65,18 +65,10 @@ export function ProjectDetail() {
             <MetadataCell label="TASKS" value={project.taskCount} />
             <MetadataCell label="FLOWS" value={project.workflowCount} />
             <MetadataCell label="STATUS" value="NOMINAL" />
-            <MetadataCell label="HEALTH" value={
-              <div className="flex items-end space-x-1 h-8">
-                <div className="w-2 h-full bg-primary-container"></div>
-                <div className="w-2 h-5/6 bg-primary-container"></div>
-                <div className="w-2 h-full bg-primary-container"></div>
-                <div className="w-2 h-4/6 bg-primary-container"></div>
-                <div className="w-2 h-3/6 bg-primary-container"></div>
-              </div>
-            } />
+            <MetadataCell label="HEALTH" value={<HealthBar />} />
           </MetadataGrid>
 
-          <section className="space-y-6">
+          <div className="space-y-6">
             <div className="flex items-center justify-between">
               <h2 className="text-2xl font-black font-headline uppercase tracking-tighter">ACTIVE_WORKFLOWS</h2>
               <ViewSwitcher activeView={viewMode} onViewChange={setViewMode} />
@@ -85,25 +77,25 @@ export function ProjectDetail() {
               {workflows.map((workflow) => (
                 <EntityCard key={workflow.id} entity={workflow} type="workflow" />
               ))}
-              <div className="border-2 border-dashed border-outline p-6 flex flex-col items-center justify-center text-outline hover:border-primary-container hover:text-primary-container transition-colors cursor-pointer group">
-                <Icon name="add_box" className="mb-2" size={40} />
-                <span className="font-headline font-black uppercase tracking-widest text-sm">ADD_WORKFLOW</span>
-              </div>
+              <AddCard label="ADD_WORKFLOW" />
             </div>
-          </section>
+          </div>
 
           <TacticalVisualizer />
         </div>
       </div>
 
-      <footer className="mt-auto bg-surface-container-highest border-t-3 border-outline px-6 py-2 flex items-center justify-between text-[10px] font-mono uppercase tracking-widest text-on-surface-variant">
-        <div className="flex items-center space-x-6">
-          <span className="flex items-center"><span className="w-2 h-2 bg-primary-container rounded-full mr-2"></span> SYSTEM: ONLINE</span>
-          <span className="flex items-center"><span className="w-2 h-2 bg-primary-container rounded-full mr-2"></span> SYNC: 99.8%</span>
-          <span>PATH: /PROJECTS/{project.id.toUpperCase()}/OVERVIEW</span>
-        </div>
-        <div>OPERATOR: ALTAIR_99 // NODE: DC_NORTH_04</div>
-      </footer>
+      <DetailFooter
+        className="h-auto py-2"
+        leftContent={
+          <div className="flex items-center space-x-6">
+            <span className="flex items-center"><span className="w-2 h-2 bg-primary-container rounded-full mr-2"></span> SYSTEM: ONLINE</span>
+            <span className="flex items-center"><span className="w-2 h-2 bg-primary-container rounded-full mr-2"></span> SYNC: 99.8%</span>
+            <span>PATH: /PROJECTS/{project.id.toUpperCase()}/OVERVIEW</span>
+          </div>
+        }
+        rightContent={<div>OPERATOR: ALTAIR_99 // NODE: DC_NORTH_04</div>}
+      />
     </div>
   );
 }

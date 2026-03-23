@@ -40,7 +40,7 @@ export function Button({
         transition-all duration-75
         disabled:opacity-50 disabled:cursor-not-allowed
         active:translate-x-1 active:translate-y-1 active:shadow-none
-        shadow-[4px_4px_0px_0px_#0e0e0e] hover:shadow-[6px_6px_0px_0px_#0e0e0e]
+        shadow-[var(--shadow-hard)] hover:shadow-[var(--shadow-hard-hover)]
         ${variantClasses[variant]}
         ${sizeClasses[size]}
         ${className}

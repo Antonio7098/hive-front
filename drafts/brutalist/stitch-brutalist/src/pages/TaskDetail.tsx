@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import { Toolbar } from '../components/common';
+import { Toolbar, InfoGrid, DetailFooter } from '../components/common';
 import { Button, Badge, Toggle, Card, Icon } from '../components/ui';
 import { mockTasks } from '../data/mock';
 import { useToggle } from '../hooks/useToggle';
@@ -45,23 +45,19 @@ export function TaskDetail() {
                 <label className="font-headline font-bold text-[10px] text-on-surface-variant tracking-widest uppercase mb-1 block">Objective</label>
                 <p className="text-on-surface leading-relaxed text-sm">{task.description}</p>
               </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="border-l-2 border-primary-container pl-4">
-                  <label className="font-headline font-bold text-[10px] text-on-surface-variant tracking-widest uppercase block">Assigned To</label>
-                  <div className="flex items-center gap-2 mt-2">
+              <InfoGrid cells={[
+                { label: 'Assigned_To', value: (
+                  <div className="flex items-center gap-2">
                     <div className="w-6 h-6 bg-surface-container-highest border border-outline flex items-center justify-center">
                       <Icon name="person" size={14} />
                     </div>
                     <span className="text-sm font-bold mono-text uppercase">{task.assignee || 'UNASSIGNED'}</span>
                   </div>
-                </div>
-                <div className="border-l-2 border-secondary-container pl-4">
-                  <label className="font-headline font-bold text-[10px] text-on-surface-variant tracking-widest uppercase block">Due Date</label>
-                  <div className="flex items-center gap-2 mt-2">
-                    <span className="text-sm font-bold mono-text text-secondary-container">{task.dueDate || 'NO_DEADLINE'}</span>
-                  </div>
-                </div>
-              </div>
+                )},
+                { label: 'Due_Date', value: (
+                  <span className="text-sm font-bold mono-text text-secondary-container">{task.dueDate || 'NO_DEADLINE'}</span>
+                )},
+              ]} />
             </div>
           </Card>
 
@@ -70,22 +66,20 @@ export function TaskDetail() {
               <span className="font-headline font-bold text-xs tracking-widest text-on-surface-variant uppercase">Active State</span>
               <Toggle checked={isActive} onChange={setIsActive} label={activeLabel} />
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="p-4 bg-surface-container-high border-2 border-outline-variant">
-                <label className="text-[10px] font-headline font-black text-on-surface-variant tracking-widest uppercase block mb-2">Priority</label>
+            <InfoGrid cells={[
+              { label: 'Priority', value: (
                 <div className="flex items-center gap-2">
                   <Icon name="warning" className="text-secondary-container" size={18} />
                   <span className="font-headline font-bold text-lg text-secondary-container tracking-widest uppercase">{task.priority}</span>
                 </div>
-              </div>
-              <div className="p-4 bg-surface-container-high border-2 border-outline-variant">
-                <label className="text-[10px] font-headline font-black text-on-surface-variant tracking-widest uppercase block mb-2">Estimation</label>
+              )},
+              { label: 'Estimation', value: (
                 <div className="flex items-center gap-2">
                   <Icon name="timer" className="text-primary-container" size={18} />
                   <span className="font-headline font-bold text-lg text-primary-container tracking-widest uppercase">18H</span>
                 </div>
-              </div>
-            </div>
+              )},
+            ]} />
             <div className="p-4 bg-surface-container-highest border-2 border-outline-variant flex items-center justify-between">
               <span className="font-headline font-black text-xs tracking-widest uppercase">Current Status</span>
               <Badge variant="warning">{task.status.replace('_', ' ')}</Badge>
@@ -170,22 +164,27 @@ export function TaskDetail() {
         </div>
       </main>
 
-      <footer className="mt-auto bg-surface-container-highest border-t-3 border-outline px-6 py-2 flex justify-between items-center h-10">
-        <div className="flex items-center gap-6 text-[10px] mono-text font-bold text-on-surface-variant uppercase tracking-widest">
-          <span>PATH: PROJECTS / CORE_ENGINE / {task.id.toUpperCase()}</span>
-          <span className="text-primary-container">UPLOADING_LOGS... 44%</span>
-        </div>
-        <div className="flex items-center gap-4 text-[10px] font-headline font-black uppercase tracking-widest">
-          <span className="flex items-center gap-1">
-            <Icon name="schedule" size={16} />
-            SYNCED: 12:44:02
-          </span>
-          <span className="flex items-center gap-1 text-secondary-container">
-            <Icon name="bolt" size={16} />
-            LATENCY: 12ms
-          </span>
-        </div>
-      </footer>
+      <DetailFooter
+        className="h-10"
+        leftContent={
+          <div className="flex items-center gap-6 text-[10px] mono-text font-bold text-on-surface-variant uppercase tracking-widest">
+            <span>PATH: PROJECTS / CORE_ENGINE / {task.id.toUpperCase()}</span>
+            <span className="text-primary-container">UPLOADING_LOGS... 44%</span>
+          </div>
+        }
+        rightContent={
+          <div className="flex items-center gap-4 text-[10px] font-headline font-black uppercase tracking-widest">
+            <span className="flex items-center gap-1">
+              <Icon name="schedule" size={16} />
+              SYNCED: 12:44:02
+            </span>
+            <span className="flex items-center gap-1 text-secondary-container">
+              <Icon name="bolt" size={16} />
+              LATENCY: 12ms
+            </span>
+          </div>
+        }
+      />
     </div>
   );
 }
