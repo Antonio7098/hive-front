@@ -3,12 +3,15 @@ import { useData } from '../context/DataContext';
 import type { ActiveItem, TodoItem, RecentProject } from '../services/IDataSource';
 
 export function useActiveItems() {
-  const { getActiveItems } = useData();
+  const { getActiveItems, isLoading: contextLoading } = useData();
   const [items, setItems] = useState<ActiveItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
   const refresh = useCallback(async () => {
+    if (contextLoading || !getActiveItems) {
+      return;
+    }
     setIsLoading(true);
     setError(null);
     try {
@@ -19,22 +22,25 @@ export function useActiveItems() {
     } finally {
       setIsLoading(false);
     }
-  }, [getActiveItems]);
+  }, [getActiveItems, contextLoading]);
 
   useEffect(() => {
     refresh();
   }, [refresh]);
 
-  return { items, isLoading, error, refresh };
+  return { items, isLoading: isLoading || contextLoading, error, refresh };
 }
 
 export function useTodoItems() {
-  const { getTodoItems } = useData();
+  const { getTodoItems, isLoading: contextLoading } = useData();
   const [items, setItems] = useState<TodoItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
   const refresh = useCallback(async () => {
+    if (contextLoading || !getTodoItems) {
+      return;
+    }
     setIsLoading(true);
     setError(null);
     try {
@@ -45,22 +51,25 @@ export function useTodoItems() {
     } finally {
       setIsLoading(false);
     }
-  }, [getTodoItems]);
+  }, [getTodoItems, contextLoading]);
 
   useEffect(() => {
     refresh();
   }, [refresh]);
 
-  return { items, isLoading, error, refresh };
+  return { items, isLoading: isLoading || contextLoading, error, refresh };
 }
 
 export function useRecentProjects() {
-  const { getRecentProjects } = useData();
+  const { getRecentProjects, isLoading: contextLoading } = useData();
   const [projects, setProjects] = useState<RecentProject[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
   const refresh = useCallback(async () => {
+    if (contextLoading || !getRecentProjects) {
+      return;
+    }
     setIsLoading(true);
     setError(null);
     try {
@@ -71,11 +80,11 @@ export function useRecentProjects() {
     } finally {
       setIsLoading(false);
     }
-  }, [getRecentProjects]);
+  }, [getRecentProjects, contextLoading]);
 
   useEffect(() => {
     refresh();
   }, [refresh]);
 
-  return { projects, isLoading, error, refresh };
+  return { projects, isLoading: isLoading || contextLoading, error, refresh };
 }

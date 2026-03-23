@@ -3,12 +3,15 @@ import { useData } from '../context/DataContext';
 import type { Task } from '../types/entities';
 
 export function useTasks() {
-  const { getTasks } = useData();
+  const { getTasks, isLoading: contextLoading } = useData();
   const [tasks, setTasks] = useState<Task[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
   const refresh = useCallback(async () => {
+    if (contextLoading || !getTasks) {
+      return;
+    }
     setIsLoading(true);
     setError(null);
     try {
@@ -19,23 +22,23 @@ export function useTasks() {
     } finally {
       setIsLoading(false);
     }
-  }, [getTasks]);
+  }, [getTasks, contextLoading]);
 
   useEffect(() => {
     refresh();
   }, [refresh]);
 
-  return { tasks, isLoading, error, refresh };
+  return { tasks, isLoading: isLoading || contextLoading, error, refresh };
 }
 
 export function useTask(id: string | undefined) {
-  const { getTask } = useData();
+  const { getTask, isLoading: contextLoading } = useData();
   const [task, setTask] = useState<Task | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    if (!id) {
+    if (!id || contextLoading || !getTask) {
       setIsLoading(false);
       setTask(null);
       return;
@@ -67,19 +70,19 @@ export function useTask(id: string | undefined) {
     return () => {
       cancelled = true;
     };
-  }, [id, getTask]);
+  }, [id, getTask, contextLoading]);
 
-  return { task, isLoading, error };
+  return { task, isLoading: isLoading || contextLoading, error };
 }
 
 export function useTasksByWorkflow(workflowId: string | undefined) {
-  const { getTasksByWorkflow } = useData();
+  const { getTasksByWorkflow, isLoading: contextLoading } = useData();
   const [tasks, setTasks] = useState<Task[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    if (!workflowId) {
+    if (!workflowId || contextLoading || !getTasksByWorkflow) {
       setTasks([]);
       setIsLoading(false);
       return;
@@ -111,7 +114,7 @@ export function useTasksByWorkflow(workflowId: string | undefined) {
     return () => {
       cancelled = true;
     };
-  }, [workflowId, getTasksByWorkflow]);
+  }, [workflowId, getTasksByWorkflow, contextLoading]);
 
-  return { tasks, isLoading, error };
+  return { tasks, isLoading: isLoading || contextLoading, error };
 }

@@ -3,12 +3,15 @@ import { useData } from '../context/DataContext';
 import type { Project } from '../types/entities';
 
 export function useProjects() {
-  const { getProjects, dataSource } = useData();
+  const { getProjects, isLoading: contextLoading } = useData();
   const [projects, setProjects] = useState<Project[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
   const refresh = useCallback(async () => {
+    if (contextLoading || !getProjects) {
+      return;
+    }
     setIsLoading(true);
     setError(null);
     try {
@@ -19,23 +22,23 @@ export function useProjects() {
     } finally {
       setIsLoading(false);
     }
-  }, [getProjects]);
+  }, [getProjects, contextLoading]);
 
   useEffect(() => {
     refresh();
   }, [refresh]);
 
-  return { projects, isLoading, error, refresh, dataSource };
+  return { projects, isLoading: isLoading || contextLoading, error, refresh };
 }
 
 export function useProject(id: string | undefined) {
-  const { getProject } = useData();
+  const { getProject, isLoading: contextLoading } = useData();
   const [project, setProject] = useState<Project | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    if (!id) {
+    if (!id || contextLoading || !getProject) {
       setIsLoading(false);
       setProject(null);
       return;
@@ -67,7 +70,7 @@ export function useProject(id: string | undefined) {
     return () => {
       cancelled = true;
     };
-  }, [id, getProject]);
+  }, [id, getProject, contextLoading]);
 
-  return { project, isLoading, error };
+  return { project, isLoading: isLoading || contextLoading, error };
 }

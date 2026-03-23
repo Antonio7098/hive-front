@@ -3,12 +3,15 @@ import { useData } from '../context/DataContext';
 import type { Workflow } from '../types/entities';
 
 export function useWorkflows() {
-  const { getWorkflows } = useData();
+  const { getWorkflows, isLoading: contextLoading } = useData();
   const [workflows, setWorkflows] = useState<Workflow[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
   const refresh = useCallback(async () => {
+    if (contextLoading || !getWorkflows) {
+      return;
+    }
     setIsLoading(true);
     setError(null);
     try {
@@ -19,23 +22,23 @@ export function useWorkflows() {
     } finally {
       setIsLoading(false);
     }
-  }, [getWorkflows]);
+  }, [getWorkflows, contextLoading]);
 
   useEffect(() => {
     refresh();
   }, [refresh]);
 
-  return { workflows, isLoading, error, refresh };
+  return { workflows, isLoading: isLoading || contextLoading, error, refresh };
 }
 
 export function useWorkflow(id: string | undefined) {
-  const { getWorkflow } = useData();
+  const { getWorkflow, isLoading: contextLoading } = useData();
   const [workflow, setWorkflow] = useState<Workflow | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    if (!id) {
+    if (!id || contextLoading || !getWorkflow) {
       setIsLoading(false);
       setWorkflow(null);
       return;
@@ -67,19 +70,19 @@ export function useWorkflow(id: string | undefined) {
     return () => {
       cancelled = true;
     };
-  }, [id, getWorkflow]);
+  }, [id, getWorkflow, contextLoading]);
 
-  return { workflow, isLoading, error };
+  return { workflow, isLoading: isLoading || contextLoading, error };
 }
 
 export function useWorkflowsByProject(projectId: string | undefined) {
-  const { getWorkflowsByProject } = useData();
+  const { getWorkflowsByProject, isLoading: contextLoading } = useData();
   const [workflows, setWorkflows] = useState<Workflow[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    if (!projectId) {
+    if (!projectId || contextLoading || !getWorkflowsByProject) {
       setWorkflows([]);
       setIsLoading(false);
       return;
@@ -111,7 +114,7 @@ export function useWorkflowsByProject(projectId: string | undefined) {
     return () => {
       cancelled = true;
     };
-  }, [projectId, getWorkflowsByProject]);
+  }, [projectId, getWorkflowsByProject, contextLoading]);
 
-  return { workflows, isLoading, error };
+  return { workflows, isLoading: isLoading || contextLoading, error };
 }
