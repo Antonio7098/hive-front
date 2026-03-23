@@ -1,15 +1,17 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useData } from '../context/DataContext';
 import type { Workflow } from '../types/entities';
+import { ErrorTaxonomy, ErrorCategory, ErrorSeverity } from '../types/errors';
+import { structuredLogger } from '../lib/logger';
 
 export function useWorkflows() {
-  const { getWorkflows, isLoading: contextLoading } = useData();
+  const { getWorkflows, isLoading: contextLoading, isConnected } = useData();
   const [workflows, setWorkflows] = useState<Workflow[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
   const refresh = useCallback(async () => {
-    if (contextLoading || !getWorkflows) {
+    if (contextLoading) {
       return;
     }
     setIsLoading(true);
@@ -18,7 +20,18 @@ export function useWorkflows() {
       const data = await getWorkflows();
       setWorkflows(data);
     } catch (err) {
-      setError(err instanceof Error ? err : new Error('Failed to load workflows'));
+      const taxonomy = ErrorTaxonomy.API_REQUEST_FAILED;
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      setError(new Error(`Failed to load workflows: ${errorMessage}`));
+      structuredLogger.error(
+        'Failed to load workflows',
+        {
+          code: taxonomy.code,
+          category: ErrorCategory.API,
+          severity: ErrorSeverity.MEDIUM,
+          message: errorMessage,
+        }
+      );
     } finally {
       setIsLoading(false);
     }
@@ -28,19 +41,27 @@ export function useWorkflows() {
     refresh();
   }, [refresh]);
 
-  return { workflows, isLoading: isLoading || contextLoading, error, refresh };
+  return { 
+    workflows, 
+    isLoading: isLoading || contextLoading, 
+    error, 
+    refresh,
+    isDemoMode: !isConnected 
+  };
 }
 
 export function useWorkflow(id: string | undefined) {
-  const { getWorkflow, isLoading: contextLoading } = useData();
+  const { getWorkflow, isLoading: contextLoading, isConnected } = useData();
   const [workflow, setWorkflow] = useState<Workflow | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    if (!id || contextLoading || !getWorkflow) {
-      setIsLoading(false);
-      setWorkflow(null);
+    if (!id || contextLoading) {
+      if (!id) {
+        setWorkflow(null);
+        setIsLoading(false);
+      }
       return;
     }
 
@@ -56,7 +77,19 @@ export function useWorkflow(id: string | undefined) {
         }
       } catch (err) {
         if (!cancelled) {
-          setError(err instanceof Error ? err : new Error('Failed to load workflow'));
+          const taxonomy = ErrorTaxonomy.API_REQUEST_FAILED;
+          const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+          setError(new Error(`Failed to load workflow "${workflowId}": ${errorMessage}`));
+          structuredLogger.error(
+            `Failed to load workflow: ${workflowId}`,
+            {
+              code: taxonomy.code,
+              category: ErrorCategory.API,
+              severity: ErrorSeverity.MEDIUM,
+              message: errorMessage,
+            },
+            { workflowId }
+          );
         }
       } finally {
         if (!cancelled) {
@@ -72,17 +105,22 @@ export function useWorkflow(id: string | undefined) {
     };
   }, [id, getWorkflow, contextLoading]);
 
-  return { workflow, isLoading: isLoading || contextLoading, error };
+  return { 
+    workflow, 
+    isLoading: isLoading || contextLoading, 
+    error,
+    isDemoMode: !isConnected 
+  };
 }
 
 export function useWorkflowsByProject(projectId: string | undefined) {
-  const { getWorkflowsByProject, isLoading: contextLoading } = useData();
+  const { getWorkflowsByProject, isLoading: contextLoading, isConnected } = useData();
   const [workflows, setWorkflows] = useState<Workflow[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    if (!projectId || contextLoading || !getWorkflowsByProject) {
+    if (!projectId || contextLoading) {
       setWorkflows([]);
       setIsLoading(false);
       return;
@@ -100,7 +138,19 @@ export function useWorkflowsByProject(projectId: string | undefined) {
         }
       } catch (err) {
         if (!cancelled) {
-          setError(err instanceof Error ? err : new Error('Failed to load workflows'));
+          const taxonomy = ErrorTaxonomy.API_REQUEST_FAILED;
+          const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+          setError(new Error(`Failed to load workflows for project: ${errorMessage}`));
+          structuredLogger.error(
+            `Failed to load workflows for project: ${pid}`,
+            {
+              code: taxonomy.code,
+              category: ErrorCategory.API,
+              severity: ErrorSeverity.MEDIUM,
+              message: errorMessage,
+            },
+            { projectId: pid }
+          );
         }
       } finally {
         if (!cancelled) {
@@ -116,5 +166,10 @@ export function useWorkflowsByProject(projectId: string | undefined) {
     };
   }, [projectId, getWorkflowsByProject, contextLoading]);
 
-  return { workflows, isLoading: isLoading || contextLoading, error };
+  return { 
+    workflows, 
+    isLoading: isLoading || contextLoading, 
+    error,
+    isDemoMode: !isConnected 
+  };
 }

@@ -1,15 +1,17 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useData } from '../context/DataContext';
 import type { Project } from '../types/entities';
+import { ErrorTaxonomy, ErrorCategory, ErrorSeverity } from '../types/errors';
+import { structuredLogger } from '../lib/logger';
 
 export function useProjects() {
-  const { getProjects, isLoading: contextLoading } = useData();
+  const { getProjects, isLoading: contextLoading, isConnected } = useData();
   const [projects, setProjects] = useState<Project[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
   const refresh = useCallback(async () => {
-    if (contextLoading || !getProjects) {
+    if (contextLoading) {
       return;
     }
     setIsLoading(true);
@@ -18,7 +20,18 @@ export function useProjects() {
       const data = await getProjects();
       setProjects(data);
     } catch (err) {
-      setError(err instanceof Error ? err : new Error('Failed to load projects'));
+      const taxonomy = ErrorTaxonomy.API_REQUEST_FAILED;
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      setError(new Error(`Failed to load projects: ${errorMessage}`));
+      structuredLogger.error(
+        'Failed to load projects',
+        {
+          code: taxonomy.code,
+          category: ErrorCategory.API,
+          severity: ErrorSeverity.MEDIUM,
+          message: errorMessage,
+        }
+      );
     } finally {
       setIsLoading(false);
     }
@@ -28,19 +41,27 @@ export function useProjects() {
     refresh();
   }, [refresh]);
 
-  return { projects, isLoading: isLoading || contextLoading, error, refresh };
+  return { 
+    projects, 
+    isLoading: isLoading || contextLoading, 
+    error, 
+    refresh,
+    isDemoMode: !isConnected 
+  };
 }
 
 export function useProject(id: string | undefined) {
-  const { getProject, isLoading: contextLoading } = useData();
+  const { getProject, isLoading: contextLoading, isConnected } = useData();
   const [project, setProject] = useState<Project | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    if (!id || contextLoading || !getProject) {
-      setIsLoading(false);
-      setProject(null);
+    if (!id || contextLoading) {
+      if (!id) {
+        setProject(null);
+        setIsLoading(false);
+      }
       return;
     }
 
@@ -56,7 +77,19 @@ export function useProject(id: string | undefined) {
         }
       } catch (err) {
         if (!cancelled) {
-          setError(err instanceof Error ? err : new Error('Failed to load project'));
+          const taxonomy = ErrorTaxonomy.API_REQUEST_FAILED;
+          const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+          setError(new Error(`Failed to load project "${projectId}": ${errorMessage}`));
+          structuredLogger.error(
+            `Failed to load project: ${projectId}`,
+            {
+              code: taxonomy.code,
+              category: ErrorCategory.API,
+              severity: ErrorSeverity.MEDIUM,
+              message: errorMessage,
+            },
+            { projectId }
+          );
         }
       } finally {
         if (!cancelled) {
@@ -72,5 +105,10 @@ export function useProject(id: string | undefined) {
     };
   }, [id, getProject, contextLoading]);
 
-  return { project, isLoading: isLoading || contextLoading, error };
+  return { 
+    project, 
+    isLoading: isLoading || contextLoading, 
+    error,
+    isDemoMode: !isConnected 
+  };
 }

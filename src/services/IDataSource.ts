@@ -46,6 +46,45 @@ export interface TaskDto {
   updated_at: string;
 }
 
+export interface GraphDto {
+  id: string;
+  name: string;
+  type: string;
+  config: unknown;
+}
+
+export interface FlowDto {
+  id: string;
+  name: string;
+  workflow_id: string | null;
+  config: unknown;
+}
+
+export interface WorkflowRunDto {
+  id: string;
+  workflow_id: string;
+  status: string;
+  started_at: string | null;
+  finished_at: string | null;
+  result: unknown;
+}
+
+export interface MergeStateDto {
+  id: string;
+  pr_number: number;
+  repository: string;
+  state: string;
+  mergeable: boolean;
+}
+
+export interface EventDto {
+  id: string;
+  type: string;
+  payload: unknown;
+  timestamp: string;
+  source: string;
+}
+
 export interface ActiveItem {
   id: string;
   name: string;
