@@ -8,3 +8,4 @@ export { useData } from '../context/DataContext';
 export { DataProvider } from '../context/DataContext';
 export { useViewMode } from './useViewMode';
 export { useToggle } from './useToggle';
+export { useConstitution, useGovernanceDocuments, useGovernanceDocument, useProjectNotepad, useGlobalNotepad } from './useGovernance';

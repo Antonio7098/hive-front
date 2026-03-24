@@ -9,10 +9,12 @@ import { ProgressBar } from '../components/ui/ProgressBar';
 import { StatusDot } from '../components/ui/StatusDot';
 import { Icon } from '../components/ui/Icon';
 import { BrutalSpinner, PulseLoader, WaveLoader, TypingLoader, OrbitLoader, StackLoader, DotsLoader, Skeleton, SkeletonCard, LoadingOverlay, PageLoader, InlineLoader, HoneycombLoader } from '../components/ui/Loading';
-import { EntityCard } from '../components/common/EntityCard';
-import type { Project } from '../types/entities';
+import { EntityCard, DocumentTree, DocumentViewer, DocumentEmptyState, DocumentSection, DocumentMetadata, MarkdownRenderer, JsonDisplay, SpecNode, DetailRow } from '../components/common';
+import type { Project, GovernanceDocument } from '../types/entities';
+import { EventDetail } from '../components/features/EventDetail';
+import type { Event } from '../types/entities';
 
-type TabId = 'ui' | 'common' | 'features' | 'loading';
+type TabId = 'ui' | 'common' | 'features' | 'loading' | 'documents' | 'panels';
 
 interface Tab {
   id: TabId;
@@ -23,8 +25,10 @@ interface Tab {
 const tabs: Tab[] = [
   { id: 'ui', label: 'UI Primitives', description: 'Basic building blocks: Button, Badge, Card, Input, Toggle, ProgressBar, StatusDot, Icon' },
   { id: 'loading', label: 'Loading States', description: 'Animated loading components: Spinners, Pulsers, Skeletons, Overlays. All use CSS variables to adapt to theme changes.' },
-  { id: 'common', label: 'Common Components', description: 'Reusable composite components: EntityCard, PageHeader, PageFooter, SectionHeader, etc.' },
-  { id: 'features', label: 'Feature Components', description: 'Domain-specific components: TacticalVisualizer' },
+  { id: 'common', label: 'Common Components', description: 'Reusable composite components: EntityCard, PageHeader, PageFooter, SectionHeader, DocumentTree, DocumentViewer, MarkdownRenderer, JsonDisplay, SpecNode, etc.' },
+  { id: 'features', label: 'Feature Components', description: 'Domain-specific components: TacticalVisualizer, EventTimelineItem, EventDetail' },
+  { id: 'documents', label: 'Document Components', description: 'Components for rendering documents, specs, and structured content: DocumentTree, DocumentViewer, MarkdownRenderer, JsonDisplay, SpecNode' },
+  { id: 'panels', label: 'Panels & Details', description: 'Slide-in panels, detail views, and inspection components: DetailPanel, DetailRow, PanelSection' },
 ];
 
 const mockProject: Project = {
@@ -420,8 +424,178 @@ function FeaturesTab() {
   );
 }
 
+function DocumentsTab() {
+  const mockDocuments: GovernanceDocument[] = [
+    {
+      id: 'doc-001',
+      projectId: 'proj-001',
+      name: 'Introduction',
+      path: '/docs/introduction.md',
+      documentType: 'markdown',
+      content: '# Introduction\n\nWelcome to the project documentation.\n\n## Getting Started\n\n1. Install dependencies\n2. Run the application\n3. Read more docs',
+      updatedAt: new Date('2024-01-15'),
+    },
+    {
+      id: 'doc-002',
+      projectId: 'proj-001',
+      name: 'Configuration',
+      path: '/docs/config.yaml',
+      documentType: 'yaml',
+      content: 'version: "1.0"\nproject: sample\nsettings:\n  debug: true\n  timeout: 30',
+      updatedAt: new Date('2024-01-16'),
+    },
+  ];
+
+  const mockSpecNode = {
+    id: 'spec-001',
+    kind: 'workflow' as const,
+    title: 'Sample Workflow',
+    intent: 'A sample workflow for demonstration purposes',
+    constraints: ['Must complete within 5 minutes', 'Max 3 retries'],
+    acceptance_criteria: ['All tests pass', 'No console errors'],
+    verification: {
+      posture: 'automated',
+      instructions: ['Run test suite', 'Check coverage'],
+      checkpoints: ['pre_deploy'],
+    },
+    children: [
+      {
+        id: 'spec-002',
+        kind: 'task' as const,
+        title: 'Setup',
+        intent: 'Initialize the project',
+        constraints: [],
+        acceptance_criteria: ['Dependencies installed'],
+        verification: {
+          posture: 'unit_tests',
+          instructions: [],
+          checkpoints: [],
+        },
+        step_id: 'step-001',
+      },
+    ],
+  };
+
+  const mockJsonData = {
+    schema: 'workflow_spec',
+    schema_version: 1,
+    binding_hash: 'abc123',
+    root: mockSpecNode,
+  };
+
+  return (
+    <div className="space-y-12">
+      <section>
+        <h2 className="text-2xl font-black font-headline uppercase mb-6 border-b-2 border-outline pb-2">DocumentTree</h2>
+        <Card variant="outlined" padding="none">
+          <div className="h-80">
+            <DocumentTree
+              documents={mockDocuments}
+              constitutionName="Constitution v1"
+              onSelectConstitution={() => {}}
+              onSelectDocument={() => {}}
+              selectedDocumentId="doc-001"
+              selectedType="document"
+            />
+          </div>
+        </Card>
+      </section>
+
+      <section>
+        <h2 className="text-2xl font-black font-headline uppercase mb-6 border-b-2 border-outline pb-2">DocumentViewer</h2>
+        <Card variant="outlined" padding="none">
+          <div className="h-80">
+            <DocumentViewer
+              title="Sample Document"
+              subtitle="/docs/sample.md"
+              actions={
+                <div className="flex gap-2">
+                  <Button variant="ghost" size="sm">Copy</Button>
+                </div>
+              }
+            >
+              <div className="p-6">
+                <p className="text-on-surface-variant leading-relaxed">
+                  This is a sample document viewer. It displays document content with a consistent header and scrollable body.
+                </p>
+              </div>
+            </DocumentViewer>
+          </div>
+        </Card>
+      </section>
+
+      <section>
+        <h2 className="text-2xl font-black font-headline uppercase mb-6 border-b-2 border-outline pb-2">DocumentEmptyState</h2>
+        <Card variant="outlined" padding="none">
+          <div className="h-48">
+            <DocumentEmptyState
+              icon="rule"
+              title="No Document Selected"
+              description="Select a document from the tree to view its contents"
+            />
+          </div>
+        </Card>
+      </section>
+
+      <section>
+        <h2 className="text-2xl font-black font-headline uppercase mb-6 border-b-2 border-outline pb-2">DocumentSection & DocumentMetadata</h2>
+        <Card variant="outlined" padding="md">
+          <DocumentSection title="Section Title">
+            <p className="text-on-surface-variant mb-4">Section content goes here...</p>
+          </DocumentSection>
+          <DocumentMetadata
+            items={[
+              { label: 'Version', value: '1.0.0' },
+              { label: 'Updated', value: '2024-01-15' },
+              { label: 'Author', value: 'Operator_01' },
+              { label: 'Status', value: 'Active' },
+            ]}
+          />
+        </Card>
+      </section>
+
+      <section>
+        <h2 className="text-2xl font-black font-headline uppercase mb-6 border-b-2 border-outline pb-2">MarkdownRenderer</h2>
+        <Card variant="outlined" padding="md">
+          <MarkdownRenderer
+            content={`# Heading 1
+
+## Heading 2
+
+This is **bold** and this is \`inline code\`.
+
+- List item 1
+- List item 2
+
+> This is a blockquote
+
+\`\`\`
+Code block
+\`\`\`
+`}
+          />
+        </Card>
+      </section>
+
+      <section>
+        <h2 className="text-2xl font-black font-headline uppercase mb-6 border-b-2 border-outline pb-2">JsonDisplay</h2>
+        <Card variant="outlined" padding="none">
+          <JsonDisplay data={mockJsonData} />
+        </Card>
+      </section>
+
+      <section>
+        <h2 className="text-2xl font-black font-headline uppercase mb-6 border-b-2 border-outline pb-2">SpecNode</h2>
+        <Card variant="outlined" padding="md">
+          <SpecNode node={mockSpecNode} />
+        </Card>
+      </section>
+    </div>
+  );
+}
+
 export function ComponentLibrary() {
-  const [activeTab, setActiveTab] = useState<TabId>('loading');
+  const [activeTab, setActiveTab] = useState<TabId>('documents');
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -458,10 +632,75 @@ export function ComponentLibrary() {
           {activeTab === 'loading' && <LoadingTab />}
           {activeTab === 'common' && <CommonTab />}
           {activeTab === 'features' && <FeaturesTab />}
+          {activeTab === 'documents' && <DocumentsTab />}
+          {activeTab === 'panels' && <PanelsTab />}
         </div>
       </main>
 
       <PageFooter />
+    </div>
+  );
+}
+
+function PanelsTab() {
+  const mockEvent: Event = {
+    id: 'evt-001-abc123',
+    type: 'workflow_run.started',
+    category: 'execution',
+    timestamp: new Date('2024-03-10T10:00:00Z'),
+    sequence: 42,
+    correlation: {
+      projectId: 'proj-001',
+      workflowId: 'wf-001',
+      workflowRunId: 'run-001',
+      taskId: null,
+      attemptId: 'att-001',
+      flowId: null,
+      graphId: null,
+    },
+    payload: {
+      run_id: 'run-001',
+      workflow_id: 'wf-001',
+      triggered_by: 'operator',
+    },
+  };
+
+  return (
+    <div className="space-y-12">
+      <section>
+        <h2 className="text-2xl font-black font-headline uppercase mb-6 border-b-2 border-outline pb-2">DetailPanel & DetailRow</h2>
+        <Card variant="outlined" padding="md">
+          <p className="text-sm text-on-surface-variant mb-4">
+            A slide-in panel component for showing detailed views. Press Escape or click outside to close.
+          </p>
+          <div className="space-y-4">
+            <DetailRow label="Event ID" value="evt-001-abc123" />
+            <DetailRow label="Type" value="workflow_run.started" />
+            <DetailRow label="Category" value="execution" />
+            <DetailRow label="Sequence" value="42" />
+            <DetailRow label="Project ID" value="proj-001" />
+            <DetailRow label="Workflow Run ID" value="run-001" />
+            <DetailRow label="Attempt ID" value="att-001" />
+          </div>
+        </Card>
+      </section>
+
+      <section>
+        <h2 className="text-2xl font-black font-headline uppercase mb-6 border-b-2 border-outline pb-2">EventDetail</h2>
+        <Card variant="outlined" padding="md">
+          <p className="text-sm text-on-surface-variant mb-4">
+            Event detail panel showing full event information with Overview, Lineage/Correlation, Payload, and Raw Event sections.
+          </p>
+          <div className="bg-surface-container-low border border-outline p-4">
+            <p className="font-mono text-xs text-outline mb-2">Click any event in the Events page to see the EventDetail panel.</p>
+            <EventDetail
+              event={mockEvent}
+              isOpen={true}
+              onClose={() => {}}
+            />
+          </div>
+        </Card>
+      </section>
     </div>
   );
 }

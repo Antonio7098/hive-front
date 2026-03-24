@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useEffect, useMemo, type ReactNode
 import type { IDataSource, ActiveItem, TodoItem, RecentProject } from '../services/IDataSource';
 import { ApiDataSource } from '../services/apiDataSource';
 import { MockDataSource } from '../services/mockDataSource';
-import type { Project, Workflow, Task, MergeState, Event, WorkflowRun } from '../types/entities';
+import type { Project, Workflow, Task, MergeState, Event, WorkflowRun, Constitution, GovernanceDocument, Notepad } from '../types/entities';
 import { ErrorTaxonomy, ErrorCategory, ErrorSeverity } from '../types/errors';
 import { structuredLogger } from '../lib/logger';
 
@@ -45,6 +45,11 @@ interface DataContextValue {
   getActiveItems(): Promise<ActiveItem[]>;
   getTodoItems(): Promise<TodoItem[]>;
   getRecentProjects(): Promise<RecentProject[]>;
+  getConstitution(projectId: string): Promise<Constitution | null>;
+  getGovernanceDocuments(projectId: string): Promise<GovernanceDocument[]>;
+  inspectGovernanceDocument(projectId: string, documentId: string): Promise<GovernanceDocument | null>;
+  getProjectNotepad(projectId: string): Promise<Notepad | null>;
+  getGlobalNotepad(): Promise<Notepad | null>;
 }
 
 const DataContext = createContext<DataContextValue | null>(null);
@@ -166,6 +171,11 @@ export function DataProvider({ children }: DataProviderProps) {
         getActiveItems: async () => { throw notInitializedError; },
         getTodoItems: async () => { throw notInitializedError; },
         getRecentProjects: async () => { throw notInitializedError; },
+        getConstitution: async () => { throw notInitializedError; },
+        getGovernanceDocuments: async () => { throw notInitializedError; },
+        inspectGovernanceDocument: async () => { throw notInitializedError; },
+        getProjectNotepad: async () => { throw notInitializedError; },
+        getGlobalNotepad: async () => { throw notInitializedError; },
       };
     }
 
@@ -194,6 +204,11 @@ export function DataProvider({ children }: DataProviderProps) {
       getActiveItems: () => dataSource.getActiveItems(),
       getTodoItems: () => dataSource.getTodoItems(),
       getRecentProjects: () => dataSource.getRecentProjects(),
+      getConstitution: (projectId) => dataSource.getConstitution(projectId),
+      getGovernanceDocuments: (projectId) => dataSource.getGovernanceDocuments(projectId),
+      inspectGovernanceDocument: (projectId, documentId) => dataSource.inspectGovernanceDocument(projectId, documentId),
+      getProjectNotepad: (projectId) => dataSource.getProjectNotepad(projectId),
+      getGlobalNotepad: () => dataSource.getGlobalNotepad(),
     };
   }, [dataSource, isConnected, isLoading, error, connectionWarning, notInitializedError]);
 

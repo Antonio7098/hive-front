@@ -30,7 +30,7 @@ export function ProjectDetail() {
           { label: 'DOCS', path: `/projects/${id}/docs` },
           { label: 'SETTINGS', path: `/projects/${id}/settings` },
         ]}
-        activeTab="OVERVIEW"
+        activeTab="DOCS"
         actions={
           <div className="flex items-center gap-3">
             <span className="font-headline text-xs font-bold uppercase text-on-surface-variant tracking-tighter">PROJECT STATE:</span>

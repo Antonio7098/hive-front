@@ -5,7 +5,8 @@ import {
   FileJson, AlignLeft, Database, MoreHorizontal,
   Copy, Download, ExternalLink, AlertTriangle, Timer,
   Check, ChevronUp, ChevronDown, Eye, Code, Sliders,
-  Zap, ArrowRight, Webhook, Server, RotateCcw
+  Zap, ArrowRight, Webhook, Server, RotateCcw,
+  Folder, FolderOpen, File, FileText as FileTextIcon, X
 } from 'lucide-react';
 
 type IconName = string;
@@ -50,6 +51,11 @@ const iconMap: Record<string, any> = {
   webhook: Webhook,
   dns: Server,
   settings_backup_restore: RotateCcw,
+  folder: Folder,
+  folder_open: FolderOpen,
+  description: FileTextIcon,
+  article: File,
+  close: X,
 };
 
 interface IconProps {

@@ -6,6 +6,7 @@ import { structuredLogger } from '../lib/logger';
 import { PageHeader, PageFooter, SectionHeader } from '../components/common';
 import { Card, Button } from '../components/ui';
 import { EventTimelineItem } from '../components/features/EventTimelineItem';
+import { EventDetail } from '../components/features/EventDetail';
 import { BrutalSpinner } from '../components/ui/Loading';
 
 const PAGE_SIZE = 50;
@@ -73,6 +74,7 @@ export function Events() {
   const { events, isLoading, isLoadingMore, error, hasMore, loadMore, refresh, isDemoMode } = usePaginatedEvents();
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
   const [searchFilter, setSearchFilter] = useState('');
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
 
   const filtered = useMemo(() => {
     return events.filter(e => {
@@ -162,7 +164,7 @@ export function Events() {
         ) : (
           <>
             {filtered.map(event => (
-              <EventTimelineItem key={event.id} event={event} />
+              <EventTimelineItem key={event.id} event={event} onSelect={setSelectedEvent} />
             ))}
             {hasMore && (
               <div className="mt-4 flex justify-center">
@@ -185,6 +187,12 @@ export function Events() {
           </>
         )}
       </div>
+
+      <EventDetail
+        event={selectedEvent}
+        isOpen={selectedEvent !== null}
+        onClose={() => setSelectedEvent(null)}
+      />
 
       <PageFooter />
     </div>

@@ -1,4 +1,4 @@
-import type { Project, Workflow, Task, MergeState, Event, WorkflowRun } from '../types/entities';
+import type { Project, Workflow, Task, MergeState, Event, WorkflowRun, Constitution, GovernanceDocument, Notepad } from '../types/entities';
 
 export type {
   ServerProject as ProjectDto,
@@ -7,6 +7,9 @@ export type {
   ServerWorkflowRun as WorkflowRunDto,
   ServerMergeState as MergeStateDto,
   ServerEvent as EventDto,
+  ServerConstitution as ConstitutionDto,
+  ServerGovernanceDocument as GovernanceDocumentDto,
+  ServerNotepad as NotepadDto,
 } from '../types/server';
 
 export interface ActiveItem {
@@ -68,4 +71,10 @@ export interface IDataSource {
   getActiveItems(): Promise<ActiveItem[]>;
   getTodoItems(): Promise<TodoItem[]>;
   getRecentProjects(): Promise<RecentProject[]>;
+
+  getConstitution(projectId: string): Promise<Constitution | null>;
+  getGovernanceDocuments(projectId: string): Promise<GovernanceDocument[]>;
+  inspectGovernanceDocument(projectId: string, documentId: string): Promise<GovernanceDocument | null>;
+  getProjectNotepad(projectId: string): Promise<Notepad | null>;
+  getGlobalNotepad(): Promise<Notepad | null>;
 }

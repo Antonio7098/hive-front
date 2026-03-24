@@ -116,6 +116,30 @@ export interface ServerEvent {
   payload: Record<string, unknown>;
 }
 
+export interface ServerConstitution {
+  project_id: string;
+  version: number;
+  content: string;
+  digest: string | null;
+  updated_at: string | null;
+}
+
+export interface ServerGovernanceDocument {
+  id: string;
+  project_id: string;
+  name: string;
+  path: string;
+  document_type: 'markdown' | 'yaml' | 'text';
+  content: string;
+  updated_at: string;
+}
+
+export interface ServerNotepad {
+  project_id: string | null;
+  content: string;
+  updated_at: string;
+}
+
 export interface UiState {
   projects: ServerProject[];
   tasks: ServerTask[];

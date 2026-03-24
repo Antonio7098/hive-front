@@ -4,6 +4,7 @@ import { Icon } from '../ui/Icon';
 
 interface EventTimelineItemProps {
   event: Event;
+  onSelect?: (event: Event) => void;
   className?: string;
 }
 
@@ -34,12 +35,19 @@ function formatTimestamp(date: Date): string {
   });
 }
 
-export function EventTimelineItem({ event, className = '' }: EventTimelineItemProps) {
+export function EventTimelineItem({ event, onSelect, className = '' }: EventTimelineItemProps) {
   const variant = categoryVariant[event.category] ?? 'neutral';
   const icon = categoryIcon[event.category] ?? 'bolt';
 
+  const handleClick = () => {
+    onSelect?.(event);
+  };
+
   return (
-    <div className={`flex gap-4 ${className}`}>
+    <div
+      className={`flex gap-4 cursor-pointer hover:bg-surface-container-low transition-colors ${className}`}
+      onClick={handleClick}
+    >
       <div className="flex flex-col items-center">
         <div className="w-8 h-8 bg-surface-container border-2 border-outline flex items-center justify-center shrink-0">
           <Icon name={icon} size={14} className="text-on-surface-variant" />

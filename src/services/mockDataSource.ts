@@ -1,4 +1,4 @@
-import type { Project, Workflow, Task, MergeState, Event, WorkflowRun } from '../types/entities';
+import type { Project, Workflow, Task, MergeState, Event, WorkflowRun, Constitution, GovernanceDocument, Notepad } from '../types/entities';
 import type { IDataSource, ActiveItem, TodoItem, RecentProject } from './IDataSource';
 import { ErrorTaxonomy, ErrorCategory, ErrorSeverity } from '../types/errors';
 import { structuredLogger } from '../lib/logger';
@@ -228,7 +228,7 @@ export class MockDataSource implements IDataSource {
       status: 'prepared',
       targetBranch: 'main',
       conflicts: [],
-      commits: ['a1b2c3d', 'e4f5g6h'],
+      commits: ['a1b2c3d', 'e4f5g6h', 'i7j8k9l0'],
       updatedAt: new Date('2024-03-12T16:00:00Z'),
     },
     {
@@ -238,6 +238,54 @@ export class MockDataSource implements IDataSource {
       conflicts: ['src/server/routes/tasks.rs'],
       commits: ['x9y8z7w'],
       updatedAt: new Date('2024-03-14T10:30:00Z'),
+    },
+    {
+      flowId: 'run-015',
+      status: 'completed',
+      targetBranch: 'main',
+      conflicts: [],
+      commits: ['m1n2o3p4', 'q5r6s7t8'],
+      updatedAt: new Date('2024-03-13T14:22:00Z'),
+    },
+    {
+      flowId: 'run-022',
+      status: 'prepared',
+      targetBranch: 'feature/auth-v2',
+      conflicts: ['src/auth/jwt.rs', 'src/auth/middleware.rs'],
+      commits: ['u9v0w1x2'],
+      updatedAt: new Date('2024-03-15T09:15:00Z'),
+    },
+    {
+      flowId: 'run-031',
+      status: 'prepared',
+      targetBranch: 'develop',
+      conflicts: [],
+      commits: ['y3z4a5b6', 'c7d8e9f0', 'g1h2i3j4'],
+      updatedAt: new Date('2024-03-15T11:45:00Z'),
+    },
+    {
+      flowId: 'run-042',
+      status: 'approved',
+      targetBranch: 'release/v2.1.0',
+      conflicts: [],
+      commits: ['k5l6m7n8'],
+      updatedAt: new Date('2024-03-15T08:30:00Z'),
+    },
+    {
+      flowId: 'run-051',
+      status: 'prepared',
+      targetBranch: 'main',
+      conflicts: ['src/core/flow.rs', 'src/core/registry/context.rs'],
+      commits: ['o9p0q1r2', 's3t4u5v6'],
+      updatedAt: new Date('2024-03-15T13:20:00Z'),
+    },
+    {
+      flowId: 'run-063',
+      status: 'completed',
+      targetBranch: 'develop',
+      conflicts: [],
+      commits: ['w7x8y9z0'],
+      updatedAt: new Date('2024-03-14T17:55:00Z'),
     },
   ];
 
@@ -458,6 +506,254 @@ export class MockDataSource implements IDataSource {
     { id: 'orion', name: 'Project Orion', lastEdit: '2M_AGO', icon: 'rocket_launch' },
     { id: 'titan', name: 'Project Nexus', lastEdit: '5H_AGO', icon: 'hub' },
   ];
+
+  private readonly constitutions: Map<string, Constitution> = new Map([
+    ['orion', {
+      projectId: 'orion',
+      version: 2,
+      content: `# Neural Nexus Constitution
+
+## Preamble
+This constitution establishes the operational boundaries for the Neural Nexus project, governing all workflow executions, verification standards, and merge procedures.
+
+## Article I: Scope
+All tasks executed under this project MUST adhere to the verification protocols defined herein.
+
+## Article II: Verification Standards
+- All code changes MUST pass schema validation before merge
+- Unit test coverage MUST exceed 80%
+- Integration tests MUST pass on all supported runtimes
+
+## Article III: Merge Governance
+1. All merges MUST be approved by at least 2 operators
+2. Failed verification blocks merge until resolved
+3. Rollback procedures must be documented for each major feature
+
+## Article IV: Runtime Configuration
+- Default runtime: \`codex\` with \`gpt-4o\` model
+- Timeout: 300 seconds maximum
+- Max parallel tasks: 4
+
+## Article V: Amendments
+Constitution amendments require unanimous consent from all project operators.
+`,
+      updatedAt: new Date('2024-02-15'),
+      digest: 'sha256:a3f2b8c9d4e5f6a7b8c0d1e2f3a4b5c6d7e8f9a0',
+    }],
+    ['titan', {
+      projectId: 'titan',
+      version: 3,
+      content: `# Titan Shield Constitution
+
+## Security Protocols
+All operations under Titan Shield MUST follow biometric verification and encrypted handshake procedures.
+
+## Verification Requirements
+- Security audit MUST pass before any merge
+- Pen testing required for network-facing components
+`,
+      updatedAt: new Date('2024-03-01'),
+      digest: 'sha256:b4c3d9e8f7a6b5c4d3e2f1a0b9c8d7e6f5a4b3c2',
+    }],
+  ]);
+
+  private readonly governanceDocuments: GovernanceDocument[] = [
+    {
+      id: 'doc-001',
+      projectId: 'orion',
+      name: 'Getting Started',
+      path: '/docs/introduction.md',
+      documentType: 'markdown',
+      content: `# Introduction to Neural Nexus
+
+Welcome to the Neural Nexus project. This document provides an overview of the system architecture and operational guidelines.
+
+## System Overview
+
+Neural Nexus is a decentralized compute cluster optimization system for deep-learning deployment in edge environments.
+
+## Quick Start
+
+1. Clone the repository
+2. Install dependencies: \`npm install\`
+3. Run tests: \`npm test\`
+4. Start development: \`npm run dev\`
+
+## Architecture
+
+The system consists of:
+- **Ingestion Layer**: Handles telemetry data from edge nodes
+- **Processing Pipeline**: Transforms and validates incoming data
+- **Storage Layer**: Persists validated data to cluster delta
+`,
+      updatedAt: new Date('2024-02-10'),
+    },
+    {
+      id: 'doc-002',
+      projectId: 'orion',
+      name: 'Architecture',
+      path: '/docs/architecture.yaml',
+      documentType: 'yaml',
+      content: `version: "1.0"
+project: neural_nexus
+
+architecture:
+  name: Neural Nexus Distributed System
+  layers:
+    - name: ingestion
+      components:
+        - telemetry_collector
+        - schema_validator
+        - rate_limiter
+      runtime: codex
+    - name: processing
+      components:
+        - data_transformer
+        - aggregators
+        - validators
+      runtime: codex
+    - name: storage
+      components:
+        - delta_writer
+        - query_engine
+      runtime: codex
+
+runtime_defaults:
+  timeout_ms: 300000
+  max_parallel_tasks: 4
+  model: gpt-4o
+
+security:
+  verification_required: true
+  min_approvals: 2
+`,
+      updatedAt: new Date('2024-02-12'),
+    },
+    {
+      id: 'doc-003',
+      projectId: 'orion',
+      name: 'Contributing',
+      path: '/docs/contributing.md',
+      documentType: 'markdown',
+      content: `# Contributing to Neural Nexus
+
+## Development Workflow
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Run tests locally
+5. Submit a pull request
+
+## Coding Standards
+
+- Use TypeScript for all new code
+- Follow ESLint configuration
+- Write unit tests for new functions
+- Update documentation as needed
+
+## Pull Request Guidelines
+
+- Keep PRs focused and small
+- Reference related issues
+- Include test coverage
+- Update CHANGELOG.md
+`,
+      updatedAt: new Date('2024-02-14'),
+    },
+    {
+      id: 'doc-004',
+      projectId: 'orion',
+      name: 'API Reference',
+      path: '/docs/api.md',
+      documentType: 'markdown',
+      content: `# API Reference
+
+## Endpoints
+
+### Projects
+- \`GET /api/projects\` - List all projects
+- \`POST /api/projects/create\` - Create a new project
+- \`GET /api/projects/:id\` - Get project details
+
+### Workflows
+- \`GET /api/workflows\` - List all workflows
+- \`POST /api/workflows/create\` - Create a workflow
+- \`POST /api/workflows/start\` - Start workflow execution
+
+### Tasks
+- \`GET /api/tasks\` - List tasks
+- \`POST /api/tasks/create\` - Create a task
+- \`POST /api/tasks/start\` - Start task execution
+`,
+      updatedAt: new Date('2024-02-16'),
+    },
+    {
+      id: 'doc-005',
+      projectId: 'orion',
+      name: 'Deployment Guide',
+      path: '/docs/deployment.yaml',
+      documentType: 'yaml',
+      content: `deployment:
+  environment: production
+  region: us-east-1
+  
+  clusters:
+    - name: edge_cluster_7
+      nodes: 12
+      capacity: 1000
+    - name: edge_cluster_8
+      nodes: 8
+      capacity: 800
+
+  monitoring:
+    enabled: true
+    metrics_interval: 60
+    alert_threshold: 0.95
+
+  scaling:
+    auto_scale: true
+    min_nodes: 4
+    max_nodes: 20
+    target_utilization: 0.75
+`,
+      updatedAt: new Date('2024-02-18'),
+    },
+  ];
+
+  private readonly notepads: Map<string, Notepad> = new Map([
+    ['orion', {
+      projectId: 'orion',
+      content: `# Project Notes
+
+## 2024-02-20
+- Discussion with team about new ingestion format
+- Need to update schema validator for v2 telemetry
+
+## 2024-02-18
+- Deployed hotfix for rate limiter
+- Monitoring shows 99.9% uptime this week
+
+## 2024-02-15
+- Constitution updated to v2
+- New verification requirements added
+`,
+      updatedAt: new Date('2024-02-20'),
+    }],
+    ['global', {
+      projectId: null,
+      content: `# Global Notepad
+
+## 2024-03-01
+- Team offsite next week
+- Review Q1 objectives
+
+## 2024-02-28
+- Infrastructure maintenance scheduled for Sunday
+`,
+      updatedAt: new Date('2024-03-01'),
+    }],
+  ]);
 
   // Projects
 
@@ -704,5 +1000,32 @@ export class MockDataSource implements IDataSource {
   async getRecentProjects(): Promise<RecentProject[]> {
     await delay(50);
     return [...this.recentProjects];
+  }
+
+  // Governance
+
+  async getConstitution(projectId: string): Promise<Constitution | null> {
+    await delay(50);
+    return this.constitutions.get(projectId) ?? null;
+  }
+
+  async getGovernanceDocuments(projectId: string): Promise<GovernanceDocument[]> {
+    await delay(50);
+    return this.governanceDocuments.filter(d => d.projectId === projectId);
+  }
+
+  async inspectGovernanceDocument(projectId: string, documentId: string): Promise<GovernanceDocument | null> {
+    await delay(50);
+    return this.governanceDocuments.find(d => d.projectId === projectId && d.id === documentId) ?? null;
+  }
+
+  async getProjectNotepad(projectId: string): Promise<Notepad | null> {
+    await delay(50);
+    return this.notepads.get(projectId) ?? null;
+  }
+
+  async getGlobalNotepad(): Promise<Notepad | null> {
+    await delay(50);
+    return this.notepads.get('global') ?? null;
   }
 }

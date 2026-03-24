@@ -1,9 +1,11 @@
 import type { IDataSource } from './IDataSource';
 import type { 
-  ServerProject, ServerTask, ServerWorkflow, ServerWorkflowRun, ServerStepRun, ServerMergeState, ServerEvent 
+  ServerProject, ServerTask, ServerWorkflow, ServerWorkflowRun, ServerStepRun, ServerMergeState, ServerEvent,
+  ServerConstitution, ServerGovernanceDocument, ServerNotepad
 } from '../types/server';
 import type { 
-  Project, Workflow, Task, MergeState, Event, WorkflowRun, StepRun, CorrelationIds 
+  Project, Workflow, Task, MergeState, Event, WorkflowRun, StepRun, CorrelationIds,
+  Constitution, GovernanceDocument, Notepad
 } from '../types/entities';
 import { ErrorTaxonomy, ErrorCategory, ErrorSeverity } from '../types/errors';
 import { structuredLogger } from '../lib/logger';
@@ -246,6 +248,37 @@ function mapWorkflowRun(dto: ServerWorkflowRun): WorkflowRun {
     createdAt: validateDate(dto.created_at),
     startedAt: dto.started_at ? validateDate(dto.started_at) : null,
     completedAt: dto.completed_at ? validateDate(dto.completed_at) : null,
+    updatedAt: validateDate(dto.updated_at),
+  };
+}
+
+function mapConstitution(dto: ServerConstitution): Constitution {
+  return {
+    projectId: validateString(dto.project_id, ''),
+    version: typeof dto.version === 'number' ? dto.version : 0,
+    content: validateString(dto.content, ''),
+    updatedAt: dto.updated_at ? validateDate(dto.updated_at) : null,
+    digest: typeof dto.digest === 'string' ? dto.digest : null,
+  };
+}
+
+function mapGovernanceDocument(dto: ServerGovernanceDocument): GovernanceDocument {
+  const validTypes = ['markdown', 'yaml', 'text'];
+  return {
+    id: validateString(dto.id, 'unknown'),
+    projectId: validateString(dto.project_id, ''),
+    name: validateString(dto.name, 'Unnamed Document'),
+    path: validateString(dto.path, ''),
+    documentType: validTypes.includes(dto.document_type) ? dto.document_type : 'text',
+    content: validateString(dto.content, ''),
+    updatedAt: validateDate(dto.updated_at),
+  };
+}
+
+function mapNotepad(dto: ServerNotepad): Notepad {
+  return {
+    projectId: dto.project_id ?? null,
+    content: typeof dto.content === 'string' ? dto.content : '',
     updatedAt: validateDate(dto.updated_at),
   };
 }
@@ -596,6 +629,57 @@ export class ApiDataSource implements IDataSource {
       lastEdit: p.recentActivity || '',
       icon: 'folder',
     }));
+  }
+
+  // Governance
+
+  async getConstitution(projectId: string): Promise<Constitution | null> {
+    try {
+      const params = new URLSearchParams({ project: projectId });
+      const response = await apiFetch<{ success: boolean; data: ServerConstitution }>(`/api/governance/constitution?${params}`);
+      return response.data ? mapConstitution(response.data) : null;
+    } catch {
+      return null;
+    }
+  }
+
+  async getGovernanceDocuments(projectId: string): Promise<GovernanceDocument[]> {
+    try {
+      const params = new URLSearchParams({ project: projectId });
+      const response = await apiFetch<{ success: boolean; data: ServerGovernanceDocument[] }>(`/api/governance/documents?${params}`);
+      return (response.data ?? []).map(mapGovernanceDocument);
+    } catch {
+      return [];
+    }
+  }
+
+  async inspectGovernanceDocument(projectId: string, documentId: string): Promise<GovernanceDocument | null> {
+    try {
+      const params = new URLSearchParams({ project: projectId, document_id: documentId });
+      const response = await apiFetch<{ success: boolean; data: ServerGovernanceDocument }>(`/api/governance/documents/inspect?${params}`);
+      return response.data ? mapGovernanceDocument(response.data) : null;
+    } catch {
+      return null;
+    }
+  }
+
+  async getProjectNotepad(projectId: string): Promise<Notepad | null> {
+    try {
+      const params = new URLSearchParams({ project: projectId });
+      const response = await apiFetch<{ success: boolean; data: ServerNotepad }>(`/api/governance/notepad?${params}`);
+      return response.data ? mapNotepad(response.data) : null;
+    } catch {
+      return null;
+    }
+  }
+
+  async getGlobalNotepad(): Promise<Notepad | null> {
+    try {
+      const response = await apiFetch<{ success: boolean; data: ServerNotepad }>('/api/governance/global/notepad');
+      return response.data ? mapNotepad(response.data) : null;
+    } catch {
+      return null;
+    }
   }
 }
 

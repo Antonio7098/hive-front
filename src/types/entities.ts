@@ -110,3 +110,67 @@ export interface WorkflowRun {
 
 export type Entity = Project | Workflow | Task;
 export type EntityType = 'project' | 'workflow' | 'task';
+
+export interface Constitution {
+  projectId: string;
+  version: number;
+  content: string;
+  updatedAt: Date | null;
+  digest: string | null;
+}
+
+export interface GovernanceDocument {
+  id: string;
+  projectId: string;
+  name: string;
+  path: string;
+  documentType: 'markdown' | 'yaml' | 'text';
+  content: string;
+  updatedAt: Date;
+}
+
+export interface Notepad {
+  projectId: string | null;
+  content: string;
+  updatedAt: Date;
+}
+
+export interface SpecTreeNode {
+  id: string;
+  kind: 'workflow' | 'task';
+  title: string;
+  intent: string;
+  workflow_id?: string;
+  step_id?: string;
+  scope?: string;
+  constraints: string[];
+  acceptance_criteria: string[];
+  verification: {
+    posture: string;
+    instructions: string[];
+    checkpoints: string[];
+  };
+  execution_context?: Record<string, unknown>;
+  attached_artifacts?: string[];
+  deviation_notes?: string[];
+  children?: SpecTreeNode[];
+}
+
+export interface SpecStepNode {
+  id: string;
+  kind: 'task';
+  title: string;
+  intent: string;
+  step_id: string;
+  scope?: string;
+  constraints: string[];
+  acceptance_criteria: string[];
+  verification: {
+    posture: string;
+    instructions: string[];
+    checkpoints: string[];
+  };
+  execution_context?: Record<string, unknown>;
+  attached_artifacts?: string[];
+  deviation_notes?: string[];
+}
