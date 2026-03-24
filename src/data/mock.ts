@@ -2,8 +2,15 @@ import type { Project, Workflow, Task } from '../types/entities';
 export type { Project, Workflow, Task } from '../types/entities';
 export type { Subtask } from '../types/entities';
 
+const defaultProject: Pick<Project, 'runtime' | 'constitutionVersion' | 'constitutionUpdatedAt'> = {
+  runtime: null,
+  constitutionVersion: null,
+  constitutionUpdatedAt: null,
+};
+
 export const mockProjects: Project[] = [
   {
+    ...defaultProject,
     id: 'orion',
     name: 'NEURAL_NEXUS',
     description: 'Optimization of decentralized compute clusters for deep-learning deployment in edge environments.',
@@ -16,6 +23,7 @@ export const mockProjects: Project[] = [
     priority: 'PRIORITY_ALPHA',
   },
   {
+    ...defaultProject,
     id: 'titan',
     name: 'TITAN_SHIELD',
     description: 'Hardening layer-2 protocol security through biometric verification and encrypted handshakes.',
@@ -28,6 +36,7 @@ export const mockProjects: Project[] = [
     priority: 'ACTIVE_STATUS',
   },
   {
+    ...defaultProject,
     id: 'core',
     name: 'CORE_LEGACY',
     description: 'Maintenance of legacy mainframe interfaces for modern API consumption and data bridging.',
@@ -40,6 +49,7 @@ export const mockProjects: Project[] = [
     priority: 'STABLE_FLOW',
   },
   {
+    ...defaultProject,
     id: 'vortex',
     name: 'VORTEX_BLADE',
     description: 'High-performance data processing pipeline',
@@ -51,6 +61,7 @@ export const mockProjects: Project[] = [
     recentActivity: '1D_AGO',
   },
   {
+    ...defaultProject,
     id: 'ghost',
     name: 'GHOST_SHELL',
     description: 'Stealth network protocol implementation',
@@ -62,6 +73,7 @@ export const mockProjects: Project[] = [
     recentActivity: '3H_AGO',
   },
   {
+    ...defaultProject,
     id: 'druid',
     name: 'DRUID_NET',
     description: 'Distributed caching system',
@@ -73,6 +85,7 @@ export const mockProjects: Project[] = [
     recentActivity: '30_DAYS_AGO',
   },
   {
+    ...defaultProject,
     id: 'zenith',
     name: 'ZENITH_OPS',
     description: 'Operations automation platform',
@@ -84,6 +97,7 @@ export const mockProjects: Project[] = [
     recentActivity: '1H_AGO',
   },
   {
+    ...defaultProject,
     id: 'kinetic',
     name: 'KINETIC_LINK',
     description: 'Real-time data synchronization',
@@ -136,6 +150,8 @@ export const mockTasks: Task[] = [
       { id: 's3', name: 'OVERFLOW_SAFETY_NET', completed: false },
       { id: 's4', name: 'UNIT_TEST_RECOVERY', completed: false },
     ],
+    state: 'open',
+    runMode: 'auto',
   },
   {
     id: 't-4093',
@@ -148,6 +164,8 @@ export const mockTasks: Task[] = [
     assignee: 'OPERATOR_X42',
     dueDate: '2024.11.25',
     subtasks: [],
+    state: 'open',
+    runMode: 'auto',
   },
   {
     id: 't-4094',
@@ -159,6 +177,8 @@ export const mockTasks: Task[] = [
     priority: 'medium',
     dueDate: '2024.11.26',
     subtasks: [],
+    state: 'open',
+    runMode: 'manual',
   },
 ];
 

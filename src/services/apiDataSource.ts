@@ -1,5 +1,10 @@
-import type { IDataSource, ProjectDto, WorkflowDto, TaskDto, GraphDto, FlowDto, WorkflowRunDto, MergeStateDto, EventDto } from './IDataSource';
-import type { Project, Workflow, Task } from '../types/entities';
+import type { IDataSource } from './IDataSource';
+import type { 
+  ServerProject, ServerTask, ServerWorkflow, ServerWorkflowRun, ServerStepRun, ServerMergeState, ServerEvent 
+} from '../types/server';
+import type { 
+  Project, Workflow, Task, MergeState, Event, WorkflowRun, StepRun, CorrelationIds 
+} from '../types/entities';
 import { ErrorTaxonomy, ErrorCategory, ErrorSeverity } from '../types/errors';
 import { structuredLogger } from '../lib/logger';
 
@@ -20,14 +25,12 @@ class ApiError extends Error {
 interface UiStateResponse {
   success: boolean;
   data: {
-    projects: ProjectDto[];
-    tasks: TaskDto[];
-    graphs: GraphDto[];
-    flows: FlowDto[];
-    workflows: WorkflowDto[];
-    workflow_runs: WorkflowRunDto[];
-    merge_states: MergeStateDto[];
-    events: EventDto[];
+    projects: ServerProject[];
+    tasks: ServerTask[];
+    workflows: ServerWorkflow[];
+    workflow_runs: ServerWorkflowRun[];
+    merge_states: ServerMergeState[];
+    events: ServerEvent[];
   };
 }
 
@@ -113,10 +116,6 @@ function validateString(value: unknown, fallback: string): string {
   return typeof value === 'string' ? value : fallback;
 }
 
-function validateNumber(value: unknown, fallback: number): number {
-  return typeof value === 'number' ? value : fallback;
-}
-
 function validateDate(value: unknown): Date {
   if (typeof value === 'string') {
     const date = new Date(value);
@@ -125,14 +124,7 @@ function validateDate(value: unknown): Date {
   return new Date();
 }
 
-function validateStatus(value: unknown, validStatuses: string[]): string {
-  if (typeof value === 'string' && validStatuses.includes(value)) {
-    return value;
-  }
-  return validStatuses[0];
-}
-
-function mapProject(dto: ProjectDto): Project {
+function mapProject(dto: ServerProject): Project {
   return {
     id: validateString(dto.id, 'unknown'),
     name: validateString(dto.name, 'Unnamed Project'),
@@ -144,23 +136,32 @@ function mapProject(dto: ProjectDto): Project {
     updatedAt: validateDate(dto.updated_at),
     recentActivity: '',
     priority: undefined,
+    runtime: dto.runtime ? {
+      adapterName: validateString(dto.runtime.adapter_name, ''),
+      binaryPath: validateString(dto.runtime.binary_path, ''),
+      model: dto.runtime.model,
+      timeoutMs: typeof dto.runtime.timeout_ms === 'number' ? dto.runtime.timeout_ms : 0,
+      maxParallelTasks: typeof dto.runtime.max_parallel_tasks === 'number' ? dto.runtime.max_parallel_tasks : 1,
+    } : null,
+    constitutionVersion: typeof dto.constitution_version === 'number' ? dto.constitution_version : null,
+    constitutionUpdatedAt: dto.constitution_updated_at ? validateDate(dto.constitution_updated_at) : null,
   };
 }
 
-function mapWorkflow(dto: WorkflowDto): Workflow {
+function mapWorkflow(dto: ServerWorkflow): Workflow {
   return {
     id: validateString(dto.id, 'unknown'),
     projectId: validateString(dto.project_id, ''),
     name: validateString(dto.name, 'Unnamed Workflow'),
     description: validateString(dto.description, ''),
-    status: validateStatus(dto.status, ['todo', 'active', 'completed']) as 'todo' | 'active' | 'completed',
-    taskCount: validateNumber(dto.task_count, 0),
-    lastRun: validateString(dto.last_run, 'Never'),
-    trigger: validateString(dto.trigger, 'manual'),
+    status: 'active',
+    taskCount: Object.keys(dto.steps ?? {}).length,
+    lastRun: 'Never',
+    trigger: 'manual',
   };
 }
 
-function mapTask(dto: TaskDto): Task {
+function mapTask(dto: ServerTask): Task {
   const stateMap: Record<string, 'backlog' | 'in_progress' | 'done'> = {
     open: 'in_progress',
     closed: 'done',
@@ -168,7 +169,7 @@ function mapTask(dto: TaskDto): Task {
   
   return {
     id: validateString(dto.id, 'unknown'),
-    workflowId: validateString(dto.workflow_id, ''),
+    workflowId: '',
     projectId: validateString(dto.project_id, ''),
     name: validateString(dto.title, 'Unnamed Task'),
     description: validateString(dto.description, ''),
@@ -177,6 +178,75 @@ function mapTask(dto: TaskDto): Task {
     assignee: undefined,
     dueDate: undefined,
     subtasks: [],
+    state: dto.state === 'closed' ? 'closed' : 'open',
+    runMode: dto.run_mode === 'manual' ? 'manual' : 'auto',
+  };
+}
+
+function mapMergeState(dto: ServerMergeState): MergeState {
+  const validStatuses = ['prepared', 'approved', 'completed'];
+  return {
+    flowId: validateString(dto.flow_id, 'unknown'),
+    status: validStatuses.includes(dto.status) ? dto.status : 'prepared',
+    targetBranch: typeof dto.target_branch === 'string' ? dto.target_branch : null,
+    conflicts: Array.isArray(dto.conflicts) ? dto.conflicts : [],
+    commits: Array.isArray(dto.commits) ? dto.commits : [],
+    updatedAt: validateDate(dto.updated_at),
+  };
+}
+
+function mapCorrelation(dto: ServerEvent['correlation']): CorrelationIds {
+  return {
+    projectId: dto.project_id ?? null,
+    graphId: dto.graph_id ?? null,
+    flowId: dto.flow_id ?? null,
+    workflowId: dto.workflow_id ?? null,
+    workflowRunId: dto.workflow_run_id ?? null,
+    taskId: dto.task_id ?? null,
+    attemptId: dto.attempt_id ?? null,
+  };
+}
+
+function mapEvent(dto: ServerEvent): Event {
+  return {
+    id: validateString(dto.id, 'unknown'),
+    type: validateString(dto.type, 'unknown'),
+    category: validateString(dto.category, 'unknown'),
+    timestamp: validateDate(dto.timestamp),
+    sequence: typeof dto.sequence === 'number' ? dto.sequence : null,
+    correlation: mapCorrelation(dto.correlation ?? {}),
+    payload: typeof dto.payload === 'object' && dto.payload !== null ? dto.payload as Record<string, unknown> : {},
+  };
+}
+
+function mapStepRun(dto: ServerStepRun): StepRun {
+  const validStates = ['pending', 'ready', 'running', 'verifying', 'retry', 'waiting', 'succeeded', 'failed', 'skipped', 'aborted'];
+  return {
+    id: validateString(dto.id, 'unknown'),
+    stepId: validateString(dto.step_id, 'unknown'),
+    state: validStates.includes(dto.state) ? dto.state : 'pending',
+    updatedAt: validateDate(dto.updated_at),
+    reason: typeof dto.reason === 'string' ? dto.reason : null,
+  };
+}
+
+function mapWorkflowRun(dto: ServerWorkflowRun): WorkflowRun {
+  const validStates = ['created', 'running', 'paused', 'completed', 'aborted'];
+  const stepRuns = dto.step_runs
+    ? Object.values(dto.step_runs).map(mapStepRun)
+    : [];
+  return {
+    id: validateString(dto.id, 'unknown'),
+    workflowId: validateString(dto.workflow_id, ''),
+    projectId: validateString(dto.project_id, ''),
+    rootWorkflowRunId: validateString(dto.root_workflow_run_id, ''),
+    parentWorkflowRunId: typeof dto.parent_workflow_run_id === 'string' ? dto.parent_workflow_run_id : null,
+    state: validStates.includes(dto.state) ? dto.state : 'created',
+    stepRuns,
+    createdAt: validateDate(dto.created_at),
+    startedAt: dto.started_at ? validateDate(dto.started_at) : null,
+    completedAt: dto.completed_at ? validateDate(dto.completed_at) : null,
+    updatedAt: validateDate(dto.updated_at),
   };
 }
 
@@ -205,6 +275,8 @@ export class ApiDataSource implements IDataSource {
     structuredLogger.debug('Cache invalidated');
   }
 
+  // Projects
+
   async getProjects(): Promise<Project[]> {
     const state = await this.getUiState();
     return state.data.projects.map(mapProject);
@@ -217,7 +289,7 @@ export class ApiDataSource implements IDataSource {
   }
 
   async createProject(_data: Omit<Project, 'id' | 'createdAt' | 'updatedAt'>): Promise<Project> {
-    const response = await apiFetch<ProjectDto>('/api/projects/create', {
+    const response = await apiFetch<ServerProject>('/api/projects/create', {
       method: 'POST',
       body: JSON.stringify({ name: _data.name, description: _data.description }),
     });
@@ -277,6 +349,8 @@ export class ApiDataSource implements IDataSource {
     this.invalidateCache();
   }
 
+  // Workflows
+
   async getWorkflows(): Promise<Workflow[]> {
     const state = await this.getUiState();
     return state.data.workflows.map(mapWorkflow);
@@ -294,7 +368,7 @@ export class ApiDataSource implements IDataSource {
   }
 
   async createWorkflow(_data: Omit<Workflow, 'id'>): Promise<Workflow> {
-    const response = await apiFetch<WorkflowDto>('/api/workflows/create', {
+    const response = await apiFetch<ServerWorkflow>('/api/workflows/create', {
       method: 'POST',
       body: JSON.stringify(_data),
     });
@@ -354,6 +428,8 @@ export class ApiDataSource implements IDataSource {
     this.invalidateCache();
   }
 
+  // Tasks
+
   async getTasks(): Promise<Task[]> {
     const state = await this.getUiState();
     return state.data.tasks.map(mapTask);
@@ -371,7 +447,7 @@ export class ApiDataSource implements IDataSource {
   }
 
   async createTask(_data: Omit<Task, 'id'>): Promise<Task> {
-    const response = await apiFetch<TaskDto>('/api/tasks/create', {
+    const response = await apiFetch<ServerTask>('/api/tasks/create', {
       method: 'POST',
       body: JSON.stringify(_data),
     });
@@ -430,6 +506,79 @@ export class ApiDataSource implements IDataSource {
     });
     this.invalidateCache();
   }
+
+  // Merge States
+
+  async getMergeStates(): Promise<MergeState[]> {
+    const state = await this.getUiState();
+    return state.data.merge_states.map(mapMergeState);
+  }
+
+  async getMergeState(flowId: string): Promise<MergeState | null> {
+    const state = await this.getUiState();
+    const dto = state.data.merge_states.find(m => m.flow_id === flowId);
+    return dto ? mapMergeState(dto) : null;
+  }
+
+  // Events
+
+  async getEvents(limit?: number): Promise<Event[]> {
+    const state = await this.getUiState();
+    const events = state.data.events.map(mapEvent);
+    if (typeof limit === 'number' && limit > 0) {
+      return events.slice(0, limit);
+    }
+    return events;
+  }
+
+  async getEventsByCorrelation(filters: { projectId?: string; flowId?: string; taskId?: string }): Promise<Event[]> {
+    const state = await this.getUiState();
+    return state.data.events
+      .map(mapEvent)
+      .filter(e => {
+        if (filters.projectId && e.correlation.projectId !== filters.projectId) return false;
+        if (filters.flowId && e.correlation.flowId !== filters.flowId) return false;
+        if (filters.taskId && e.correlation.taskId !== filters.taskId) return false;
+        return true;
+      });
+  }
+
+  async getEventsFiltered(filters: { workflowRunId?: string; projectId?: string; workflowId?: string; taskId?: string; limit?: number; offset?: number }): Promise<Event[]> {
+    const params = new URLSearchParams();
+    if (filters.workflowRunId) params.set('workflow_run_id', filters.workflowRunId);
+    if (filters.projectId) params.set('project_id', filters.projectId);
+    if (filters.workflowId) params.set('workflow_id', filters.workflowId);
+    if (filters.taskId) params.set('task_id', filters.taskId);
+    if (filters.limit) params.set('limit', String(filters.limit));
+    if (filters.offset) params.set('offset', String(filters.offset));
+    
+    const queryString = params.toString();
+    const path = queryString ? `/api/events?${queryString}` : '/api/events';
+    const response = await apiFetch<{ success: boolean; data: ServerEvent[] }>(path);
+    return (response.data ?? []).map(mapEvent);
+  }
+
+  // Workflow Runs
+
+  async getWorkflowRuns(): Promise<WorkflowRun[]> {
+    const state = await this.getUiState();
+    return state.data.workflow_runs.map(mapWorkflowRun);
+  }
+
+  async getWorkflowRun(id: string): Promise<WorkflowRun | null> {
+    const state = await this.getUiState();
+    const dto = state.data.workflow_runs.find(r => r.id === id);
+    return dto ? mapWorkflowRun(dto) : null;
+  }
+
+  async getWorkflowRunsByWorkflow(workflowId: string): Promise<WorkflowRun[]> {
+    const params = new URLSearchParams();
+    params.set('workflow', workflowId);
+    const response = await apiFetch<{ success: boolean; data: ServerWorkflowRun[] }>(`/api/workflow-runs?${params.toString()}`);
+    return (response.data ?? []).map(mapWorkflowRun);
+  }
+
+  // Dashboard helpers
 
   async getActiveItems() {
     return [];

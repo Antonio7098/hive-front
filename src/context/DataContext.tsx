@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useEffect, useMemo, type ReactNode
 import type { IDataSource, ActiveItem, TodoItem, RecentProject } from '../services/IDataSource';
 import { ApiDataSource } from '../services/apiDataSource';
 import { MockDataSource } from '../services/mockDataSource';
-import type { Project, Workflow, Task } from '../types/entities';
+import type { Project, Workflow, Task, MergeState, Event, WorkflowRun } from '../types/entities';
 import { ErrorTaxonomy, ErrorCategory, ErrorSeverity } from '../types/errors';
 import { structuredLogger } from '../lib/logger';
 
@@ -34,6 +34,14 @@ interface DataContextValue {
   getTasks(): Promise<Task[]>;
   getTask(id: string): Promise<Task | null>;
   getTasksByWorkflow(workflowId: string): Promise<Task[]>;
+  getMergeStates(): Promise<MergeState[]>;
+  getMergeState(flowId: string): Promise<MergeState | null>;
+  getEvents(limit?: number): Promise<Event[]>;
+  getEventsByCorrelation(filters: { projectId?: string; flowId?: string; taskId?: string }): Promise<Event[]>;
+  getEventsFiltered(filters: { workflowRunId?: string; projectId?: string; workflowId?: string; taskId?: string; limit?: number; offset?: number }): Promise<Event[]>;
+  getWorkflowRuns(): Promise<WorkflowRun[]>;
+  getWorkflowRun(id: string): Promise<WorkflowRun | null>;
+  getWorkflowRunsByWorkflow(workflowId: string): Promise<WorkflowRun[]>;
   getActiveItems(): Promise<ActiveItem[]>;
   getTodoItems(): Promise<TodoItem[]>;
   getRecentProjects(): Promise<RecentProject[]>;
@@ -147,6 +155,14 @@ export function DataProvider({ children }: DataProviderProps) {
         getTasks: async () => { throw notInitializedError; },
         getTask: async () => { throw notInitializedError; },
         getTasksByWorkflow: async () => { throw notInitializedError; },
+        getMergeStates: async () => { throw notInitializedError; },
+        getMergeState: async () => { throw notInitializedError; },
+        getEvents: async () => { throw notInitializedError; },
+        getEventsByCorrelation: async () => { throw notInitializedError; },
+        getEventsFiltered: async () => { throw notInitializedError; },
+        getWorkflowRuns: async () => { throw notInitializedError; },
+        getWorkflowRun: async () => { throw notInitializedError; },
+        getWorkflowRunsByWorkflow: async () => { throw notInitializedError; },
         getActiveItems: async () => { throw notInitializedError; },
         getTodoItems: async () => { throw notInitializedError; },
         getRecentProjects: async () => { throw notInitializedError; },
@@ -167,6 +183,14 @@ export function DataProvider({ children }: DataProviderProps) {
       getTasks: () => dataSource.getTasks(),
       getTask: (id) => dataSource.getTask(id),
       getTasksByWorkflow: (workflowId) => dataSource.getTasksByWorkflow(workflowId),
+      getMergeStates: () => dataSource.getMergeStates(),
+      getMergeState: (flowId) => dataSource.getMergeState(flowId),
+      getEvents: (limit?) => dataSource.getEvents(limit),
+      getEventsByCorrelation: (filters) => dataSource.getEventsByCorrelation(filters),
+      getEventsFiltered: (filters) => dataSource.getEventsFiltered(filters),
+      getWorkflowRuns: () => dataSource.getWorkflowRuns(),
+      getWorkflowRun: (id) => dataSource.getWorkflowRun(id),
+      getWorkflowRunsByWorkflow: (workflowId) => dataSource.getWorkflowRunsByWorkflow(workflowId),
       getActiveItems: () => dataSource.getActiveItems(),
       getTodoItems: () => dataSource.getTodoItems(),
       getRecentProjects: () => dataSource.getRecentProjects(),

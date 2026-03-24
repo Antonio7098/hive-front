@@ -11,6 +11,8 @@ const navItems = [
   { to: '/projects', icon: 'account_tree', label: 'PROJECTS' },
   { to: '/workflows', icon: 'reorder', label: 'WORKFLOWS' },
   { to: '/tasks', icon: 'task_alt', label: 'TASKS' },
+  { to: '/events', icon: 'bolt', label: 'EVENTS' },
+  { to: '/merges', icon: 'account_tree', label: 'MERGES' },
   { to: '/analytics', icon: 'bar_chart', label: 'ANALYTICS' },
   { to: '/settings', icon: 'settings', label: 'SETTINGS' },
   { to: '/components', icon: 'code', label: 'COMPONENTS' },

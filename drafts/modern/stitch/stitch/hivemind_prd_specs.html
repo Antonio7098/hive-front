@@ -1,0 +1,81 @@
+# HiveMind - Project/Workflow/Task Management Dashboard
+
+## Tech Stack
+- **Build Tool**: Vite
+- **Framework**: React 18+ with functional components and hooks
+- **Routing**: React Router v6
+- **Styling**: Tailwind CSS (with CSS custom properties for theming)
+- **Icons**: Lucide React or Heroicons
+
+---
+
+## Architecture Principles
+
+### 1. Centralized Theme System
+All colors, spacing, and design tokens defined as CSS custom properties.
+
+```css
+:root {
+  --color-bg-primary: #09090b;
+  --color-bg-secondary: #18181b;
+  --color-bg-elevated: #27272a;
+  --color-bg-hover: #3f3f46;
+  --color-border: #3f3f46;
+  --color-border-subtle: #27272a;
+  --color-text-primary: #fef3c7;
+  --color-text-secondary: #fcd34d;
+  --color-text-muted: #d97706;
+  --color-accent: #fbbf24;
+  --color-accent-hover: #f59e0b;
+  --color-accent-light: #fcd34d;
+  --color-accent-glow: rgba(251, 191, 36, 0.15);
+  --color-warning: #f97316;
+  --color-danger: #ea580c;
+}
+```
+
+### 2. Component Reusability Strategy
+- **Layer 1 - Primitives**: Button, Card, Badge, Input, Select, Toggle, Avatar, Icon.
+- **Layer 2 - Composed**: EntityCard, ViewSwitcher, MetadataRow, SectionPanel, Toolbar, StatusToggle, ExpandableItem, HoneycombBackground.
+- **Layer 3 - Features**: TaskBoard/WorkflowBoard (Kanban), ListView, GraphView, ProjectGrid, DashboardWidgets.
+
+### 3. Layout Structure
+- **AppLayout**: Main layout with sidebar and header.
+- **Pages**: Dashboard, Projects, ProjectDetail, WorkflowDetail, TaskDetail.
+
+---
+
+## Page Specifications
+
+### Dashboard (`/`)
+- **Active Widget**: Currently running tasks/workflows with animated pulse.
+- **Todo Widget**: List of TaskSummary items with status indicators.
+- **Recent Projects**: Quick access to last projects worked on.
+
+### Projects Page (`/projects`)
+- **Header**: "Projects" title + "New Project" button.
+- **Recent Section**: Top 3 most recently modified projects (large cards).
+- **All Projects Section**: Grid of remaining projects (smaller cards).
+
+### Project Detail (`/projects/:id`)
+- **Two-column layout**: Fixed left sidebar (overview/spec), scrollable main content (workflows/metadata).
+- **Toolbar**: Overview, Workflows, Docs, Settings.
+- **ViewSwitcher**: Kanban, List, Graph views.
+
+### Workflow Detail (`/workflows/:id`)
+- **Two-column layout**: Left (overview/trigger), Right (metadata/tasks/spec).
+- **Toolbar**: Overview, Tasks, Spec, Config.
+
+### Task Detail (`/tasks/:id`)
+- **Two-column layout**: Left (objective/assignee), Right (metadata/subtasks/spec).
+- **Toolbar**: Overview, Spec, Subtasks, Config.
+
+---
+
+## Visual Language
+- **Soft corners**: 8-12px border-radius.
+- **Subtle borders**: 1px low contrast.
+- **Soft shadows**: Diffused amber glow.
+- **Typography**: Inter/Geist/SF Pro, light weights (300-500).
+- **Honeycomb Hints**: Faint hexagonal grid overlays and geometry.
+- **Color Palette**: Near-black backgrounds, Zinc/Slate grays, Yellow/Amber accents.

@@ -1,89 +1,13 @@
-import type { Project, Workflow, Task } from '../types/entities';
+import type { Project, Workflow, Task, MergeState, Event, WorkflowRun } from '../types/entities';
 
-export interface ProjectDto {
-  id: string;
-  name: string;
-  description: string | null;
-  created_at: string;
-  updated_at: string;
-  repositories: Array<{
-    name: string;
-    path: string;
-    access_mode: string;
-  }>;
-  runtime: {
-    adapter_name: string;
-    binary_path: string;
-    model: string | null;
-    args: string[];
-    env: Record<string, string>;
-    timeout_ms: number;
-    max_parallel_tasks: number;
-  } | null;
-}
-
-export interface WorkflowDto {
-  id: string;
-  project_id: string | null;
-  name: string;
-  description: string | null;
-  status: string | null;
-  task_count: number | null;
-  last_run: string | null;
-  trigger: string | null;
-}
-
-export interface TaskDto {
-  id: string;
-  workflow_id: string | null;
-  project_id: string;
-  title: string;
-  description: string | null;
-  scope: unknown | null;
-  run_mode: string;
-  state: 'open' | 'closed';
-  created_at: string;
-  updated_at: string;
-}
-
-export interface GraphDto {
-  id: string;
-  name: string;
-  type: string;
-  config: unknown;
-}
-
-export interface FlowDto {
-  id: string;
-  name: string;
-  workflow_id: string | null;
-  config: unknown;
-}
-
-export interface WorkflowRunDto {
-  id: string;
-  workflow_id: string;
-  status: string;
-  started_at: string | null;
-  finished_at: string | null;
-  result: unknown;
-}
-
-export interface MergeStateDto {
-  id: string;
-  pr_number: number;
-  repository: string;
-  state: string;
-  mergeable: boolean;
-}
-
-export interface EventDto {
-  id: string;
-  type: string;
-  payload: unknown;
-  timestamp: string;
-  source: string;
-}
+export type {
+  ServerProject as ProjectDto,
+  ServerTask as TaskDto,
+  ServerWorkflow as WorkflowDto,
+  ServerWorkflowRun as WorkflowRunDto,
+  ServerMergeState as MergeStateDto,
+  ServerEvent as EventDto,
+} from '../types/server';
 
 export interface ActiveItem {
   id: string;
@@ -129,6 +53,17 @@ export interface IDataSource {
   createTask(data: Omit<Task, 'id'>): Promise<Task>;
   updateTask(id: string, data: Partial<Task>): Promise<Task>;
   deleteTask(id: string): Promise<void>;
+
+  getMergeStates(): Promise<MergeState[]>;
+  getMergeState(flowId: string): Promise<MergeState | null>;
+
+  getEvents(limit?: number): Promise<Event[]>;
+  getEventsByCorrelation(filters: { projectId?: string; flowId?: string; taskId?: string }): Promise<Event[]>;
+  getEventsFiltered(filters: { workflowRunId?: string; projectId?: string; workflowId?: string; taskId?: string; limit?: number; offset?: number }): Promise<Event[]>;
+
+  getWorkflowRuns(): Promise<WorkflowRun[]>;
+  getWorkflowRun(id: string): Promise<WorkflowRun | null>;
+  getWorkflowRunsByWorkflow(workflowId: string): Promise<WorkflowRun[]>;
 
   getActiveItems(): Promise<ActiveItem[]>;
   getTodoItems(): Promise<TodoItem[]>;

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Badge } from '../ui/Badge';
 import { StatusDot } from '../ui/StatusDot';
 import { Icon } from '../ui';
@@ -8,6 +8,7 @@ interface EntityCardProps {
   entity: Project | Workflow | Task;
   type: 'project' | 'workflow' | 'task';
   variant?: 'default' | 'compact' | 'expanded';
+  disableLink?: boolean;
   onClick?: () => void;
   onToggleActive?: (id: string, active: boolean) => void;
 }
@@ -22,8 +23,10 @@ export function EntityCard({
   entity,
   type,
   variant = 'default',
+  disableLink = false,
   onClick,
 }: EntityCardProps) {
+  const navigate = useNavigate();
   const isProject = type === 'project';
   const isWorkflow = type === 'workflow';
   const isTask = type === 'task';
@@ -32,38 +35,18 @@ export function EntityCard({
   const workflow = entity as Workflow;
   const task = entity as Task;
 
-  if (variant === 'compact') {
-    return (
-      <Link
-        to={`/${type === 'workflow' ? 'workflows' : type === 'task' ? 'tasks' : 'projects'}/${entity.id}`}
-        className="bg-surface-container-low border-2 border-outline-variant p-4 flex flex-col justify-between hover:bg-surface-container-high transition-colors group cursor-pointer"
-        onClick={onClick}
-      >
-        <div>
-          <div className="flex justify-between mb-2">
-            <span className="font-mono text-[10px] text-outline">{entity.id.toUpperCase()}</span>
-            <StatusDot status={entity.status === 'active' || entity.status === 'in_progress' ? 'online' : 'offline'} />
-          </div>
-          <h5 className="font-headline font-bold text-on-surface uppercase group-hover:text-primary-container transition-colors">
-            {entity.name}
-          </h5>
-        </div>
-        <div className="mt-8 flex justify-between items-end">
-          <span className="font-mono text-xs text-on-surface-variant">
-            TASKS: {isProject ? project.taskCount : isWorkflow ? workflow.taskCount : task.subtasks?.length || 0}
-          </span>
-          <Icon name="arrow_forward" className="text-outline" size={18} />
-        </div>
-      </Link>
-    );
-  }
+  const linkPath = `/${type === 'workflow' ? 'workflows' : type === 'task' ? 'tasks' : 'projects'}/${entity.id}`;
 
-  return (
-    <Link
-      to={`/${type === 'workflow' ? 'workflows' : type === 'task' ? 'tasks' : 'projects'}/${entity.id}`}
-      className="bg-surface-container border-3 border-outline p-6 shadow-[var(--shadow-hard-lg)] hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-[var(--shadow-accent-lg)] transition-all cursor-pointer group"
-      onClick={onClick}
-    >
+  const handleClick = () => {
+    if (disableLink) {
+      navigate(linkPath);
+    } else if (onClick) {
+      onClick();
+    }
+  };
+
+  const cardContent = (
+    <>
       <div className="flex justify-between items-start mb-4">
         {isProject && project.priority && (
           <Badge variant={project.priority === 'high' ? 'error' : project.priority === 'medium' ? 'warning' : 'neutral'}>
@@ -112,6 +95,78 @@ export function EntityCard({
           </span>
         </div>
       </div>
+    </>
+  );
+
+  const compactContent = (
+    <div className="flex justify-between mb-2">
+      <span className="font-mono text-[10px] text-outline">{entity.id.toUpperCase()}</span>
+      <StatusDot status={entity.status === 'active' || entity.status === 'in_progress' ? 'online' : 'offline'} />
+    </div>
+  );
+
+  if (variant === 'compact') {
+    if (disableLink) {
+      return (
+        <div
+          className="bg-surface-container-low border-2 border-outline-variant p-4 flex flex-col justify-between hover:bg-surface-container-high transition-colors group cursor-pointer"
+          onClick={handleClick}
+        >
+          {compactContent}
+          <div>
+            <h5 className="font-headline font-bold text-on-surface uppercase group-hover:text-primary-container transition-colors">
+              {entity.name}
+            </h5>
+          </div>
+          <div className="mt-8 flex justify-between items-end">
+            <span className="font-mono text-xs text-on-surface-variant">
+              TASKS: {isProject ? project.taskCount : isWorkflow ? workflow.taskCount : task.subtasks?.length || 0}
+            </span>
+            <Icon name="arrow_forward" className="text-outline" size={18} />
+          </div>
+        </div>
+      );
+    }
+    return (
+      <Link
+        to={linkPath}
+        className="bg-surface-container-low border-2 border-outline-variant p-4 flex flex-col justify-between hover:bg-surface-container-high transition-colors group cursor-pointer"
+        onClick={handleClick}
+      >
+        {compactContent}
+        <div>
+          <h5 className="font-headline font-bold text-on-surface uppercase group-hover:text-primary-container transition-colors">
+            {entity.name}
+          </h5>
+        </div>
+        <div className="mt-8 flex justify-between items-end">
+          <span className="font-mono text-xs text-on-surface-variant">
+            TASKS: {isProject ? project.taskCount : isWorkflow ? workflow.taskCount : task.subtasks?.length || 0}
+          </span>
+          <Icon name="arrow_forward" className="text-outline" size={18} />
+        </div>
+      </Link>
+    );
+  }
+
+  if (disableLink) {
+    return (
+      <div
+        className="bg-surface-container border-3 border-outline p-6 shadow-[var(--shadow-hard-lg)] transition-all cursor-pointer group"
+        onClick={handleClick}
+      >
+        {cardContent}
+      </div>
+    );
+  }
+
+  return (
+    <Link
+      to={linkPath}
+      className="bg-surface-container border-3 border-outline p-6 shadow-[var(--shadow-hard-lg)] hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-[var(--shadow-accent-lg)] transition-all cursor-pointer group"
+      onClick={handleClick}
+    >
+      {cardContent}
     </Link>
   );
 }

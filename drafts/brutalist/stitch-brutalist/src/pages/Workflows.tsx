@@ -1,5 +1,5 @@
 import { useWorkflows } from '../hooks';
-import { EntityCard, PageHeader, SectionHeader, PageFooter } from '../components/common';
+import { EntityCard, PageHeader, SectionHeader, PageFooter, KanbanBoard } from '../components/common';
 import { useViewMode } from '../hooks/useViewMode';
 
 export function Workflows() {
@@ -27,28 +27,81 @@ export function Workflows() {
         actionLabel="+ NEW_WORKFLOW"
       />
 
-      <section className="mb-16">
-        <SectionHeader label="Section_01 // Active_Runs" />
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {activeWorkflows.map((workflow) => (
-            <EntityCard key={workflow.id} entity={workflow} type="workflow" variant="default" />
-          ))}
-        </div>
-      </section>
+      {viewMode === 'kanban' && (
+        <section className="mb-16">
+          <SectionHeader label="Section_01 // Workflow_Kanban" />
+          <KanbanBoard
+            columns={[
+              {
+                id: 'todo',
+                title: 'Todo',
+                color: 'bg-outline',
+                items: workflows
+                  .filter((w) => w.status === 'todo')
+                  .map((workflow) => ({
+                    id: workflow.id,
+                    content: (
+                      <EntityCard entity={workflow} type="workflow" variant="default" disableLink />
+                    ),
+                  })),
+              },
+              {
+                id: 'active',
+                title: 'Active',
+                color: 'bg-primary-container',
+                items: workflows
+                  .filter((w) => w.status === 'active')
+                  .map((workflow) => ({
+                    id: workflow.id,
+                    content: (
+                      <EntityCard entity={workflow} type="workflow" variant="default" disableLink />
+                    ),
+                  })),
+              },
+              {
+                id: 'completed',
+                title: 'Completed',
+                color: 'bg-success',
+                items: workflows
+                  .filter((w) => w.status === 'completed')
+                  .map((workflow) => ({
+                    id: workflow.id,
+                    content: (
+                      <EntityCard entity={workflow} type="workflow" variant="default" disableLink />
+                    ),
+                  })),
+              },
+            ]}
+          />
+        </section>
+      )}
 
-      <section>
-        <SectionHeader
-          label="Section_02 // Workflow_Manifest"
-          dividerWidth="short"
-          viewMode={viewMode}
-          onViewModeChange={setViewMode}
-        />
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {otherWorkflows.map((workflow) => (
-            <EntityCard key={workflow.id} entity={workflow} type="workflow" variant="compact" />
-          ))}
-        </div>
-      </section>
+      {viewMode !== 'kanban' && (
+        <>
+          <section className="mb-16">
+            <SectionHeader label="Section_01 // Active_Runs" />
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {activeWorkflows.map((workflow) => (
+                <EntityCard key={workflow.id} entity={workflow} type="workflow" variant="default" />
+              ))}
+            </div>
+          </section>
+
+          <section>
+            <SectionHeader
+              label="Section_02 // Workflow_Manifest"
+              dividerWidth="short"
+              viewMode={viewMode}
+              onViewModeChange={setViewMode}
+            />
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {otherWorkflows.map((workflow) => (
+                <EntityCard key={workflow.id} entity={workflow} type="workflow" variant="compact" />
+              ))}
+            </div>
+          </section>
+        </>
+      )}
 
       <PageFooter />
     </div>

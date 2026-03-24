@@ -39,6 +39,9 @@ const mockProject: Project = {
   updatedAt: new Date('2024-01-20'),
   recentActivity: '2h ago',
   workflowCount: 3,
+  runtime: null,
+  constitutionVersion: null,
+  constitutionUpdatedAt: null,
 };
 
 function UiTab() {

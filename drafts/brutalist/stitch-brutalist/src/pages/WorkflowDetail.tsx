@@ -96,22 +96,56 @@ export function WorkflowDetail() {
                 <Icon name="filter_list" className="mr-1" size={18} /> Filter_Tasks
               </Button>
             </div>
-            <div className="p-6 grid grid-cols-2 gap-6">
-              {tasks.map((task) => (
-                <Card key={task.id} variant="elevated" padding="md" className="hover:border-primary-container transition-colors cursor-pointer">
-                  <div className="flex justify-between items-start mb-4">
-                    <div className="p-2 bg-primary-container/10 border border-primary-container">
-                      <Icon name="data_object" className="text-primary-container" size={18} />
+            <div className="p-6">
+            {viewMode === 'kanban' && (
+              <div className="grid grid-cols-2 gap-6">
+                {tasks.map((task) => (
+                  <Card key={task.id} variant="elevated" padding="md" className="hover:border-primary-container transition-colors cursor-pointer">
+                    <div className="flex justify-between items-start mb-4">
+                      <div className="p-2 bg-primary-container/10 border border-primary-container">
+                        <Icon name="data_object" className="text-primary-container" size={18} />
+                      </div>
+                      <Badge variant={task.status === 'done' ? 'success' : task.status === 'in_progress' ? 'warning' : 'neutral'}>
+                        {task.status.replace('_', ' ')}
+                      </Badge>
                     </div>
-                    <Badge variant={task.status === 'done' ? 'success' : task.status === 'in_progress' ? 'warning' : 'neutral'}>
-                      {task.status.replace('_', ' ')}
-                    </Badge>
-                  </div>
-                  <h4 className="font-headline font-bold text-lg uppercase">{task.name}</h4>
-                  <p className="text-on-surface-variant text-sm mt-2 font-mono">{task.description}</p>
-                </Card>
-              ))}
-            </div>
+                    <h4 className="font-headline font-bold text-lg uppercase">{task.name}</h4>
+                    <p className="text-on-surface-variant text-sm mt-2 font-mono">{task.description}</p>
+                  </Card>
+                ))}
+              </div>
+            )}
+            {viewMode === 'list' && (
+              <div className="flex flex-col">
+                {tasks.map((task) => (
+                  <Card key={task.id} variant="elevated" padding="md" className="mb-2 hover:border-primary-container transition-colors cursor-pointer">
+                    <div className="flex justify-between items-center">
+                      <div className="flex items-center gap-4">
+                        <div className="p-2 bg-primary-container/10 border border-primary-container">
+                          <Icon name="data_object" className="text-primary-container" size={18} />
+                        </div>
+                        <div>
+                          <h4 className="font-headline font-bold uppercase">{task.name}</h4>
+                          <p className="text-on-surface-variant text-sm font-mono">{task.description}</p>
+                        </div>
+                      </div>
+                      <Badge variant={task.status === 'done' ? 'success' : task.status === 'in_progress' ? 'warning' : 'neutral'}>
+                        {task.status.replace('_', ' ')}
+                      </Badge>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            )}
+            {viewMode === 'graph' && (
+              <div className="flex items-center justify-center h-64">
+                <div className="text-center">
+                  <Icon name="account_tree" size={48} className="text-outline mb-4" />
+                  <p className="font-mono text-outline uppercase tracking-widest">Graph_View: Under_Construction</p>
+                </div>
+              </div>
+            )}
+          </div>
           </Card>
         </div>
       </div>

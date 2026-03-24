@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HIVEMIND // WORKFLOW_DETAIL</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;900&amp;family=Work+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "tertiary-fixed-dim": "#d1c79d",
+                        "secondary-fixed-dim": "#ffb690",
+                        "on-secondary-fixed": "#341100",
+                        "primary": "#ffe1a7",
+                        "secondary-container": "#ec6a06",
+                        "surface-variant": "#353534",
+                        "surface-dim": "#131313",
+                        "outline": "#9c8f79",
+                        "error": "#ffb4ab",
+                        "secondary-fixed": "#ffdbca",
+                        "inverse-surface": "#e5e2e1",
+                        "tertiary": "#f0e5ba",
+                        "surface-bright": "#3a3939",
+                        "on-surface": "#e5e2e1",
+                        "on-tertiary-fixed-variant": "#4d4727",
+                        "on-primary-fixed": "#261a00",
+                        "on-tertiary-fixed": "#201c02",
+                        "surface-tint": "#f9bd22",
+                        "primary-container": "#fbbf24",
+                        "on-secondary-container": "#4a1c00",
+                        "error-container": "#93000a",
+                        "on-tertiary": "#363113",
+                        "outline-variant": "#4f4633",
+                        "on-primary": "#402d00",
+                        "inverse-on-surface": "#313030",
+                        "on-primary-container": "#6c4f00",
+                        "primary-fixed": "#ffdf9f",
+                        "on-error-container": "#ffdad6",
+                        "on-secondary-fixed-variant": "#783200",
+                        "surface-container-lowest": "#0e0e0e",
+                        "on-background": "#e5e2e1",
+                        "secondary": "#ffb690",
+                        "tertiary-container": "#d3c99f",
+                        "tertiary-fixed": "#ede3b8",
+                        "background": "#131313",
+                        "surface-container-high": "#2a2a2a",
+                        "on-secondary": "#552100",
+                        "on-primary-fixed-variant": "#5c4300",
+                        "inverse-primary": "#795900",
+                        "surface-container-highest": "#353534",
+                        "surface": "#131313",
+                        "on-surface-variant": "#d3c5ac",
+                        "on-tertiary-container": "#5b5433",
+                        "surface-container-low": "#1c1b1b",
+                        "primary-fixed-dim": "#f9bd22",
+                        "surface-container": "#201f1f",
+                        "on-error": "#690005"
+                    },
+                    fontFamily: {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Work Sans"],
+                        "label": ["Space Grotesk"],
+                        "mono": ["ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "Consolas", "Liberation Mono", "Courier New", "monospace"]
+                    },
+                    borderRadius: { "DEFAULT": "0px", "lg": "0px", "xl": "0px", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body {
+            background-color: #131313;
+            background-image: radial-gradient(#2a2a2a 1px, transparent 1px);
+            background-size: 20px 20px;
+            color: #e5e2e1;
+        }
+        .brutal-shadow {
+            box-shadow: 4px 4px 0px 0px #0e0e0e;
+        }
+        .brutal-shadow-hover:hover {
+            box-shadow: 8px 8px 0px 0px #0e0e0e;
+            transform: translate(-2px, -2px);
+        }
+        .brutal-shadow-active:active {
+            box-shadow: 0px 0px 0px 0px #0e0e0e;
+            transform: translate(4px, 4px);
+        }
+    </style>
+</head>
+<body class="font-body selection:bg-primary-container selection:text-on-primary-container">
+<div class="flex min-h-screen">
+<!-- SideNavBar -->
+<aside class="w-64 h-screen border-r-3 border-[#9c8f79] rounded-none flex flex-col sticky top-0 left-0 bg-[#131313] shadow-[4px_4px_0px_0px_#0e0e0e] z-50">
+<div class="p-6">
+<div class="text-2xl font-black tracking-tighter text-[#fbbf24] font-headline uppercase">HIVEMIND</div>
+<div class="text-[10px] font-mono text-outline tracking-[0.3em] mt-1 uppercase">OPERATOR_01</div>
+</div>
+<nav class="flex-1 mt-4">
+<a class="flex items-center px-6 py-4 text-[#e5e2e1] hover:bg-[#2a2a2a] transition-colors font-['Space_Grotesk'] uppercase tracking-widest font-bold group hover:translate-x-1 hover:shadow-[2px_2px_0px_0px_#fbbf24]" href="#">
+<span class="material-symbols-outlined mr-4">grid_view</span> DASHBOARD
+                </a>
+<a class="flex items-center px-6 py-4 text-[#e5e2e1] hover:bg-[#2a2a2a] transition-colors font-['Space_Grotesk'] uppercase tracking-widest font-bold group hover:translate-x-1 hover:shadow-[2px_2px_0px_0px_#fbbf24]" href="#">
+<span class="material-symbols-outlined mr-4">account_tree</span> PROJECTS
+                </a>
+<a class="flex items-center px-6 py-4 bg-[#fbbf24] text-[#131313] border-y-2 border-black font-['Space_Grotesk'] uppercase tracking-widest font-bold" href="#">
+<span class="material-symbols-outlined mr-4">reorder</span> WORKFLOWS
+                </a>
+<a class="flex items-center px-6 py-4 text-[#e5e2e1] hover:bg-[#2a2a2a] transition-colors font-['Space_Grotesk'] uppercase tracking-widest font-bold group hover:translate-x-1 hover:shadow-[2px_2px_0px_0px_#fbbf24]" href="#">
+<span class="material-symbols-outlined mr-4">task_alt</span> TASKS
+                </a>
+<a class="flex items-center px-6 py-4 text-[#e5e2e1] hover:bg-[#2a2a2a] transition-colors font-['Space_Grotesk'] uppercase tracking-widest font-bold group hover:translate-x-1 hover:shadow-[2px_2px_0px_0px_#fbbf24]" href="#">
+<span class="material-symbols-outlined mr-4">bar_chart</span> ANALYTICS
+                </a>
+<a class="flex items-center px-6 py-4 text-[#e5e2e1] hover:bg-[#2a2a2a] transition-colors font-['Space_Grotesk'] uppercase tracking-widest font-bold group hover:translate-x-1 hover:shadow-[2px_2px_0px_0px_#fbbf24]" href="#">
+<span class="material-symbols-outlined mr-4">settings</span> SETTINGS
+                </a>
+</nav>
+<div class="p-6">
+<button class="w-full bg-[#fbbf24] text-black font-black py-4 border-2 border-black brutal-shadow brutal-shadow-active font-headline uppercase tracking-tighter">
+                    NEW_PROJECT
+                </button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center w-full px-6 py-4 sticky top-0 z-40 bg-[#131313] border-b-3 border-[#9c8f79]">
+<div class="flex items-center gap-4">
+<span class="text-xl font-black text-[#fbbf24] font-headline tracking-[0.1em] uppercase">HIVEMIND // COMMAND_CENTER</span>
+<span class="px-2 py-0.5 bg-surface-container-high border border-outline font-mono text-[10px] text-on-surface-variant">V.2.0.4_STABLE</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative group">
+<input class="bg-surface-container-lowest border-2 border-outline px-4 py-1.5 font-mono text-sm focus:outline-none focus:border-primary-container w-64 text-on-surface" placeholder="SEARCH_SYSTEM..." type="text"/>
+<span class="material-symbols-outlined absolute right-3 top-2 text-outline">search</span>
+</div>
+<div class="flex gap-4 text-on-surface-variant">
+<span class="material-symbols-outlined cursor-pointer hover:text-primary-container">notifications</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-primary-container">terminal</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-primary-container">account_circle</span>
+</div>
+</div>
+</header>
+<!-- Secondary Toolbar -->
+<nav class="bg-surface-container-low border-b-2 border-outline px-6 flex items-center justify-between">
+<div class="flex">
+<button class="px-6 py-4 font-headline font-bold uppercase tracking-widest border-r border-outline bg-primary-container text-on-primary-fixed border-b-4 border-b-on-primary-fixed">Overview</button>
+<button class="px-6 py-4 font-headline font-bold uppercase tracking-widest border-r border-outline hover:bg-surface-container-high text-on-surface-variant transition-colors">Tasks</button>
+<button class="px-6 py-4 font-headline font-bold uppercase tracking-widest border-r border-outline hover:bg-surface-container-high text-on-surface-variant transition-colors">Spec</button>
+<button class="px-6 py-4 font-headline font-bold uppercase tracking-widest border-r border-outline hover:bg-surface-container-high text-on-surface-variant transition-colors">Config</button>
+</div>
+<div class="flex items-center gap-4">
+<span class="font-mono text-xs text-secondary-container animate-pulse">● LIVE_STREAM_ACTIVE</span>
+<button class="bg-secondary-container text-white px-4 py-1 font-headline font-bold uppercase text-sm border-2 border-black brutal-shadow brutal-shadow-active">Execute Now</button>
+</div>
+</nav>
+<!-- Dashboard Grid -->
+<div class="p-8 grid grid-cols-12 gap-8">
+<!-- Left Panel (40%) -->
+<div class="col-span-12 lg:col-span-5 space-y-8">
+<!-- Workflow Info -->
+<section class="bg-surface-container p-6 border-3 border-outline brutal-shadow">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h1 class="text-4xl font-headline font-black uppercase tracking-tighter text-primary-container">Ingestion Flow</h1>
+<p class="text-on-surface-variant font-mono text-sm mt-1 uppercase tracking-widest">ID: WF_ING_001_ALPHA</p>
+</div>
+<div class="bg-primary-container/10 border-2 border-primary-container px-3 py-1">
+<span class="font-headline font-bold text-primary-container uppercase text-xs">System Critical</span>
+</div>
+</div>
+<div class="space-y-6">
+<div>
+<h3 class="font-headline text-xs font-bold text-outline uppercase tracking-widest mb-2">Purpose_Log</h3>
+<p class="text-on-surface leading-relaxed border-l-4 border-outline pl-4 italic">
+                                    High-throughput data normalization layer responsible for sanitizing incoming telemetry from orbital arrays and mapping to core schema definitions.
+                                </p>
+</div>
+<div class="grid grid-cols-2 gap-4">
+<div class="p-4 bg-surface-container-lowest border-2 border-outline">
+<h3 class="font-headline text-[10px] font-bold text-outline uppercase tracking-widest mb-1">Linked_Project</h3>
+<p class="font-headline font-bold text-on-surface">Project Orion</p>
+</div>
+<div class="p-4 bg-surface-container-lowest border-2 border-outline">
+<h3 class="font-headline text-[10px] font-bold text-outline uppercase tracking-widest mb-1">Runtime_Env</h3>
+<p class="font-headline font-bold text-on-surface">Edge_Node_04</p>
+</div>
+</div>
+<div>
+<h3 class="font-headline text-xs font-bold text-outline uppercase tracking-widest mb-3">Trigger_Conditions</h3>
+<div class="space-y-2">
+<div class="flex items-center justify-between p-3 bg-surface-container-high border-2 border-outline">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary-container">webhook</span>
+<span class="font-mono text-sm">Webhook: GitHub Push</span>
+</div>
+<span class="text-[10px] bg-outline/20 px-2 font-bold text-outline uppercase">Active</span>
+</div>
+<div class="flex items-center justify-between p-3 bg-surface-container-high border-2 border-outline">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary-container">schedule</span>
+<span class="font-mono text-sm">CRON: 00 */6 * * *</span>
+</div>
+<span class="text-[10px] bg-outline/20 px-2 font-bold text-outline uppercase">Active</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Spec Section -->
+<section class="bg-surface-container-lowest border-3 border-outline brutal-shadow flex flex-col h-[400px]">
+<div class="p-3 border-b-2 border-outline bg-surface-container flex justify-between items-center">
+<span class="font-headline font-bold text-xs uppercase tracking-widest text-outline">workflow_spec.yaml</span>
+<span class="material-symbols-outlined text-outline cursor-pointer hover:text-primary-container">content_copy</span>
+</div>
+<div class="p-6 font-mono text-xs overflow-auto text-on-surface-variant leading-6">
+<div class="flex gap-4">
+<span class="text-outline/40 select-none">01</span>
+<span><span class="text-primary-container">version:</span> "3.4"</span>
+</div>
+<div class="flex gap-4">
+<span class="text-outline/40 select-none">02</span>
+<span><span class="text-primary-container">pipeline:</span></span>
+</div>
+<div class="flex gap-4">
+<span class="text-outline/40 select-none">03</span>
+<span class="pl-4"><span class="text-primary-container">name:</span> ingestion_main</span>
+</div>
+<div class="flex gap-4">
+<span class="text-outline/40 select-none">04</span>
+<span class="pl-4"><span class="text-primary-container">steps:</span></span>
+</div>
+<div class="flex gap-4">
+<span class="text-outline/40 select-none">05</span>
+<span class="pl-8">- <span class="text-secondary-container">id:</span> parse_json</span>
+</div>
+<div class="flex gap-4">
+<span class="text-outline/40 select-none">06</span>
+<span class="pl-10"><span class="text-primary-container">uses:</span> hive/parser@v2</span>
+</div>
+<div class="flex gap-4">
+<span class="text-outline/40 select-none">07</span>
+<span class="pl-8">- <span class="text-secondary-container">id:</span> schema_check</span>
+</div>
+<div class="flex gap-4">
+<span class="text-outline/40 select-none">08</span>
+<span class="pl-10"><span class="text-primary-container">with:</span></span>
+</div>
+<div class="flex gap-4">
+<span class="text-outline/40 select-none">09</span>
+<span class="pl-12"><span class="text-primary-container">strict:</span> true</span>
+</div>
+<div class="flex gap-4">
+<span class="text-outline/40 select-none">10</span>
+<span class="pl-8">- <span class="text-secondary-container">id:</span> db_load</span>
+</div>
+<div class="flex gap-4">
+<span class="text-outline/40 select-none">11</span>
+<span class="pl-10"><span class="text-primary-container">target:</span> prod_cluster</span>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Panel (60%) -->
+<div class="col-span-12 lg:col-span-7 space-y-8">
+<!-- Top Status Cards -->
+<div class="grid grid-cols-4 gap-4">
+<div class="col-span-3 bg-surface-container p-4 border-3 border-outline brutal-shadow flex justify-between items-center">
+<div class="grid grid-cols-3 gap-8 divide-x-2 divide-outline/30">
+<div class="px-2 text-center">
+<div class="text-[10px] font-bold text-outline uppercase tracking-tighter">Total_Tasks</div>
+<div class="text-2xl font-black font-headline text-primary-container">12</div>
+</div>
+<div class="px-6 text-center">
+<div class="text-[10px] font-bold text-outline uppercase tracking-tighter">Avg_Duration</div>
+<div class="text-2xl font-black font-headline text-on-surface">14.2s</div>
+</div>
+<div class="px-6 text-center">
+<div class="text-[10px] font-bold text-outline uppercase tracking-tighter">Last_Run</div>
+<div class="text-2xl font-black font-headline text-on-surface">4m Ago</div>
+</div>
+</div>
+</div>
+<div class="bg-surface-container p-4 border-3 border-outline brutal-shadow flex flex-col items-center justify-center gap-2">
+<div class="text-[10px] font-bold text-outline uppercase tracking-tighter text-center">Workflow_Status</div>
+<div class="flex items-center gap-2">
+<div class="w-12 h-6 bg-surface-container-lowest border-2 border-outline relative cursor-pointer">
+<div class="absolute right-1 top-1 w-4 h-2.5 bg-secondary-container"></div>
+</div>
+<span class="font-headline font-black text-xs uppercase text-secondary-container">Enabled</span>
+</div>
+</div>
+</div>
+<!-- Tasks Section -->
+<section class="bg-surface-container border-3 border-outline brutal-shadow flex flex-col min-h-[600px]">
+<div class="p-4 border-b-2 border-outline bg-surface-container-high flex justify-between items-center">
+<div class="flex items-center gap-4">
+<h2 class="font-headline font-black uppercase tracking-widest text-lg">Active_Tasks</h2>
+<div class="flex border-2 border-outline">
+<button class="px-3 py-1 bg-primary-container text-black border-r-2 border-outline">
+<span class="material-symbols-outlined text-sm">view_kanban</span>
+</button>
+<button class="px-3 py-1 hover:bg-surface-container-lowest border-r-2 border-outline">
+<span class="material-symbols-outlined text-sm">format_list_bulleted</span>
+</button>
+<button class="px-3 py-1 hover:bg-surface-container-lowest">
+<span class="material-symbols-outlined text-sm">account_tree</span>
+</button>
+</div>
+</div>
+<button class="text-xs font-bold uppercase tracking-widest text-outline hover:text-primary-container flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">filter_list</span> Filter_Tasks
+                            </button>
+</div>
+<div class="p-6 grid grid-cols-2 gap-6">
+<!-- Task Card 1 -->
+<div class="bg-surface-container-lowest border-2 border-outline p-5 brutal-shadow-hover transition-all cursor-pointer group">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-primary-container/10 border border-primary-container">
+<span class="material-symbols-outlined text-primary-container">data_object</span>
+</div>
+<span class="font-mono text-[10px] text-outline px-2 py-0.5 border border-outline uppercase">Completed</span>
+</div>
+<h4 class="font-headline font-bold text-lg uppercase group-hover:text-primary-container transition-colors">Parse JSON</h4>
+<p class="text-on-surface-variant text-sm mt-2 font-mono">Input: stream.raw_buffer</p>
+<div class="mt-4 pt-4 border-t border-outline/20 flex justify-between items-center">
+<span class="text-xs font-mono text-outline">240ms</span>
+<span class="material-symbols-outlined text-outline text-sm">more_vert</span>
+</div>
+</div>
+<!-- Task Card 2 -->
+<div class="bg-surface-container-lowest border-2 border-outline p-5 brutal-shadow-hover transition-all cursor-pointer group border-l-4 border-l-secondary-container">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-secondary-container/10 border border-secondary-container">
+<span class="material-symbols-outlined text-secondary-container">rule</span>
+</div>
+<span class="font-mono text-[10px] text-secondary-container px-2 py-0.5 border border-secondary-container uppercase animate-pulse">Running</span>
+</div>
+<h4 class="font-headline font-bold text-lg uppercase group-hover:text-secondary-container transition-colors">Validate Schema</h4>
+<p class="text-on-surface-variant text-sm mt-2 font-mono">Rule: orbital_strict_v2</p>
+<div class="mt-4 pt-4 border-t border-outline/20 flex justify-between items-center">
+<div class="w-full bg-surface-container-high h-1 overflow-hidden">
+<div class="bg-secondary-container h-full w-[65%]"></div>
+</div>
+</div>
+</div>
+<!-- Task Card 3 -->
+<div class="bg-surface-container-lowest border-2 border-outline p-5 brutal-shadow-hover transition-all cursor-pointer group">
+<div class="flex justify-between items-start mb-4">
+<div class="p-2 bg-outline/10 border border-outline">
+<span class="material-symbols-outlined text-outline">database</span>
+</div>
+<span class="font-mono text-[10px] text-outline px-2 py-0.5 border border-outline uppercase">Pending</span>
+</div>
+<h4 class="font-headline font-bold text-lg uppercase group-hover:text-primary-container transition-colors">Load to DB</h4>
+<p class="text-on-surface-variant text-sm mt-2 font-mono">Target: cluster_delta_01</p>
+<div class="mt-4 pt-4 border-t border-outline/20 flex justify-between items-center">
+<span class="text-xs font-mono text-outline">Queue: #04</span>
+<span class="material-symbols-outlined text-outline text-sm">settings_backup_restore</span>
+</div>
+</div>
+<!-- Task Card 4 -->
+<div class="bg-surface-container-lowest border-2 border-outline border-dashed p-5 flex flex-col items-center justify-center group cursor-pointer hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-3xl text-outline group-hover:text-primary-container mb-2">add_box</span>
+<span class="font-headline font-bold uppercase text-xs text-outline tracking-widest">Append_Step</span>
+</div>
+</div>
+</section>
+</div>
+</div>
+<!-- Footer Status Bar -->
+<footer class="mt-auto bg-surface-container-highest px-6 py-2 flex justify-between items-center border-t-3 border-outline">
+<div class="flex items-center gap-6 divide-x divide-outline/30">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-xs text-outline">terminal</span>
+<span class="font-mono text-[10px] text-on-surface-variant uppercase tracking-tighter">System_Log: 1045_Ready</span>
+</div>
+<div class="pl-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-xs text-secondary-container">dns</span>
+<span class="font-mono text-[10px] text-on-surface-variant uppercase tracking-tighter">Core: 0% Load</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-primary-container"></div>
+<span class="font-mono text-[10px] text-primary-container font-bold">HEALTH: OPTIMAL</span>
+</div>
+<div class="font-mono text-[10px] text-outline">UTC: 14:32:01</div>
+</div>
+</footer>
+</main>
+</div>
+</body></html>

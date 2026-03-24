@@ -1,4 +1,4 @@
-import type { Project, Workflow, Task } from '../types/entities';
+import type { Project, Workflow, Task, MergeState, Event, WorkflowRun } from '../types/entities';
 import type { IDataSource, ActiveItem, TodoItem, RecentProject } from './IDataSource';
 import { ErrorTaxonomy, ErrorCategory, ErrorSeverity } from '../types/errors';
 import { structuredLogger } from '../lib/logger';
@@ -44,6 +44,9 @@ export class MockDataSource implements IDataSource {
       updatedAt: new Date(),
       recentActivity: '2M_AGO',
       priority: 'PRIORITY_ALPHA',
+      runtime: { adapterName: 'codex', binaryPath: '/usr/local/bin/codex', model: 'gpt-4o', timeoutMs: 300000, maxParallelTasks: 4 },
+      constitutionVersion: 2,
+      constitutionUpdatedAt: new Date('2024-02-15'),
     },
     {
       id: 'titan',
@@ -56,6 +59,9 @@ export class MockDataSource implements IDataSource {
       updatedAt: new Date(),
       recentActivity: '14_HRS_AGO',
       priority: 'ACTIVE_STATUS',
+      runtime: { adapterName: 'claude', binaryPath: '/usr/local/bin/claude', model: 'claude-3-opus', timeoutMs: 600000, maxParallelTasks: 8 },
+      constitutionVersion: 3,
+      constitutionUpdatedAt: new Date('2024-03-01'),
     },
     {
       id: 'core',
@@ -68,6 +74,9 @@ export class MockDataSource implements IDataSource {
       updatedAt: new Date(),
       recentActivity: '05_DAYS_AGO',
       priority: 'STABLE_FLOW',
+      runtime: null,
+      constitutionVersion: 1,
+      constitutionUpdatedAt: new Date('2023-09-01'),
     },
     {
       id: 'vortex',
@@ -79,6 +88,9 @@ export class MockDataSource implements IDataSource {
       createdAt: new Date('2024-01-10'),
       updatedAt: new Date(),
       recentActivity: '1D_AGO',
+      runtime: { adapterName: 'codex', binaryPath: '/usr/local/bin/codex', model: 'gpt-4o-mini', timeoutMs: 120000, maxParallelTasks: 2 },
+      constitutionVersion: null,
+      constitutionUpdatedAt: null,
     },
     {
       id: 'ghost',
@@ -90,6 +102,9 @@ export class MockDataSource implements IDataSource {
       createdAt: new Date('2024-02-20'),
       updatedAt: new Date(),
       recentActivity: '3H_AGO',
+      runtime: { adapterName: 'codex', binaryPath: '/usr/local/bin/codex', model: 'gpt-4o', timeoutMs: 300000, maxParallelTasks: 4 },
+      constitutionVersion: 1,
+      constitutionUpdatedAt: new Date('2024-02-20'),
     },
     {
       id: 'druid',
@@ -101,6 +116,9 @@ export class MockDataSource implements IDataSource {
       createdAt: new Date('2023-06-15'),
       updatedAt: new Date(),
       recentActivity: '30_DAYS_AGO',
+      runtime: null,
+      constitutionVersion: null,
+      constitutionUpdatedAt: null,
     },
     {
       id: 'zenith',
@@ -112,6 +130,9 @@ export class MockDataSource implements IDataSource {
       createdAt: new Date('2024-03-01'),
       updatedAt: new Date(),
       recentActivity: '1H_AGO',
+      runtime: { adapterName: 'claude', binaryPath: '/usr/local/bin/claude', model: 'claude-3-sonnet', timeoutMs: 180000, maxParallelTasks: 6 },
+      constitutionVersion: 4,
+      constitutionUpdatedAt: new Date('2024-03-14'),
     },
     {
       id: 'kinetic',
@@ -123,6 +144,9 @@ export class MockDataSource implements IDataSource {
       createdAt: new Date('2024-01-25'),
       updatedAt: new Date(),
       recentActivity: '6H_AGO',
+      runtime: { adapterName: 'codex', binaryPath: '/usr/local/bin/codex', model: 'gpt-4o', timeoutMs: 300000, maxParallelTasks: 4 },
+      constitutionVersion: null,
+      constitutionUpdatedAt: null,
     },
   ];
 
@@ -166,6 +190,8 @@ export class MockDataSource implements IDataSource {
         { id: 's3', name: 'OVERFLOW_SAFETY_NET', completed: false },
         { id: 's4', name: 'UNIT_TEST_RECOVERY', completed: false },
       ],
+      state: 'open',
+      runMode: 'auto',
     },
     {
       id: 't-4093',
@@ -178,6 +204,8 @@ export class MockDataSource implements IDataSource {
       assignee: 'OPERATOR_X42',
       dueDate: '2024.11.25',
       subtasks: [],
+      state: 'open',
+      runMode: 'auto',
     },
     {
       id: 't-4094',
@@ -189,6 +217,226 @@ export class MockDataSource implements IDataSource {
       priority: 'medium',
       dueDate: '2024.11.26',
       subtasks: [],
+      state: 'open',
+      runMode: 'manual',
+    },
+  ];
+
+  private readonly mergeStates: MergeState[] = [
+    {
+      flowId: 'run-003',
+      status: 'prepared',
+      targetBranch: 'main',
+      conflicts: [],
+      commits: ['a1b2c3d', 'e4f5g6h'],
+      updatedAt: new Date('2024-03-12T16:00:00Z'),
+    },
+    {
+      flowId: 'run-007',
+      status: 'approved',
+      targetBranch: 'develop',
+      conflicts: ['src/server/routes/tasks.rs'],
+      commits: ['x9y8z7w'],
+      updatedAt: new Date('2024-03-14T10:30:00Z'),
+    },
+  ];
+
+  private readonly events: Event[] = [
+    {
+      id: 'evt-001',
+      type: 'workflow.created',
+      category: 'lifecycle',
+      timestamp: new Date('2024-03-10T09:00:00Z'),
+      sequence: 1,
+      correlation: { projectId: 'orion', graphId: null, flowId: null, workflowId: 'wf-ing-001', workflowRunId: null, taskId: null, attemptId: null },
+      payload: { workflow_id: 'wf-ing-001' },
+    },
+    {
+      id: 'evt-002',
+      type: 'workflow_run.started',
+      category: 'execution',
+      timestamp: new Date('2024-03-10T10:00:00Z'),
+      sequence: 2,
+      correlation: { projectId: 'orion', graphId: null, flowId: null, workflowId: 'wf-ing-001', workflowRunId: 'run-001', taskId: null, attemptId: null },
+      payload: { run_id: 'run-001' },
+    },
+    {
+      id: 'evt-003',
+      type: 'step.completed',
+      category: 'execution',
+      timestamp: new Date('2024-03-10T10:05:00Z'),
+      sequence: 3,
+      correlation: { projectId: 'orion', graphId: null, flowId: null, workflowId: 'wf-ing-001', workflowRunId: 'run-001', taskId: 't-4092', attemptId: 'att-001' },
+      payload: { step_id: 'step-parse', state: 'success' },
+    },
+    {
+      id: 'evt-004',
+      type: 'step.completed',
+      category: 'execution',
+      timestamp: new Date('2024-03-10T10:12:00Z'),
+      sequence: 4,
+      correlation: { projectId: 'orion', graphId: null, flowId: null, workflowId: 'wf-ing-001', workflowRunId: 'run-001', taskId: 't-4093', attemptId: 'att-002' },
+      payload: { step_id: 'step-validate', state: 'success' },
+    },
+    {
+      id: 'evt-005',
+      type: 'workflow_run.completed',
+      category: 'execution',
+      timestamp: new Date('2024-03-10T10:20:00Z'),
+      sequence: 5,
+      correlation: { projectId: 'orion', graphId: null, flowId: null, workflowId: 'wf-ing-001', workflowRunId: 'run-001', taskId: null, attemptId: null },
+      payload: { run_id: 'run-001', state: 'completed' },
+    },
+    {
+      id: 'evt-006',
+      type: 'workflow_run.started',
+      category: 'execution',
+      timestamp: new Date('2024-03-11T08:00:00Z'),
+      sequence: 6,
+      correlation: { projectId: 'orion', graphId: null, flowId: null, workflowId: 'wf-ing-001', workflowRunId: 'run-002', taskId: null, attemptId: null },
+      payload: { run_id: 'run-002' },
+    },
+    {
+      id: 'evt-007',
+      type: 'step.failed',
+      category: 'execution',
+      timestamp: new Date('2024-03-11T08:08:00Z'),
+      sequence: 7,
+      correlation: { projectId: 'orion', graphId: null, flowId: null, workflowId: 'wf-ing-001', workflowRunId: 'run-002', taskId: 't-4093', attemptId: 'att-003' },
+      payload: { step_id: 'step-validate', state: 'failed', error: 'Schema validation timeout' },
+    },
+    {
+      id: 'evt-008',
+      type: 'workflow_run.aborted',
+      category: 'execution',
+      timestamp: new Date('2024-03-11T08:10:00Z'),
+      sequence: 8,
+      correlation: { projectId: 'orion', graphId: null, flowId: null, workflowId: 'wf-ing-001', workflowRunId: 'run-002', taskId: null, attemptId: null },
+      payload: { run_id: 'run-002', state: 'aborted' },
+    },
+    {
+      id: 'evt-009',
+      type: 'workflow_run.started',
+      category: 'execution',
+      timestamp: new Date('2024-03-12T14:00:00Z'),
+      sequence: 9,
+      correlation: { projectId: 'orion', graphId: null, flowId: null, workflowId: 'wf-ing-001', workflowRunId: 'run-003', taskId: null, attemptId: null },
+      payload: { run_id: 'run-003' },
+    },
+    {
+      id: 'evt-010',
+      type: 'merge.prepared',
+      category: 'merge',
+      timestamp: new Date('2024-03-12T16:00:00Z'),
+      sequence: 10,
+      correlation: { projectId: 'orion', graphId: null, flowId: null, workflowId: 'wf-ing-001', workflowRunId: 'run-003', taskId: null, attemptId: null },
+      payload: { target_branch: 'main', commits: ['a1b2c3d', 'e4f5g6h'] },
+    },
+    {
+      id: 'evt-011',
+      type: 'workflow.created',
+      category: 'lifecycle',
+      timestamp: new Date('2024-03-13T09:00:00Z'),
+      sequence: 11,
+      correlation: { projectId: 'orion', graphId: null, flowId: null, workflowId: 'wf-ana-002', workflowRunId: null, taskId: null, attemptId: null },
+      payload: { workflow_id: 'wf-ana-002' },
+    },
+    {
+      id: 'evt-012',
+      type: 'merge.approved',
+      category: 'merge',
+      timestamp: new Date('2024-03-14T10:30:00Z'),
+      sequence: 12,
+      correlation: { projectId: 'orion', graphId: null, flowId: null, workflowId: 'wf-ing-001', workflowRunId: 'run-007', taskId: null, attemptId: null },
+      payload: { target_branch: 'develop' },
+    },
+  ];
+
+  private readonly workflowRuns: WorkflowRun[] = [
+    {
+      id: 'run-001',
+      workflowId: 'wf-ing-001',
+      projectId: 'orion',
+      rootWorkflowRunId: 'run-001',
+      parentWorkflowRunId: null,
+      state: 'completed',
+      stepRuns: [
+        { id: 'sr-001a', stepId: 'step-parse', state: 'succeeded', updatedAt: new Date('2024-03-10T10:05:00Z'), reason: null },
+        { id: 'sr-001b', stepId: 'step-validate', state: 'succeeded', updatedAt: new Date('2024-03-10T10:12:00Z'), reason: null },
+        { id: 'sr-001c', stepId: 'step-load', state: 'succeeded', updatedAt: new Date('2024-03-10T10:20:00Z'), reason: null },
+      ],
+      createdAt: new Date('2024-03-10T09:55:00Z'),
+      startedAt: new Date('2024-03-10T10:00:00Z'),
+      completedAt: new Date('2024-03-10T10:20:00Z'),
+      updatedAt: new Date('2024-03-10T10:20:00Z'),
+    },
+    {
+      id: 'run-002',
+      workflowId: 'wf-ing-001',
+      projectId: 'orion',
+      rootWorkflowRunId: 'run-002',
+      parentWorkflowRunId: null,
+      state: 'aborted',
+      stepRuns: [
+        { id: 'sr-002a', stepId: 'step-parse', state: 'succeeded', updatedAt: new Date('2024-03-11T08:04:00Z'), reason: null },
+        { id: 'sr-002b', stepId: 'step-validate', state: 'failed', updatedAt: new Date('2024-03-11T08:08:00Z'), reason: 'Schema validation timeout after 30s' },
+        { id: 'sr-002c', stepId: 'step-load', state: 'skipped', updatedAt: new Date('2024-03-11T08:10:00Z'), reason: 'Upstream step failed' },
+      ],
+      createdAt: new Date('2024-03-11T07:55:00Z'),
+      startedAt: new Date('2024-03-11T08:00:00Z'),
+      completedAt: new Date('2024-03-11T08:10:00Z'),
+      updatedAt: new Date('2024-03-11T08:10:00Z'),
+    },
+    {
+      id: 'run-003',
+      workflowId: 'wf-ing-001',
+      projectId: 'orion',
+      rootWorkflowRunId: 'run-003',
+      parentWorkflowRunId: null,
+      state: 'completed',
+      stepRuns: [
+        { id: 'sr-003a', stepId: 'step-parse', state: 'succeeded', updatedAt: new Date('2024-03-12T14:05:00Z'), reason: null },
+        { id: 'sr-003b', stepId: 'step-validate', state: 'succeeded', updatedAt: new Date('2024-03-12T14:10:00Z'), reason: null },
+        { id: 'sr-003c', stepId: 'step-load', state: 'succeeded', updatedAt: new Date('2024-03-12T14:18:00Z'), reason: null },
+      ],
+      createdAt: new Date('2024-03-12T13:55:00Z'),
+      startedAt: new Date('2024-03-12T14:00:00Z'),
+      completedAt: new Date('2024-03-12T14:18:00Z'),
+      updatedAt: new Date('2024-03-12T14:18:00Z'),
+    },
+    {
+      id: 'run-004',
+      workflowId: 'wf-ing-001',
+      projectId: 'orion',
+      rootWorkflowRunId: 'run-004',
+      parentWorkflowRunId: null,
+      state: 'running',
+      stepRuns: [
+        { id: 'sr-004a', stepId: 'step-parse', state: 'succeeded', updatedAt: new Date('2024-03-14T11:05:00Z'), reason: null },
+        { id: 'sr-004b', stepId: 'step-validate', state: 'running', updatedAt: new Date(), reason: null },
+        { id: 'sr-004c', stepId: 'step-load', state: 'pending', updatedAt: new Date(), reason: null },
+      ],
+      createdAt: new Date('2024-03-14T11:00:00Z'),
+      startedAt: new Date('2024-03-14T11:00:00Z'),
+      completedAt: null,
+      updatedAt: new Date(),
+    },
+    {
+      id: 'run-005',
+      workflowId: 'wf-ing-001',
+      projectId: 'orion',
+      rootWorkflowRunId: 'run-005',
+      parentWorkflowRunId: null,
+      state: 'paused',
+      stepRuns: [
+        { id: 'sr-005a', stepId: 'step-parse', state: 'succeeded', updatedAt: new Date('2024-03-13T16:05:00Z'), reason: null },
+        { id: 'sr-005b', stepId: 'step-validate', state: 'waiting', updatedAt: new Date('2024-03-13T16:30:00Z'), reason: 'Awaiting operator approval' },
+        { id: 'sr-005c', stepId: 'step-load', state: 'pending', updatedAt: new Date(), reason: null },
+      ],
+      createdAt: new Date('2024-03-13T16:00:00Z'),
+      startedAt: new Date('2024-03-13T16:00:00Z'),
+      completedAt: null,
+      updatedAt: new Date('2024-03-13T16:30:00Z'),
     },
   ];
 
@@ -210,6 +458,8 @@ export class MockDataSource implements IDataSource {
     { id: 'orion', name: 'Project Orion', lastEdit: '2M_AGO', icon: 'rocket_launch' },
     { id: 'titan', name: 'Project Nexus', lastEdit: '5H_AGO', icon: 'hub' },
   ];
+
+  // Projects
 
   async getProjects(): Promise<Project[]> {
     await delay(100);
@@ -258,6 +508,8 @@ export class MockDataSource implements IDataSource {
       structuredLogger.debug('Mock project deleted', { projectId: id });
     }
   }
+
+  // Workflows
 
   async getWorkflows(): Promise<Workflow[]> {
     await delay(100);
@@ -313,6 +565,8 @@ export class MockDataSource implements IDataSource {
     }
   }
 
+  // Tasks
+
   async getTasks(): Promise<Task[]> {
     await delay(100);
     return [...this.tasks];
@@ -366,6 +620,76 @@ export class MockDataSource implements IDataSource {
       structuredLogger.debug('Mock task deleted', { taskId: id });
     }
   }
+
+  // Merge States
+
+  async getMergeStates(): Promise<MergeState[]> {
+    await delay(100);
+    return [...this.mergeStates];
+  }
+
+  async getMergeState(flowId: string): Promise<MergeState | null> {
+    await delay(50);
+    return this.mergeStates.find(m => m.flowId === flowId) ?? null;
+  }
+
+  // Events
+
+  async getEvents(limit?: number): Promise<Event[]> {
+    await delay(100);
+    const events = [...this.events];
+    if (typeof limit === 'number' && limit > 0) {
+      return events.slice(0, limit);
+    }
+    return events;
+  }
+
+  async getEventsByCorrelation(filters: { projectId?: string; flowId?: string; taskId?: string }): Promise<Event[]> {
+    await delay(50);
+    return this.events.filter(e => {
+      if (filters.projectId && e.correlation.projectId !== filters.projectId) return false;
+      if (filters.flowId && e.correlation.flowId !== filters.flowId) return false;
+      if (filters.taskId && e.correlation.taskId !== filters.taskId) return false;
+      return true;
+    });
+  }
+
+  async getEventsFiltered(filters: { workflowRunId?: string; projectId?: string; workflowId?: string; taskId?: string; limit?: number; offset?: number }): Promise<Event[]> {
+    await delay(50);
+    let filtered = this.events.filter(e => {
+      if (filters.workflowRunId && e.correlation.workflowRunId !== filters.workflowRunId) return false;
+      if (filters.projectId && e.correlation.projectId !== filters.projectId) return false;
+      if (filters.workflowId && e.correlation.workflowId !== filters.workflowId) return false;
+      if (filters.taskId && e.correlation.taskId !== filters.taskId) return false;
+      return true;
+    });
+    if (filters.offset && filters.offset > 0) {
+      filtered = filtered.slice(filters.offset);
+    }
+    if (filters.limit && filters.limit > 0) {
+      filtered = filtered.slice(0, filters.limit);
+    }
+    return filtered;
+  }
+
+  // Workflow Runs
+
+  async getWorkflowRuns(): Promise<WorkflowRun[]> {
+    await delay(100);
+    return [...this.workflowRuns];
+  }
+
+  async getWorkflowRun(id: string): Promise<WorkflowRun | null> {
+    await delay(50);
+    return this.workflowRuns.find(r => r.id === id) ?? null;
+  }
+
+  async getWorkflowRunsByWorkflow(workflowId: string): Promise<WorkflowRun[]> {
+    await delay(50);
+    return this.workflowRuns.filter(r => r.workflowId === workflowId);
+  }
+
+  // Dashboard helpers
 
   async getActiveItems(): Promise<ActiveItem[]> {
     await delay(50);

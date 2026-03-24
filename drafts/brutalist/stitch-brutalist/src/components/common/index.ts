@@ -20,3 +20,5 @@ export { SubtaskList } from './SubtaskList';
 export { QuickLinks } from './QuickLinks';
 export { CodeViewer } from './CodeViewer';
 export { SpecBlock, SpecCard } from './SpecBlock';
+export { KanbanBoard } from './KanbanBoard';
+export type { KanbanColumnId } from './KanbanBoard';

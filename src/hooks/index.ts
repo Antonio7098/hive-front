@@ -1,5 +1,7 @@
 export { useProjects, useProject } from './useProjects';
 export { useWorkflows, useWorkflow, useWorkflowsByProject } from './useWorkflows';
+export { useWorkflowRuns } from './useWorkflowRuns';
+export { useWorkflowRun } from './useWorkflowRun';
 export { useTasks, useTask, useTasksByWorkflow } from './useTasks';
 export { useActiveItems, useTodoItems, useRecentProjects } from './useDashboard';
 export { useData } from '../context/DataContext';

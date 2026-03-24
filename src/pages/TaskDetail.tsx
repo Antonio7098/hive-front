@@ -86,6 +86,18 @@ export function TaskDetail() {
                   <span className="font-headline font-bold text-lg text-primary-container tracking-widest uppercase">18H</span>
                 </div>
               )},
+              { label: 'Task_State', value: (
+                <div className="flex items-center gap-2">
+                  <Icon name={task.state === 'open' ? 'bolt' : 'check'} className={task.state === 'open' ? 'text-primary-container' : 'text-outline'} size={18} />
+                  <span className={`font-headline font-bold text-lg tracking-widest uppercase ${task.state === 'open' ? 'text-primary-container' : 'text-outline'}`}>{task.state}</span>
+                </div>
+              )},
+              { label: 'Run_Mode', value: (
+                <div className="flex items-center gap-2">
+                  <Icon name={task.runMode === 'auto' ? 'bolt' : 'person'} className="text-on-surface-variant" size={18} />
+                  <span className="font-headline font-bold text-lg text-on-surface-variant tracking-widest uppercase">{task.runMode}</span>
+                </div>
+              )},
             ]} />
             <div className="p-4 bg-surface-container-highest border-2 border-outline-variant flex items-center justify-between">
               <span className="font-headline font-black text-xs tracking-widest uppercase">Current Status</span>

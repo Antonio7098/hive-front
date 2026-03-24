@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom';
-import { Toolbar, ViewSwitcher, EntityCard, MetadataGrid, MetadataCell, HealthBar, AddCard, DetailFooter, SpecBlock } from '../components/common';
-import { Button, Badge, Toggle } from '../components/ui';
+import { Toolbar, ViewSwitcher, EntityCard, MetadataGrid, MetadataCell, HealthBar, AddCard, DetailFooter, SpecBlock, KanbanBoard } from '../components/common';
+import { Button, Badge, Toggle, Icon } from '../components/ui';
 import { TacticalVisualizer } from '../components/features/TacticalVisualizer';
 import { useProject, useWorkflowsByProject, useViewMode, useToggle } from '../hooks';
 
@@ -76,12 +76,67 @@ export function ProjectDetail() {
               <h2 className="text-2xl font-black font-headline uppercase tracking-tighter">ACTIVE_WORKFLOWS</h2>
               <ViewSwitcher activeView={viewMode} onViewChange={setViewMode} />
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {workflows.map((workflow) => (
-                <EntityCard key={workflow.id} entity={workflow} type="workflow" />
-              ))}
-              <AddCard label="ADD_WORKFLOW" />
-            </div>
+            {viewMode === 'kanban' && (
+              <KanbanBoard
+                columns={[
+                  {
+                    id: 'todo',
+                    title: 'Todo',
+                    color: 'bg-outline',
+                    items: workflows
+                      .filter((w) => w.status === 'todo')
+                      .map((workflow) => ({
+                        id: workflow.id,
+                        content: (
+                          <EntityCard entity={workflow} type="workflow" disableLink />
+                        ),
+                      })),
+                  },
+                  {
+                    id: 'active',
+                    title: 'Active',
+                    color: 'bg-primary-container',
+                    items: workflows
+                      .filter((w) => w.status === 'active')
+                      .map((workflow) => ({
+                        id: workflow.id,
+                        content: (
+                          <EntityCard entity={workflow} type="workflow" disableLink />
+                        ),
+                      })),
+                  },
+                  {
+                    id: 'completed',
+                    title: 'Completed',
+                    color: 'bg-success',
+                    items: workflows
+                      .filter((w) => w.status === 'completed')
+                      .map((workflow) => ({
+                        id: workflow.id,
+                        content: (
+                          <EntityCard entity={workflow} type="workflow" disableLink />
+                        ),
+                      })),
+                  },
+                ]}
+              />
+            )}
+            {viewMode === 'list' && (
+              <div className="flex flex-col gap-4">
+                {workflows.map((workflow) => (
+                  <EntityCard key={workflow.id} entity={workflow} type="workflow" variant="compact" />
+                ))}
+                <AddCard label="ADD_WORKFLOW" />
+              </div>
+            )}
+            {viewMode === 'graph' && (
+              <div className="flex items-center justify-center h-64">
+                <div className="text-center">
+                  <Icon name="account_tree" size={48} className="text-outline mb-4" />
+                  <p className="font-mono text-outline uppercase tracking-widest">Graph_View: Under_Construction</p>
+                </div>
+              </div>
+            )}
           </div>
 
           <TacticalVisualizer />

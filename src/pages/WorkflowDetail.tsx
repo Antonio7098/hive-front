@@ -32,6 +32,7 @@ export function WorkflowDetail() {
         tabs={[
           { label: 'Overview', path: `/workflows/${id}`, icon: 'visibility' },
           { label: 'Tasks', path: `/workflows/${id}/tasks`, icon: 'checklist' },
+          { label: 'Runs', path: `/workflows/${id}/runs`, icon: 'bolt' },
           { label: 'Spec', path: `/workflows/${id}/spec`, icon: 'code' },
           { label: 'Config', path: `/workflows/${id}/config`, icon: 'tune' },
         ]}

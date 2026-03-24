@@ -69,6 +69,8 @@ export function ProjectDetail() {
             <MetadataCell label="FLOWS" value={project.workflowCount} />
             <MetadataCell label="STATUS" value="NOMINAL" />
             <MetadataCell label="HEALTH" value={<HealthBar />} />
+            <MetadataCell label="RUNTIME" value={project.runtime ? project.runtime.adapterName.toUpperCase() : 'NONE'} />
+            <MetadataCell label="CONSTITUTION" value={project.constitutionVersion !== null ? `v${project.constitutionVersion}` : '—'} />
           </MetadataGrid>
 
           <div className="space-y-6">
